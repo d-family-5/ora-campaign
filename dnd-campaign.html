@@ -832,11 +832,24 @@
 const SUPABASE_URL = 'https://kilkrhpwjkxpqwnatted.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_3_XzvnJKMsjPCLWRg7TmDA_UOlKzHhK';
 
+// Fetch with timeout — prevents hanging forever on slow/blocked connections
+async function fetchWithTimeout(url, options, ms=8000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
+  try {
+    const res = await fetch(url, {...options, signal: controller.signal});
+    return res;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function dbGet(id) {
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/characters?id=eq.${id}&select=data`, {
+    const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/characters?id=eq.${id}&select=data`, {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
     });
+    if (!res.ok) { console.warn('dbGet HTTP error:', res.status); return null; }
     const rows = await res.json();
     return rows.length ? rows[0].data : null;
   } catch(e) { return null; }
@@ -844,7 +857,7 @@ async function dbGet(id) {
 
 async function dbSave(id, data) {
   const saveData = JSON.parse(JSON.stringify(data));
-  await fetch(`${SUPABASE_URL}/rest/v1/characters`, {
+  const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/characters`, {
     method: 'POST',
     headers: {
       'apikey': SUPABASE_KEY,
@@ -854,6 +867,7 @@ async function dbSave(id, data) {
     },
     body: JSON.stringify({ id, data: saveData, updated_at: new Date().toISOString() })
   });
+  if (res && !res.ok) console.warn('dbSave HTTP error:', res.status);
 }
 
 let saveTimer = null;
@@ -994,8 +1008,20 @@ const characters = [
 let currentCharId = null;
 
 async function init() {
+  function dismissLoading() {
+    const ls = document.getElementById('loading-screen');
+    if (ls && !ls.classList.contains('hidden')) {
+      ls.classList.add('hidden');
+      document.getElementById('page-roster').classList.add('active');
+      renderRoster();
+      initParticles();
+    }
+  }
+
+  // Hard 5-second safety net — loading screen ALWAYS dismisses
+  const safetyTimer = setTimeout(dismissLoading, 5000);
+
   try {
-    // Load all characters
     for (const c of characters) {
       if (c.placeholder) continue;
       try {
@@ -1004,16 +1030,13 @@ async function init() {
         else { await dbSave(c.id, c); }
       } catch(e) { console.warn('Load failed:', c.id, e); }
     }
-    // Load DM state
-    await loadDMState();
+    try { await loadDMState(); } catch(e) { console.warn('DM state load failed', e); }
+    try { await loadChronicleState(); } catch(e) { console.warn('Chronicle load failed', e); }
   } catch(e) {
     console.warn('Init error:', e);
   } finally {
-    // Always dismiss loading screen — never leave players stuck
-    document.getElementById('loading-screen').classList.add('hidden');
-    document.getElementById('page-roster').classList.add('active');
-    renderRoster();
-    initParticles();
+    clearTimeout(safetyTimer);
+    dismissLoading();
   }
 }
 
