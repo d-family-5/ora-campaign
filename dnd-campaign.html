@@ -585,6 +585,46 @@
     color:rgba(245,237,216,.4); letter-spacing:.1em; margin-top:.1rem;
   }
 
+
+  /* ═══ CURRENCY ═══ */
+  .currency-grid {
+    display:grid; grid-template-columns:repeat(5,1fr); gap:.4rem; margin-top:.2rem;
+  }
+  .currency-box {
+    background:rgba(0,0,0,.3); border:1px solid rgba(107,83,32,.35);
+    border-radius:4px; padding:.4rem .25rem; text-align:center;
+    cursor:pointer; transition:border-color .15s;
+  }
+  .currency-box:hover { border-color:rgba(201,162,39,.5); }
+  .currency-label {
+    font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.08em;
+    text-transform:uppercase; margin-bottom:.15rem;
+  }
+  .currency-label.cp { color:#b87333; }
+  .currency-label.sp { color:#aaa; }
+  .currency-label.ep { color:#7ec8b4; }
+  .currency-label.gp { color:var(--gold-light); }
+  .currency-label.pp { color:#c4b0d8; }
+  .currency-amount {
+    font-family:'Cinzel',serif; font-size:var(--fs-sm); font-weight:700;
+    color:var(--parchment);
+  }
+  /* Tile GP badge */
+  .char-tile-gp {
+    position:absolute; bottom:48px; right:9px; z-index:3;
+    font-family:'Cinzel',serif; font-size:clamp(.58rem,1.7vw,.7rem);
+    color:var(--gold-light); background:rgba(0,0,0,.55);
+    padding:.1rem .3rem; border-radius:3px;
+    border:1px solid rgba(201,162,39,.3);
+  }
+  /* History entry types */
+  .history-result.currency { color:var(--topaz-glow); }
+  .history-result.loot     { color:var(--emerald-glow); }
+  .history-result.damage   { color:var(--ruby-glow); }
+  .history-result.heal     { color:var(--emerald-glow); }
+  .history-result.level    { color:var(--amethyst-glow); }
+  .history-result.spell    { color:var(--sapphire-glow); }
+
 </style>
 </head>
 <body>
@@ -983,7 +1023,8 @@ const characters = [
     proficiencies:['Musical Instruments (3)','Gaming Set'],
     inventory:['Musical Instrument','Gaming Set'],
     history:[],
-    faction: 'keepers',  // The Keepers of the First Memory — fits a noble scholar bard perfectly
+    faction: 'keepers',
+    currency: { cp:0, sp:0, ep:0, gp:0, pp:0 },  // The Keepers of the First Memory — fits a noble scholar bard perfectly
   },
   {id:'p2',name:'Hero Two',  class:'???',icon:'⚔️', tileColor:'var(--sapphire-light)',tileColorLight:'var(--sapphire-glow)',tileGlow:'rgba(106,173,255,.22)',tileBg:'var(--sapphire)',placeholder:true},
   {id:'p3',name:'Hero Three',class:'???',icon:'🌿', tileColor:'var(--emerald-light)', tileColorLight:'var(--emerald-glow)', tileGlow:'rgba(61,220,151,.22)', tileBg:'var(--emerald)', placeholder:true},
@@ -1076,7 +1117,7 @@ function renderRoster() {
     if(c.placeholder){
       tile.innerHTML=`<div class="char-tile-border"></div><div class="char-tile-icon" style="opacity:.32">${c.icon}</div><div class="char-tile-name" style="opacity:.32">${c.name}</div><div class="char-tile-class" style="opacity:.25">Coming soon</div>`;
     } else if(imgs){
-      tile.innerHTML=`<div class="char-tile-border"></div><img class="char-tile-img" src="${imgs.tile}" alt="${c.name}" loading="lazy"><div class="char-tile-shimmer"></div><div class="char-tile-hp-img">♥ ${c.hp.current}/${c.hp.max}</div><div class="char-tile-footer"><div class="char-tile-name">${c.name}</div><div class="char-tile-class">${c.class}${c.subclass?' · '+c.subclass:''}</div><div class="char-tile-level">LVL ${c.level} · ${c.species}</div></div>`;
+      tile.innerHTML=`<div class="char-tile-border"></div><img class="char-tile-img" src="${imgs.tile}" alt="${c.name}" loading="lazy"><div class="char-tile-shimmer"></div><div class="char-tile-hp-img">♥ ${c.hp.current}/${c.hp.max}</div>${(c.currency?.gp||0)>0?`<div class="char-tile-gp">✦ ${c.currency.gp} gp</div>`:''}<div class="char-tile-footer"><div class="char-tile-name">${c.name}</div><div class="char-tile-class">${c.class}${c.subclass?' · '+c.subclass:''}</div><div class="char-tile-level">LVL ${c.level} · ${c.species}</div></div>`;
       tile.onclick=()=>openSheet(c.id);
     } else {
       tile.innerHTML=`<div class="char-tile-border"></div><div class="char-tile-hp">♥ ${c.hp.current}/${c.hp.max}</div><div class="char-tile-icon">${c.icon}</div><div class="char-tile-name">${c.name}</div><div class="char-tile-class">${c.class}${c.subclass?' · '+c.subclass:''}</div><div class="char-tile-level">LVL ${c.level} · ${c.species}</div>`;
@@ -1160,6 +1201,44 @@ function renderSheetHTML(c) {
   const profHTML=c.proficiencies.map(p=>`<span class="prof-tag">${p}</span>`).join('');
   const inventoryHTML=c.inventory.map(p=>`<span class="prof-tag">${p}</span>`).join('');
 
+  // Currency
+  const cur = c.currency || {cp:0,sp:0,ep:0,gp:0,pp:0};
+  const currencyHTML = `
+    <div class="currency-grid">
+      <div class="currency-box" title="Copper Pieces (100cp = 1gp)">
+        <div class="currency-label cp">CP</div>
+        <div class="currency-amount">${cur.cp||0}</div>
+      </div>
+      <div class="currency-box" title="Silver Pieces (10sp = 1gp)">
+        <div class="currency-label sp">SP</div>
+        <div class="currency-amount">${cur.sp||0}</div>
+      </div>
+      <div class="currency-box" title="Electrum Pieces (2ep = 1gp)">
+        <div class="currency-label ep">EP</div>
+        <div class="currency-amount">${cur.ep||0}</div>
+      </div>
+      <div class="currency-box" title="Gold Pieces">
+        <div class="currency-label gp">GP</div>
+        <div class="currency-amount">${cur.gp||0}</div>
+      </div>
+      <div class="currency-box" title="Platinum Pieces (1pp = 10gp)">
+        <div class="currency-label pp">PP</div>
+        <div class="currency-amount">${cur.pp||0}</div>
+      </div>
+    </div>`;
+
+  // History — categorise entries for colour coding
+  function historyClass(result) {
+    const r = (result||'').toLowerCase();
+    if (r.includes('gp') || r.includes('gold') || r.includes('coin') || r.includes('sp') || r.includes('cp') || r.includes('pp')) return 'currency';
+    if (r.includes('loot') || r.includes('found') || r.includes('reward')) return 'loot';
+    if (r.includes('damage') || r.includes('hp') || r.includes('hurt') || r.includes('wound')) return 'damage';
+    if (r.includes('heal') || r.includes('rest') || r.includes('restored')) return 'heal';
+    if (r.includes('level') || r.includes('leveled') || r.includes('levelled')) return 'level';
+    if (r.includes('spell') || r.includes('learned') || r.includes('magic')) return 'spell';
+    return '';
+  }
+
   // Faction affiliation
   const factionKey = c.faction || null;
   const factionData = factionKey && typeof FACTIONS !== 'undefined' ? FACTIONS[factionKey] : null;
@@ -1174,7 +1253,16 @@ function renderSheetHTML(c) {
       </div>`
     : `<div style="font-size:var(--fs-base);color:rgba(245,237,216,.3);font-style:italic;padding:.3rem 0">Unaffiliated — use ✦ Update to set faction</div>`;
   const dsHTML=['SUCCESS','FAILURE'].map(type=>{const count=type==='SUCCESS'?c.deathSaves.successes:c.deathSaves.failures,cls=type==='SUCCESS'?'success':'failure';return `<div class="saves-row"><span>${type}</span><div class="save-dots">${[0,1,2].map(i=>`<div class="save-dot ${i<count?cls:''}"></div>`).join('')}</div></div>`;}).join('');
-  const histHTML=c.history.length===0?`<div class="history-empty">No updates yet — use ✦ Update to begin.</div>`:c.history.slice().reverse().map(h=>`<div class="history-entry"><div class="history-time">${h.time}</div><div><div class="history-text">"${h.input}"</div><div class="history-result">↳ ${h.result}</div></div></div>`).join('');
+  const histHTML=c.history.length===0
+    ?`<div class="history-empty">No updates yet — use ✦ Update to begin.</div>`
+    :c.history.slice().reverse().map(h=>`
+      <div class="history-entry">
+        <div class="history-time">${h.time}</div>
+        <div>
+          <div class="history-text">"${h.input}"</div>
+          <div class="history-result ${historyClass(h.result)}">↳ ${h.result}</div>
+        </div>
+      </div>`).join('');
 
   return portraitHTML+`
     <div class="sheet-grid">
@@ -1204,6 +1292,10 @@ function renderSheetHTML(c) {
           <div><div style="font-family:'Cinzel',serif;font-size:var(--fs-xs);color:rgba(201,162,39,.5);margin-bottom:.3rem">TOOLS & OTHER</div>${profHTML}</div>
         </div>
         <div class="stat-card"><div class="card-title">Inventory</div>${inventoryHTML}</div>
+        <div class="stat-card">
+          <div class="card-title">Currency</div>
+          ${currencyHTML}
+        </div>
       </div>
       <div>
         <div class="stat-card"><div class="card-title">Skills <span style="opacity:.4;font-size:.75rem">— tap for details</span></div>${skillsHTML}</div>
@@ -1259,14 +1351,18 @@ async function submitUpdate(){
   document.querySelector('.modal-submit').disabled=true;
   try{
     const sys=`You are a D&D 5e (2024 PHB) character sheet assistant. Return ONLY valid JSON (no markdown):
-{"summary":"one sentence","changes":{"hp_current":n,"hp_max":n,"level":n,"ac":n,"initiative":n,"speed":n,"inspiration":bool,"abilities":{"STR":{"score":n,"mod":n}},"new_weapons":[{"name":"","atkBonus":"","damage":"","notes":""}],"new_spells":[{"level":0,"name":"","castTime":"","concentration":false,"ritual":false,"material":false}],"new_features":[{"name":"","desc":""}],"new_inventory":[""],"new_proficiencies":[""]}}
-Only include changed fields. Use 2024 PHB rules. Current: ${JSON.stringify({name:c.name,class:c.class,level:c.level,hp:c.hp,ac:c.ac,abilities:c.abilities,spells:c.spells.map(s=>s.name),features:c.features.map(f=>f.name),inventory:c.inventory})}`;
+{"summary":"one sentence","changes":{"hp_current":n,"hp_max":n,"level":n,"ac":n,"initiative":n,"speed":n,"inspiration":bool,"abilities":{"STR":{"score":n,"mod":n}},"currency":{"cp":n,"sp":n,"ep":n,"gp":n,"pp":n},"new_weapons":[{"name":"","atkBonus":"","damage":"","notes":""}],"new_spells":[{"level":0,"name":"","castTime":"","concentration":false,"ritual":false,"material":false}],"new_features":[{"name":"","desc":""}],"new_inventory":[""],"new_proficiencies":[""]}}
+Only include changed fields. For currency, provide the NEW total (not the delta). Use 2024 PHB rules. Current: ${JSON.stringify({name:c.name,class:c.class,level:c.level,hp:c.hp,ac:c.ac,abilities:c.abilities,currency:c.currency||{cp:0,sp:0,ep:0,gp:0,pp:0},spells:c.spells.map(s=>s.name),features:c.features.map(f=>f.name),inventory:c.inventory})}`;
     const res=await fetch("https://ora-proxy.cdpractical.workers.dev",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"gemini-2.0-flash",max_tokens:1000,system:sys,messages:[{role:"user",content:input}]})});
     const data=await res.json();
     const text=data.content?.map(i=>i.text||'').join('')||'';
     const parsed=JSON.parse(text.replace(/```json|```/g,'').trim());
     const ch=parsed.changes||{};
-    if(ch.hp_current!==undefined)c.hp.current=ch.hp_current;if(ch.hp_max!==undefined)c.hp.max=ch.hp_max;if(ch.level!==undefined)c.level=ch.level;if(ch.ac!==undefined)c.ac=ch.ac;if(ch.initiative!==undefined)c.initiative=ch.initiative;if(ch.speed!==undefined)c.speed=ch.speed;if(ch.inspiration!==undefined)c.inspiration=ch.inspiration;
+    if(ch.hp_current!==undefined)c.hp.current=ch.hp_current;if(ch.hp_max!==undefined)c.hp.max=ch.hp_max;if(ch.level!==undefined)c.level=ch.level;if(ch.ac!==undefined)c.ac=ch.ac;if(ch.initiative!==undefined)c.initiative=ch.initiative;if(ch.speed!==undefined)c.speed=ch.speed;if(ch.inspiration!==undefined)c.inspiration=ch.inspiration;if(ch.currency){c.currency=c.currency||{cp:0,sp:0,ep:0,gp:0,pp:0};Object.assign(c.currency,ch.currency);}
+    if(ch.currency) {
+      c.currency = c.currency || {cp:0,sp:0,ep:0,gp:0,pp:0};
+      Object.assign(c.currency, ch.currency);
+    }
     if(ch.abilities)Object.entries(ch.abilities).forEach(([k,v])=>{if(c.abilities[k])c.abilities[k]={...c.abilities[k],...v};});
     if(ch.new_weapons)c.weapons.push(...ch.new_weapons);if(ch.new_spells)c.spells.push(...ch.new_spells);if(ch.new_features)c.features.push(...ch.new_features);if(ch.new_inventory)c.inventory.push(...ch.new_inventory);if(ch.new_proficiencies)c.proficiencies.push(...ch.new_proficiencies);
     const now=new Date();
