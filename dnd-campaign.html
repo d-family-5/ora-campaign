@@ -634,7 +634,6 @@
         <div class="dm-char-list" id="dm-char-chips"></div>
         <textarea class="dm-textarea" id="dm-global-input" placeholder="e.g. 'Everyone completes a long rest' or 'The party takes 12 fire damage' or 'Award 300 XP to all'"></textarea>
         <div class="dm-ai-thinking" id="dm-ai-thinking"><div class="ai-spinner"></div><span id="dm-ai-progress">Updating characters...</span></div>
-        <div class="dm-result-log" id="dm-result-log" style="display:none"></div>
         <button class="dm-btn" id="dm-global-btn" onclick="dmGlobalUpdate()">&#x26A1; APPLY TO SELECTED CHARACTERS</button>
       </div>
 
@@ -701,23 +700,23 @@
     </div>
 
     <div class="chron-panel active" id="panel-npcs">
-      <div class="npc-grid" id="npc-grid"><div class="chron-empty">No NPCs yet. Use Chronicle Update above.</div></div>
+      <div class="npc-grid" id="npc-grid"></div>
     </div>
     <div class="chron-panel" id="panel-quests">
-      <div id="quest-list"><div class="chron-empty">No quests recorded yet.</div></div>
+      <div id="quest-list"></div>
     </div>
     <div class="chron-panel" id="panel-calendar">
       <div class="calendar-box">
         <div class="calendar-date" id="cal-date">Day 1 of the Campaign</div>
         <div class="calendar-sub" id="cal-session">Session 1 &middot; Year of the Broken Dragon</div>
       </div>
-      <div class="calendar-events"><div id="cal-events"><div class="chron-empty">No events recorded yet.</div></div></div>
+      <div class="calendar-events"><div id="cal-events"></div></div>
     </div>
     <div class="chron-panel" id="panel-loot">
-      <div id="loot-list"><div class="chron-empty">No loot recorded yet.</div></div>
+      <div id="loot-list"></div>
     </div>
     <div class="chron-panel" id="panel-conditions">
-      <div id="condition-list"><div class="chron-empty">No active conditions.</div></div>
+      <div id="condition-list"></div>
     </div>
 
     <!-- SESSION LOG — at the bottom since it grows over time -->
@@ -1350,7 +1349,6 @@ function renderDMPage() {
   renderDMCharChips();
   renderPartyHP();
   renderSessionLog();
-  renderGlobalLog();
 }
 
 function renderDMCharChips() {
@@ -1413,17 +1411,7 @@ function renderSessionLog() {
     </div>`).join('');
 }
 
-function renderGlobalLog() {
-  const container = document.getElementById('dm-result-log');
-  if (!container) return;
-  // Only show successful results — filter out network/load errors
-  const successes = dmState.globalUpdateLog.filter(e => e.ok);
-  if (!successes.length) { container.style.display = 'none'; return; }
-  container.style.display = 'block';
-  container.innerHTML = successes.slice(-8).reverse().map(e =>
-    `<div class="dm-result-entry">${e.msg}</div>`
-  ).join('');
-}
+
 
 async function dmAddLogEntry() {
   const input = document.getElementById('dm-log-input');
@@ -1520,7 +1508,6 @@ Current character: ${JSON.stringify({name:c.name,class:c.class,level:c.level,hp:
   // Save DM log
   const now = new Date();
   const timeStr = now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  dmState.globalUpdateLog.push(...results);
   dmState.sessionLog.push({time:timeStr, text:`[Global] ${input} (applied to ${selected.map(c=>c.name).join(', ')})`});
   await saveDMState();
 
@@ -1530,7 +1517,6 @@ Current character: ${JSON.stringify({name:c.name,class:c.class,level:c.level,hp:
 
   renderPartyHP();
   renderSessionLog();
-  renderGlobalLog();
   showSaveStatus('saved', `&#x2713; Updated ${results.filter(r=>r.ok).length}/${selected.length} characters`);
 }
 
@@ -1979,6 +1965,7 @@ Current state summary: ${JSON.stringify({
 
     await saveChronicleState();
     await saveDMState();
+    renderSessionLog();
 
     if (inputEl) inputEl.value = '';
     inputEl.style.height = 'auto';
