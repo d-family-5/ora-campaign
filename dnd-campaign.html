@@ -690,35 +690,6 @@
       </div>
     </div>
 
-    <!-- Chronicle tabs -->
-    <div class="chronicle-tabs" style="margin-top:.5rem">
-      <button class="chron-tab active" onclick="switchChronTab('npcs',this)">&#x1F9D1; NPCs</button>
-      <button class="chron-tab" onclick="switchChronTab('quests',this)">&#x2694; Quests</button>
-      <button class="chron-tab" onclick="switchChronTab('calendar',this)">&#x1F4C5; Calendar</button>
-      <button class="chron-tab" onclick="switchChronTab('loot',this)">&#x1F4B0; Loot</button>
-      <button class="chron-tab" onclick="switchChronTab('conditions',this)">&#x1FA78; Conditions</button>
-    </div>
-
-    <div class="chron-panel active" id="panel-npcs">
-      <div class="npc-grid" id="npc-grid"></div>
-    </div>
-    <div class="chron-panel" id="panel-quests">
-      <div id="quest-list"></div>
-    </div>
-    <div class="chron-panel" id="panel-calendar">
-      <div class="calendar-box">
-        <div class="calendar-date" id="cal-date">Day 1 of the Campaign</div>
-        <div class="calendar-sub" id="cal-session">Session 1 &middot; Year of the Broken Dragon</div>
-      </div>
-      <div class="calendar-events"><div id="cal-events"></div></div>
-    </div>
-    <div class="chron-panel" id="panel-loot">
-      <div id="loot-list"></div>
-    </div>
-    <div class="chron-panel" id="panel-conditions">
-      <div id="condition-list"></div>
-    </div>
-
     <!-- SESSION LOG — at the bottom since it grows over time -->
     <div class="ornate-divider" style="margin-top:1.2rem">✦ · · · ✦ · · · ✦</div>
     <div class="dm-card" style="margin-top:0">
@@ -837,7 +808,14 @@ async function fetchWithTimeout(url, options, ms=8000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), ms);
   try {
-    const res = await fetch(url, {...options, signal: controller.signal});
+    // Build options without spreading to avoid AbortSignal clone issues
+    const fetchOptions = {
+      method: options.method || 'GET',
+      headers: options.headers || {},
+      signal: controller.signal,
+    };
+    if (options.body) fetchOptions.body = options.body;
+    const res = await fetch(url, fetchOptions);
     return res;
   } finally {
     clearTimeout(timer);
