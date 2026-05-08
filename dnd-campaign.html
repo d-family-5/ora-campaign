@@ -1283,7 +1283,7 @@ async function submitUpdate(){
     const sys=`You are a D&D 5e (2024 PHB) character sheet assistant. Return ONLY valid JSON (no markdown):
 {"summary":"one sentence","changes":{"hp_current":n,"hp_max":n,"level":n,"ac":n,"initiative":n,"speed":n,"inspiration":bool,"abilities":{"STR":{"score":n,"mod":n}},"new_weapons":[{"name":"","atkBonus":"","damage":"","notes":""}],"new_spells":[{"level":0,"name":"","castTime":"","concentration":false,"ritual":false,"material":false}],"new_features":[{"name":"","desc":""}],"new_inventory":[""],"new_proficiencies":[""]}}
 Only include changed fields. Use 2024 PHB rules. Current: ${JSON.stringify({name:c.name,class:c.class,level:c.level,hp:c.hp,ac:c.ac,abilities:c.abilities,spells:c.spells.map(s=>s.name),features:c.features.map(f=>f.name),inventory:c.inventory})}`;
-    const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:sys,messages:[{role:"user",content:input}]})});
+    const res=await fetch("https://ora-proxy.cdpractical.workers.dev",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"gemini-2.0-flash",max_tokens:1000,system:sys,messages:[{role:"user",content:input}]})});
     const data=await res.json();
     const text=data.content?.map(i=>i.text||'').join('')||'';
     const parsed=JSON.parse(text.replace(/```json|```/g,'').trim());
@@ -1471,9 +1471,9 @@ Return ONLY valid JSON (no markdown, no preamble):
 Only include fields that actually change. For a long rest: restore hp_current to hp_max, restore all spell slots to full.
 Current character: ${JSON.stringify({name:c.name,class:c.class,level:c.level,hp:c.hp,ac:c.ac,abilities:c.abilities,spellcasting:c.spellcasting,features:c.features.map(f=>f.name),inspiration:c.inspiration})}`;
 
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("https://ora-proxy.cdpractical.workers.dev", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({model:"claude-sonnet-4-20250514", max_tokens:800, system:sys, messages:[{role:"user",content:input}]})
+        body: JSON.stringify({model:"gemini-2.0-flash", max_tokens:800, system:sys, messages:[{role:"user",content:input}]})
       });
       const data = await res.json();
       const text = data.content?.map(i=>i.text||'').join('')||'';
@@ -1893,10 +1893,10 @@ Current state summary: ${JSON.stringify({
   activeConditions: chronicleState.conditions.filter(c=>c.active!==false).map(c=>c.character+':'+c.name)
 })}`;
 
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
+    const res = await fetch("https://ora-proxy.cdpractical.workers.dev", {
       method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify({
-        model:"claude-sonnet-4-20250514", max_tokens:1000,
+        model:"gemini-2.0-flash", max_tokens:1000,
         system: systemPrompt,
         messages:[{role:"user", content:input}]
       })
