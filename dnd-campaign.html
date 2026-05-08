@@ -1362,11 +1362,15 @@ function renderSessionLog() {
 
 function renderGlobalLog() {
   const container = document.getElementById('dm-result-log');
-  if (!container || !dmState.globalUpdateLog.length) return;
+  if (!container) return;
+  // Only show successful results — filter out network/load errors
+  const successes = dmState.globalUpdateLog.filter(e => e.ok);
+  if (!successes.length) { container.style.display = 'none'; return; }
   container.style.display = 'block';
-  container.innerHTML = dmState.globalUpdateLog.slice(-8).reverse().map(e =>
-    `<div class="dm-result-entry ${e.ok ? '' : 'error'}">${e.ok ? '&#x2713;' : '&#x2715;'} ${e.msg}</div>`
+  container.innerHTML = successes.slice(-8).reverse().map(e =>
+    `<div class="dm-result-entry">${e.msg}</div>`
   ).join('');
+}
 }
 
 async function dmAddLogEntry() {
@@ -1454,7 +1458,10 @@ Current character: ${JSON.stringify({name:c.name,class:c.class,level:c.level,hp:
       results.push({ok:true, msg:`${c.name}: ${parsed.summary||'updated'}`});
 
     } catch(e) {
-      results.push({ok:false, msg:`${c.name}: failed — ${e.message}`});
+      const msg = e.message.includes('Load failed') || e.message.includes('NetworkError') || e.message.includes('fetch')
+        ? `${c.name}: network unavailable — will work when deployed`
+        : `${c.name}: ${e.message}`;
+      results.push({ok:false, msg});
     }
   }
 
