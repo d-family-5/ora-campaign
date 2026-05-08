@@ -471,6 +471,93 @@
     color:rgba(201,162,39,.35); letter-spacing:.08em;
   }
 
+  /* ═══ PIN OVERLAY ═══ */
+  .pin-overlay{display:none;position:fixed;inset:0;z-index:800;background:rgba(5,3,1,.97);backdrop-filter:blur(8px);align-items:center;justify-content:center;flex-direction:column;gap:1.2rem;}
+  .pin-overlay.open{display:flex;}
+  .pin-title{font-family:'Cinzel Decorative',cursive;font-size:clamp(1.1rem,4vw,1.5rem);background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .pin-subtitle{font-family:'Cinzel',serif;font-size:var(--fs-xs);letter-spacing:.2em;color:rgba(201,162,39,.45);text-transform:uppercase;}
+  .pin-icon{font-size:2.5rem;filter:drop-shadow(0 0 12px rgba(201,162,39,.4));}
+  .pin-dots{display:flex;gap:.8rem;margin:.3rem 0;}
+  .pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid rgba(201,162,39,.35);background:transparent;transition:all .15s;}
+  .pin-dot.filled{background:var(--gold);border-color:var(--gold);box-shadow:0 0 10px rgba(201,162,39,.5);}
+  .pin-dot.error{background:var(--ruby-glow);border-color:var(--ruby-glow);}
+  .pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;max-width:240px;width:90%;}
+  .pin-btn{font-family:'Cinzel',serif;font-size:1.2rem;font-weight:700;padding:.85rem;border-radius:5px;cursor:pointer;touch-action:manipulation;background:linear-gradient(135deg,rgba(30,24,18,.9),rgba(15,12,6,.95));border:1px solid rgba(201,162,39,.3);color:var(--parchment);transition:all .15s;user-select:none;}
+  .pin-btn:hover,.pin-btn:active{background:rgba(201,162,39,.2);border-color:var(--gold);transform:scale(.96);}
+  .pin-btn.zero{grid-column:2;}
+  .pin-btn.del{grid-column:3;color:var(--ruby-glow);border-color:rgba(255,106,106,.25);font-size:.9rem;}
+  .pin-cancel{font-family:'Cinzel',serif;font-size:var(--fs-xs);letter-spacing:.12em;color:rgba(245,237,216,.3);background:none;border:none;cursor:pointer;padding:.5rem 1rem;touch-action:manipulation;}
+  .pin-cancel:hover{color:rgba(245,237,216,.6);}
+  .pin-shake{animation:pin-shake .4s ease;}
+  @keyframes pin-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+  /* ═══ CHRONICLE TILE ═══ */
+  .chronicle-tile:hover,.chronicle-tile:active{transform:translateY(-3px);box-shadow:0 10px 32px rgba(0,0,0,.6),0 0 20px rgba(201,162,39,.3);}
+  /* ═══ CHRONICLE PAGE ═══ */
+  .chronicle-container{max-width:960px;margin:0 auto;padding:.7rem .85rem 5rem;}
+  @media(min-width:600px){.chronicle-container{padding:1rem 1.4rem 5rem;}}
+  .chronicle-lock-btn{margin-left:auto;font-family:'Cinzel',serif;font-size:var(--fs-xs);letter-spacing:.1em;color:var(--ruby-glow);background:none;border:1px solid rgba(255,106,106,.3);padding:.4rem .85rem;border-radius:3px;cursor:pointer;transition:all .2s;touch-action:manipulation;}
+  .chronicle-lock-btn:hover{background:rgba(255,106,106,.1);border-color:var(--ruby-glow);}
+  .chronicle-tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem;border-bottom:1px solid rgba(201,162,39,.15);padding-bottom:.75rem;}
+  .chron-tab{font-family:'Cinzel',serif;font-size:var(--fs-xs);letter-spacing:.08em;padding:.4rem .75rem;border-radius:3px;cursor:pointer;transition:all .2s;border:1px solid rgba(107,83,32,.35);color:rgba(245,237,216,.45);background:rgba(0,0,0,.2);touch-action:manipulation;}
+  .chron-tab.active{border-color:var(--gold);color:var(--gold-light);background:rgba(201,162,39,.12);}
+  .chron-tab:hover{color:rgba(245,237,216,.75);border-color:rgba(201,162,39,.5);}
+  .chron-panel{display:none;}.chron-panel.active{display:block;}
+  .chron-ai-bar{display:flex;gap:.5rem;margin-bottom:.9rem;align-items:flex-start;}
+  .chron-ai-input{flex:1;background:rgba(0,0,0,.4);border:1px solid rgba(201,162,39,.3);border-radius:4px;color:var(--parchment);font-family:'Crimson Text',serif;font-size:var(--fs-base);padding:.6rem .75rem;outline:none;resize:none;min-height:44px;max-height:120px;transition:border-color .2s;-webkit-appearance:none;}
+  .chron-ai-input:focus{border-color:rgba(201,162,39,.6);}
+  .chron-ai-input::placeholder{color:rgba(245,237,216,.22);font-style:italic;}
+  .chron-ai-btn{font-family:'Cinzel',serif;font-size:var(--fs-xs);letter-spacing:.08em;padding:.6rem .9rem;border-radius:3px;cursor:pointer;transition:all .2s;background:linear-gradient(135deg,rgba(201,162,39,.22),rgba(201,162,39,.1));border:1px solid rgba(201,162,39,.5);color:var(--gold-light);white-space:nowrap;touch-action:manipulation;flex-shrink:0;}
+  .chron-ai-btn:hover,.chron-ai-btn:active{background:linear-gradient(135deg,rgba(201,162,39,.38),rgba(201,162,39,.2));}
+  .chron-ai-btn:disabled{opacity:.4;cursor:not-allowed;}
+  .npc-grid{display:grid;grid-template-columns:1fr;gap:.7rem;}
+  @media(min-width:540px){.npc-grid{grid-template-columns:1fr 1fr;}}
+  .npc-card{background:linear-gradient(135deg,rgba(25,18,8,.95),rgba(15,10,4,.98));border:1px solid rgba(107,83,32,.4);border-radius:5px;padding:.8rem;cursor:pointer;transition:border-color .2s;}
+  .npc-card:hover{border-color:rgba(201,162,39,.5);}
+  .npc-name{font-family:'Cinzel',serif;font-size:var(--fs-sm);color:var(--gold-light);margin-bottom:.2rem;}
+  .npc-meta{font-size:var(--fs-xs);color:rgba(245,237,216,.4);font-style:italic;margin-bottom:.4rem;}
+  .npc-public{font-size:var(--fs-sm);color:rgba(245,237,216,.7);line-height:1.4;}
+  .npc-private{margin-top:.5rem;padding:.45rem .6rem;background:rgba(255,106,106,.06);border-left:2px solid rgba(255,106,106,.4);border-radius:0 3px 3px 0;font-size:var(--fs-xs);color:var(--ruby-glow);line-height:1.4;}
+  .npc-private-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.15em;opacity:.7;margin-bottom:.2rem;}
+  .npc-status{display:inline-block;font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.1em;padding:.15rem .4rem;border-radius:2px;margin-bottom:.35rem;}
+  .npc-status.alive{background:rgba(61,220,151,.12);color:var(--emerald-glow);border:1px solid rgba(61,220,151,.25);}
+  .npc-status.dead{background:rgba(255,106,106,.1);color:var(--ruby-glow);border:1px solid rgba(255,106,106,.25);}
+  .npc-status.unknown{background:rgba(201,162,39,.1);color:var(--topaz-glow);border:1px solid rgba(201,162,39,.25);}
+  .npc-status.ally{background:rgba(106,173,255,.12);color:var(--sapphire-glow);border:1px solid rgba(106,173,255,.25);}
+  .npc-status.hostile{background:rgba(255,106,152,.1);color:var(--garnet-glow);border:1px solid rgba(255,106,152,.25);}
+  .quest-item{background:linear-gradient(135deg,rgba(25,18,8,.95),rgba(15,10,4,.98));border:1px solid rgba(107,83,32,.4);border-radius:5px;padding:.8rem;margin-bottom:.7rem;cursor:pointer;transition:border-color .2s;}
+  .quest-item:hover{border-color:rgba(201,162,39,.5);}
+  .quest-status-badge{display:inline-block;font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.1em;padding:.15rem .5rem;border-radius:2px;margin-bottom:.35rem;}
+  .quest-active{background:rgba(61,220,151,.12);color:var(--emerald-glow);border:1px solid rgba(61,220,151,.25);}
+  .quest-completed{background:rgba(106,173,255,.12);color:var(--sapphire-glow);border:1px solid rgba(106,173,255,.25);}
+  .quest-failed{background:rgba(255,106,106,.1);color:var(--ruby-glow);border:1px solid rgba(255,106,106,.25);}
+  .quest-title{font-family:'Cinzel',serif;font-size:var(--fs-sm);color:var(--gold-light);margin-bottom:.25rem;}
+  .quest-desc{font-size:var(--fs-sm);color:rgba(245,237,216,.65);line-height:1.4;}
+  .quest-clues{margin-top:.4rem;font-size:var(--fs-xs);color:var(--amethyst-glow);font-style:italic;}
+  .calendar-box{background:linear-gradient(135deg,rgba(25,18,8,.95),rgba(15,10,4,.98));border:1px solid rgba(107,83,32,.4);border-radius:5px;padding:1rem;text-align:center;margin-bottom:.9rem;}
+  .calendar-date{font-family:'Cinzel Decorative',cursive;font-size:clamp(1.1rem,4vw,1.6rem);background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.3rem;}
+  .calendar-sub{font-family:'Cinzel',serif;font-size:var(--fs-xs);color:rgba(245,237,216,.4);letter-spacing:.15em;}
+  .calendar-events{margin-top:.8rem;text-align:left;}
+  .cal-event{padding:.45rem 0;border-bottom:1px solid rgba(201,162,39,.07);display:flex;gap:.7rem;font-size:var(--fs-sm);align-items:flex-start;}
+  .cal-event:last-child{border-bottom:none;}
+  .cal-event-date{font-family:'Cinzel',serif;font-size:var(--fs-xs);color:var(--topaz-glow);white-space:nowrap;min-width:80px;}
+  .cal-event-text{color:rgba(245,237,216,.7);}
+  .cal-event-urgent{color:var(--ruby-glow);}
+  .loot-session{background:linear-gradient(135deg,rgba(25,18,8,.95),rgba(15,10,4,.98));border:1px solid rgba(107,83,32,.4);border-radius:5px;padding:.8rem;margin-bottom:.7rem;}
+  .loot-session-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;padding-bottom:.4rem;border-bottom:1px solid rgba(201,162,39,.1);}
+  .loot-session-name{font-family:'Cinzel',serif;font-size:var(--fs-sm);color:var(--gold-light);}
+  .loot-session-total{font-family:'Cinzel',serif;font-size:var(--fs-sm);color:var(--topaz-glow);}
+  .loot-item{font-size:var(--fs-sm);color:rgba(245,237,216,.65);padding:.2rem 0;}
+  .loot-item-magic{color:var(--amethyst-glow);font-style:italic;}
+  .condition-row{display:flex;align-items:center;gap:.7rem;padding:.45rem 0;border-bottom:1px solid rgba(201,162,39,.07);}
+  .condition-row:last-child{border-bottom:none;}
+  .condition-char{font-family:'Cinzel',serif;font-size:var(--fs-xs);color:rgba(245,237,216,.6);width:90px;flex-shrink:0;}
+  .condition-badges{display:flex;flex-wrap:wrap;gap:.3rem;flex:1;}
+  .condition-badge{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.06em;padding:.15rem .45rem;border-radius:3px;}
+  .condition-badge.physical{border:1px solid rgba(255,106,106,.3);background:rgba(255,106,106,.1);color:var(--ruby-glow);}
+  .condition-badge.mental{border:1px solid rgba(196,106,255,.3);background:rgba(196,106,255,.1);color:var(--amethyst-glow);}
+  .condition-badge.debuff{border:1px solid rgba(255,196,106,.3);background:rgba(255,196,106,.1);color:var(--topaz-glow);}
+  .chron-empty{font-size:var(--fs-base);color:rgba(245,237,216,.28);font-style:italic;text-align:center;padding:2rem 0;}
+
 </style>
 </head>
 <body>
@@ -510,7 +597,6 @@
       </div>
     </div>
     <div class="dm-header-banner">
-      <div class="dm-crown-large">&#x1F451;</div>
       <div class="dm-header-text">
         <div class="dm-title">Master's Chronicle</div>
         <div class="dm-sub">Global Controls &middot; Session Log &middot; Party Overview</div>
@@ -623,6 +709,83 @@
       </div>
     </div>
 
+  </div>
+</div>
+
+
+<!-- PIN OVERLAY -->
+<div class="pin-overlay" id="pin-overlay">
+  <div class="pin-icon" id="pin-icon">&#x1F511;</div>
+  <div class="pin-title" id="pin-title">DM Access</div>
+  <div class="pin-subtitle">Enter PIN to continue</div>
+  <div class="pin-dots" id="pin-dots">
+    <div class="pin-dot" id="pd0"></div>
+    <div class="pin-dot" id="pd1"></div>
+    <div class="pin-dot" id="pd2"></div>
+    <div class="pin-dot" id="pd3"></div>
+  </div>
+  <div class="pin-pad">
+    <button class="pin-btn" onclick="pinPress('1')">1</button>
+    <button class="pin-btn" onclick="pinPress('2')">2</button>
+    <button class="pin-btn" onclick="pinPress('3')">3</button>
+    <button class="pin-btn" onclick="pinPress('4')">4</button>
+    <button class="pin-btn" onclick="pinPress('5')">5</button>
+    <button class="pin-btn" onclick="pinPress('6')">6</button>
+    <button class="pin-btn" onclick="pinPress('7')">7</button>
+    <button class="pin-btn" onclick="pinPress('8')">8</button>
+    <button class="pin-btn" onclick="pinPress('9')">9</button>
+    <button class="pin-btn zero" onclick="pinPress('0')">0</button>
+    <button class="pin-btn del" onclick="pinDel()">&#x232B;</button>
+  </div>
+  <button class="pin-cancel" onclick="pinCancel()">CANCEL</button>
+</div>
+
+<!-- CHRONICLE PAGE -->
+<div class="page" id="page-chronicle">
+  <div class="chronicle-container">
+    <div class="sheet-topbar">
+      <button class="back-btn" onclick="showRoster()">&#x25C2; ROSTER</button>
+      <div>
+        <div class="sheet-char-name" style="font-family:'Cinzel Decorative',cursive;font-size:clamp(1.05rem,4vw,1.55rem);background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">The Chronicle</div>
+        <div class="sheet-char-sub">Campaign Records &middot; DM Eyes Only</div>
+      </div>
+      <button class="chronicle-lock-btn" onclick="lockDMAccess()">&#x1F512; LOCK</button>
+    </div>
+    <div class="chronicle-tabs">
+      <button class="chron-tab active" onclick="switchChronTab('npcs',this)">&#x1F9D1; NPCs</button>
+      <button class="chron-tab" onclick="switchChronTab('quests',this)">&#x2694; Quests</button>
+      <button class="chron-tab" onclick="switchChronTab('calendar',this)">&#x1F4C5; Calendar</button>
+      <button class="chron-tab" onclick="switchChronTab('loot',this)">&#x1F4B0; Loot</button>
+      <button class="chron-tab" onclick="switchChronTab('conditions',this)">&#x1FA78; Conditions</button>
+    </div>
+    <div class="chron-ai-bar">
+      <textarea class="chron-ai-input" id="chron-ai-input" rows="1"
+        placeholder="Describe what happened in plain language. e.g. 'Mira the innkeeper is a secret Sorcerer spy, party does not know' or 'Party found 300gp and a +1 sword, split gold evenly' or 'Lucian is poisoned for 2 days'"
+        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+      <button class="chron-ai-btn" id="chron-ai-btn" onclick="chronicleAIUpdate()">&#x26A1; LOG</button>
+    </div>
+    <div class="dm-ai-thinking" id="chron-ai-thinking" style="margin-bottom:.7rem">
+      <div class="ai-spinner"></div><span id="chron-ai-progress">Updating records...</span>
+    </div>
+    <div class="chron-panel active" id="panel-npcs">
+      <div class="npc-grid" id="npc-grid"><div class="chron-empty">No NPCs yet. Use the input above to add them.</div></div>
+    </div>
+    <div class="chron-panel" id="panel-quests">
+      <div id="quest-list"><div class="chron-empty">No quests recorded yet.</div></div>
+    </div>
+    <div class="chron-panel" id="panel-calendar">
+      <div class="calendar-box">
+        <div class="calendar-date" id="cal-date">Day 1 of the Campaign</div>
+        <div class="calendar-sub" id="cal-session">Session 1 &middot; Year of the Broken Dragon</div>
+      </div>
+      <div class="calendar-events"><div id="cal-events"><div class="chron-empty">No events recorded yet.</div></div></div>
+    </div>
+    <div class="chron-panel" id="panel-loot">
+      <div id="loot-list"><div class="chron-empty">No loot recorded yet.</div></div>
+    </div>
+    <div class="chron-panel" id="panel-conditions">
+      <div id="condition-list"><div class="chron-empty">No active conditions.</div></div>
+    </div>
   </div>
 </div>
 
@@ -904,8 +1067,26 @@ function renderRoster() {
       <div class="char-tile-name" style="color:var(--gold-light)">Dungeon Master</div>
       <div class="char-tile-class">Global Controls &amp; Log</div>
     </div>`;
-  dmTile.onclick = () => openDMPage();
+  dmTile.onclick = () => requirePin('dm');
   grid.appendChild(dmTile);
+
+  // Chronicle tile
+  const chronTile = document.createElement('div');
+  chronTile.className = 'char-tile chronicle-tile';
+  chronTile.style.setProperty('--tile-color','var(--topaz-light)');
+  chronTile.style.setProperty('--tile-color-light','var(--gold-light)');
+  chronTile.style.setProperty('--tile-glow','rgba(201,162,39,.35)');
+  chronTile.style.setProperty('--tile-bg','var(--topaz)');
+  chronTile.innerHTML = `
+    <div class="char-tile-border"></div>
+    <img class="char-tile-img" src="https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Chronicle%20Tile.PNG" alt="The Chronicle" loading="lazy" style="object-position:center center;">
+    <div class="char-tile-shimmer"></div>
+    <div class="char-tile-footer">
+      <div class="char-tile-name" style="color:var(--gold-light)">The Chronicle</div>
+      <div class="char-tile-class">DM Records</div>
+    </div>`;
+  chronTile.onclick = () => requirePin('chronicle');
+  grid.appendChild(chronTile);
 }
 
 function openSheet(charId) {
@@ -1023,6 +1204,7 @@ function showRoster(){
   document.getElementById('page-sheet').classList.remove('active');
   document.getElementById('page-dm').classList.remove('active');
   document.getElementById('page-world').classList.remove('active');
+  document.getElementById('page-chronicle').classList.remove('active');
   document.getElementById('page-roster').classList.add('active');
   renderRoster();
   window.scrollTo(0,0);
@@ -1350,6 +1532,375 @@ document.addEventListener('click', function(e) {
     ]
   });
 });
+
+
+
+// ═══════════════════════════════════════════
+// PIN SYSTEM
+// ═══════════════════════════════════════════
+const CORRECT_PIN = '0526';
+let pinBuffer = '';
+let pinTarget = null; // 'dm' or 'chronicle'
+let dmUnlocked = false;
+
+function requirePin(target) {
+  if (dmUnlocked) {
+    if (target === 'dm') openDMPage();
+    else openChroniclePage();
+    return;
+  }
+  pinTarget = target;
+  pinBuffer = '';
+  updatePinDots();
+  const icon = document.getElementById('pin-icon');
+  const title = document.getElementById('pin-title');
+  if (icon) icon.textContent = target === 'dm' ? '👑' : '📖';
+  if (title) title.textContent = target === 'dm' ? 'Dungeon Master' : 'The Chronicle';
+  document.getElementById('pin-overlay').classList.add('open');
+}
+
+function pinPress(digit) {
+  if (pinBuffer.length >= 4) return;
+  pinBuffer += digit;
+  updatePinDots();
+  if (pinBuffer.length === 4) {
+    setTimeout(checkPin, 150);
+  }
+}
+
+function pinDel() {
+  pinBuffer = pinBuffer.slice(0,-1);
+  updatePinDots();
+}
+
+function pinCancel() {
+  pinBuffer = '';
+  pinTarget = null;
+  document.getElementById('pin-overlay').classList.remove('open');
+}
+
+function updatePinDots() {
+  for (let i = 0; i < 4; i++) {
+    const dot = document.getElementById('pd' + i);
+    if (!dot) continue;
+    dot.classList.remove('filled','error');
+    if (i < pinBuffer.length) dot.classList.add('filled');
+  }
+}
+
+function checkPin() {
+  if (pinBuffer === CORRECT_PIN) {
+    dmUnlocked = true;
+    document.getElementById('pin-overlay').classList.remove('open');
+    pinBuffer = '';
+    if (pinTarget === 'dm') openDMPage();
+    else openChroniclePage();
+    pinTarget = null;
+  } else {
+    // Wrong PIN — shake and clear
+    const dots = document.getElementById('pin-dots');
+    for (let i = 0; i < 4; i++) {
+      const dot = document.getElementById('pd' + i);
+      if (dot) { dot.classList.remove('filled'); dot.classList.add('error'); }
+    }
+    dots.classList.add('pin-shake');
+    setTimeout(() => {
+      dots.classList.remove('pin-shake');
+      for (let i = 0; i < 4; i++) {
+        const dot = document.getElementById('pd' + i);
+        if (dot) dot.classList.remove('error');
+      }
+      pinBuffer = '';
+    }, 500);
+  }
+}
+
+function lockDMAccess() {
+  dmUnlocked = false;
+  showRoster();
+}
+
+// ═══════════════════════════════════════════
+// CHRONICLE STATE
+// ═══════════════════════════════════════════
+const CHRONICLE_ID = 'chronicle-master';
+let chronicleState = {
+  npcs: [],
+  quests: [],
+  calendar: { date: 'Day 1', session: 1, era: 'Year of the Broken Dragon', events: [] },
+  loot: [],
+  conditions: []
+};
+
+async function loadChronicleState() {
+  try {
+    const saved = await dbGet(CHRONICLE_ID);
+    if (saved) Object.assign(chronicleState, saved);
+  } catch(e) { console.warn('Chronicle load failed', e); }
+}
+
+async function saveChronicleState() {
+  try {
+    await dbSave(CHRONICLE_ID, chronicleState);
+    showSaveStatus('saved', '&#x2713; Chronicle saved');
+  } catch(e) { showSaveStatus('error', '&#x2715; Save failed'); }
+}
+
+// ─── Open Chronicle page ───────────────────
+function openChroniclePage() {
+  stopParticles();
+  ['page-roster','page-sheet','page-dm','page-world'].forEach(id =>
+    document.getElementById(id)?.classList.remove('active')
+  );
+  document.getElementById('page-chronicle').classList.add('active');
+  window.scrollTo(0,0);
+  renderChronicle();
+}
+
+function switchChronTab(name, btn) {
+  document.querySelectorAll('.chron-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.chron-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  const panel = document.getElementById('panel-' + name);
+  if (panel) panel.classList.add('active');
+}
+
+function renderChronicle() {
+  renderNPCs();
+  renderQuests();
+  renderCalendar();
+  renderLoot();
+  renderConditions();
+}
+
+// ─── NPC Roster ───────────────────────────
+function renderNPCs() {
+  const grid = document.getElementById('npc-grid');
+  if (!grid) return;
+  if (!chronicleState.npcs.length) {
+    grid.innerHTML = '<div class="chron-empty">No NPCs yet. Describe an NPC above to add them.</div>';
+    return;
+  }
+  grid.innerHTML = chronicleState.npcs.map((npc, i) => {
+    const statusClass = (npc.status||'unknown').toLowerCase();
+    return `<div class="npc-card" onclick="editNPC(${i})">
+      <div class="npc-status ${statusClass}">${(npc.status||'UNKNOWN').toUpperCase()}</div>
+      <div class="npc-name">${npc.name}</div>
+      <div class="npc-meta">${[npc.faction, npc.location].filter(Boolean).join(' &middot; ')}</div>
+      <div class="npc-public">${npc.publicNotes||''}</div>
+      ${npc.privateNotes ? `<div class="npc-private"><div class="npc-private-label">&#x1F512; DM ONLY</div>${npc.privateNotes}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function editNPC(idx) {
+  const npc = chronicleState.npcs[idx];
+  if (!npc) return;
+  const input = document.getElementById('chron-ai-input');
+  if (input) {
+    input.value = `Update NPC ${npc.name}: `;
+    input.focus();
+  }
+}
+
+// ─── Quest Board ──────────────────────────
+function renderQuests() {
+  const list = document.getElementById('quest-list');
+  if (!list) return;
+  if (!chronicleState.quests.length) {
+    list.innerHTML = '<div class="chron-empty">No quests yet.</div>';
+    return;
+  }
+  const order = ['active','failed','completed'];
+  const sorted = [...chronicleState.quests].sort((a,b) =>
+    order.indexOf(a.status) - order.indexOf(b.status)
+  );
+  list.innerHTML = sorted.map(q => `
+    <div class="quest-item">
+      <div class="quest-status-badge quest-${q.status||'active'}">${(q.status||'ACTIVE').toUpperCase()}</div>
+      <div class="quest-title">${q.title}</div>
+      <div class="quest-desc">${q.description||''}</div>
+      ${q.clues?.length ? `<div class="quest-clues">&#x26AA; Clues: ${q.clues.join(' &middot; ')}</div>` : ''}
+    </div>`).join('');
+}
+
+// ─── Campaign Calendar ────────────────────
+function renderCalendar() {
+  const c = chronicleState.calendar;
+  const dateEl = document.getElementById('cal-date');
+  const sesEl  = document.getElementById('cal-session');
+  if (dateEl) dateEl.textContent = c.date || 'Day 1';
+  if (sesEl)  sesEl.textContent  = `Session ${c.session||1} \u00B7 ${c.era||'Year of the Broken Dragon'}`;
+  const eventsEl = document.getElementById('cal-events');
+  if (!eventsEl) return;
+  if (!c.events?.length) {
+    eventsEl.innerHTML = '<div class="chron-empty">No upcoming events.</div>';
+    return;
+  }
+  eventsEl.innerHTML = c.events.map(e => `
+    <div class="cal-event">
+      <div class="cal-event-date">${e.date||''}</div>
+      <div class="cal-event-text ${e.urgent?'cal-event-urgent':''}">${e.text}</div>
+    </div>`).join('');
+}
+
+// ─── Loot Ledger ──────────────────────────
+function renderLoot() {
+  const list = document.getElementById('loot-list');
+  if (!list) return;
+  if (!chronicleState.loot.length) {
+    list.innerHTML = '<div class="chron-empty">No loot recorded yet.</div>';
+    return;
+  }
+  list.innerHTML = chronicleState.loot.slice().reverse().map(session => `
+    <div class="loot-session">
+      <div class="loot-session-header">
+        <div class="loot-session-name">&#x2694; ${session.encounter||'Encounter'}</div>
+        ${session.totalGold ? `<div class="loot-session-total">&#x1F4B0; ${session.totalGold} gp total</div>` : ''}
+      </div>
+      ${(session.items||[]).map(item =>
+        `<div class="loot-item ${item.magic?'loot-item-magic':''}">
+          ${item.magic?'&#x2728;':'&#x25AA;'} ${item.name}${item.recipient?' &rarr; '+item.recipient:''}
+        </div>`
+      ).join('')}
+    </div>`).join('');
+}
+
+// ─── Condition Tracker ────────────────────
+function renderConditions() {
+  const list = document.getElementById('condition-list');
+  if (!list) return;
+  const active = chronicleState.conditions.filter(c => c.active !== false);
+  if (!active.length) {
+    list.innerHTML = '<div class="chron-empty">No active conditions.</div>';
+    return;
+  }
+  const byChar = {};
+  active.forEach(c => {
+    if (!byChar[c.character]) byChar[c.character] = [];
+    byChar[c.character].push(c);
+  });
+  list.innerHTML = Object.entries(byChar).map(([charName, conds]) => `
+    <div class="condition-row">
+      <div class="condition-char">${charName}</div>
+      <div class="condition-badges">
+        ${conds.map(c => {
+          const type = ['Poisoned','Diseased','Exhausted','Bleeding'].includes(c.name) ? 'physical'
+                     : ['Charmed','Frightened','Stunned','Paralyzed'].includes(c.name) ? 'mental' : 'debuff';
+          return `<span class="condition-badge ${type}">${c.name}${c.duration?' ('+c.duration+')':''}`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+}
+
+// ─── AI Chronicle Update ──────────────────
+async function chronicleAIUpdate() {
+  const inputEl = document.getElementById('chron-ai-input');
+  const input = inputEl ? inputEl.value.trim() : '';
+  if (!input) return;
+
+  const btn = document.getElementById('chron-ai-btn');
+  const thinking = document.getElementById('chron-ai-thinking');
+  if (btn) btn.disabled = true;
+  if (thinking) thinking.classList.add('visible');
+
+  try {
+    const systemPrompt = `You are a D&D 5e campaign record keeper. The DM describes what happened and you update the campaign records.
+Return ONLY valid JSON (no markdown):
+{
+  "summary": "one sentence",
+  "updates": {
+    "new_npcs": [{"name":"","faction":"","location":"","status":"alive|dead|unknown|ally|hostile","publicNotes":"what party knows","privateNotes":"DM secrets the party does NOT know"}],
+    "update_npcs": [{"name":"","status":"","publicNotes":"","privateNotes":""}],
+    "new_quests": [{"title":"","description":"","status":"active","clues":[]}],
+    "update_quests": [{"title":"","status":"active|completed|failed","clues":[]}],
+    "calendar": {"date":"","session":0,"era":"","new_events":[{"date":"","text":"","urgent":false}]},
+    "new_loot": [{"encounter":"","totalGold":0,"items":[{"name":"","magic":false,"recipient":""}]}],
+    "new_conditions": [{"character":"","name":"","duration":"","active":true}],
+    "clear_conditions": ["CharacterName:ConditionName"]
+  }
+}
+Only include fields that actually change. Private NPC notes are NEVER visible to players.
+Current state summary: ${JSON.stringify({
+  npcs: chronicleState.npcs.map(n => n.name + '(' + (n.status||'?') + ')'),
+  quests: chronicleState.quests.map(q => q.title + '(' + (q.status||'?') + ')'),
+  calendar: chronicleState.calendar.date,
+  activeConditions: chronicleState.conditions.filter(c=>c.active!==false).map(c=>c.character+':'+c.name)
+})}`;
+
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model:"claude-sonnet-4-20250514", max_tokens:1000,
+        system: systemPrompt,
+        messages:[{role:"user", content:input}]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.map(i=>i.text||'').join('')||'';
+    const parsed = JSON.parse(text.replace(/```json|```/g,'').trim());
+    const u = parsed.updates || {};
+
+    // Apply NPC updates
+    if (u.new_npcs?.length) chronicleState.npcs.push(...u.new_npcs);
+    if (u.update_npcs?.length) {
+      u.update_npcs.forEach(upd => {
+        const existing = chronicleState.npcs.find(n => n.name.toLowerCase() === upd.name.toLowerCase());
+        if (existing) Object.assign(existing, upd);
+      });
+    }
+    // Apply quest updates
+    if (u.new_quests?.length) chronicleState.quests.push(...u.new_quests);
+    if (u.update_quests?.length) {
+      u.update_quests.forEach(upd => {
+        const existing = chronicleState.quests.find(q => q.title.toLowerCase().includes(upd.title.toLowerCase()));
+        if (existing) {
+          if (upd.status) existing.status = upd.status;
+          if (upd.clues?.length) existing.clues = [...(existing.clues||[]), ...upd.clues];
+        }
+      });
+    }
+    // Calendar
+    if (u.calendar) {
+      if (u.calendar.date) chronicleState.calendar.date = u.calendar.date;
+      if (u.calendar.session) chronicleState.calendar.session = u.calendar.session;
+      if (u.calendar.era) chronicleState.calendar.era = u.calendar.era;
+      if (u.calendar.new_events?.length) {
+        chronicleState.calendar.events = [...(chronicleState.calendar.events||[]), ...u.calendar.new_events];
+      }
+    }
+    // Loot
+    if (u.new_loot?.length) chronicleState.loot.push(...u.new_loot);
+    // Conditions
+    if (u.new_conditions?.length) chronicleState.conditions.push(...u.new_conditions);
+    if (u.clear_conditions?.length) {
+      u.clear_conditions.forEach(key => {
+        const [char, cond] = key.split(':');
+        const existing = chronicleState.conditions.find(c =>
+          c.character.toLowerCase()===char.toLowerCase() && c.name.toLowerCase()===cond.toLowerCase()
+        );
+        if (existing) existing.active = false;
+      });
+    }
+
+    // Log to session log too
+    const now = new Date();
+    const timeStr = now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    dmState.sessionLog.push({time: timeStr, text: '[Chronicle] ' + (parsed.summary||input)});
+
+    await saveChronicleState();
+    await saveDMState();
+
+    if (inputEl) inputEl.value = '';
+    renderChronicle();
+
+  } catch(e) {
+    alert('Chronicle scribe error: ' + e.message);
+  } finally {
+    if (btn) btn.disabled = false;
+    if (thinking) thinking.classList.remove('visible');
+  }
+}
 
 
 // ═══════════════════════════════════════════
