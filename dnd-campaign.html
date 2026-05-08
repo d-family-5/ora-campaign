@@ -558,6 +558,33 @@
   .condition-badge.debuff{border:1px solid rgba(255,196,106,.3);background:rgba(255,196,106,.1);color:var(--topaz-glow);}
   .chron-empty{font-size:var(--fs-base);color:rgba(245,237,216,.28);font-style:italic;text-align:center;padding:2rem 0;}
 
+
+  /* ═══ CHRONICLE SECTION BANNER ═══ */
+  .chronicle-section-banner {
+    position:relative; border-radius:8px; overflow:hidden;
+    margin:1.2rem 0 0; border:1px solid rgba(201,162,39,.35);
+    box-shadow:0 4px 20px rgba(0,0,0,.4);
+  }
+  .chronicle-banner-img {
+    width:100%; display:block; max-height:160px;
+    object-fit:cover; object-position:center 30%;
+  }
+  .chronicle-banner-overlay {
+    position:absolute; bottom:0; left:0; right:0;
+    background:linear-gradient(transparent, rgba(5,3,1,.92) 55%);
+    padding:.7rem 1rem .75rem;
+  }
+  .chronicle-banner-title {
+    font-family:'Cinzel Decorative',cursive;
+    font-size:clamp(1rem,4vw,1.4rem);
+    background:linear-gradient(135deg,var(--gold),var(--gold-light));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+  .chronicle-banner-sub {
+    font-family:'Cinzel',serif; font-size:var(--fs-xs);
+    color:rgba(245,237,216,.4); letter-spacing:.1em; margin-top:.1rem;
+  }
+
 </style>
 </head>
 <body>
@@ -586,132 +613,174 @@
   </div>
 </div>
 
-<!-- DM PAGE -->
+<!-- DM PAGE (unified — Global + Chronicle) -->
 <div class="page" id="page-dm">
   <div class="dm-container">
     <div class="sheet-topbar">
-      <button class="back-btn" onclick="showRoster()">◂ ROSTER</button>
+      <button class="back-btn" onclick="showRoster()">&#x25C2; ROSTER</button>
       <div>
         <div class="sheet-char-name" style="font-family:'Cinzel Decorative',cursive;font-size:clamp(1.05rem,4vw,1.55rem);background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Dungeon Master</div>
         <div class="sheet-char-sub">Campaign Command &middot; Ora</div>
       </div>
+      <button class="chronicle-lock-btn" onclick="lockDMAccess()">&#x1F512; LOCK</button>
     </div>
-    <div class="dm-header-banner">
-      <div class="dm-header-text">
-        <div class="dm-title">Master's Chronicle</div>
-        <div class="dm-sub">Global Controls &middot; Session Log &middot; Party Overview</div>
-      </div>
-    </div>
+
     <div class="dm-grid">
+
+      <!-- GLOBAL UPDATE -->
       <div class="dm-card" style="grid-column:1/-1">
         <div class="dm-card-title"><span class="dm-card-icon">&#x26A1;</span>Global Update</div>
-        <div style="font-size:var(--fs-sm);color:rgba(245,237,216,.45);font-style:italic;margin-bottom:.75rem;">Select characters, describe what happens, and the scribe updates them all at once.</div>
+        <div style="font-size:var(--fs-sm);color:rgba(245,237,216,.45);font-style:italic;margin-bottom:.75rem;">Select characters, describe what happens — updates all at once.</div>
         <div class="dm-char-list" id="dm-char-chips"></div>
         <textarea class="dm-textarea" id="dm-global-input" placeholder="e.g. 'Everyone completes a long rest' or 'The party takes 12 fire damage' or 'Award 300 XP to all'"></textarea>
         <div class="dm-ai-thinking" id="dm-ai-thinking"><div class="ai-spinner"></div><span id="dm-ai-progress">Updating characters...</span></div>
         <div class="dm-result-log" id="dm-result-log" style="display:none"></div>
         <button class="dm-btn" id="dm-global-btn" onclick="dmGlobalUpdate()">&#x26A1; APPLY TO SELECTED CHARACTERS</button>
       </div>
+
+      <!-- QUICK ACTIONS -->
       <div class="dm-card">
         <div class="dm-card-title"><span class="dm-card-icon">&#x1F3B2;</span>Quick Actions</div>
         <div class="dm-rest-row">
           <button class="dm-btn" style="font-size:.72rem" onclick="dmQuickAction('short rest')">&#x1F319; Short Rest</button>
           <button class="dm-btn" style="font-size:.72rem" onclick="dmQuickAction('long rest')">&#x2B50; Long Rest</button>
         </div>
-        <div class="dm-rest-row" style="margin-top:.6rem">
-          <button class="dm-btn dm-btn-danger" style="font-size:.72rem" onclick="dmQuickAction('set all hp to 0')">&#x1F480; TPK (0 HP)</button>
+        <div class="dm-rest-row" style="margin-top:.5rem">
           <button class="dm-btn" style="font-size:.72rem" onclick="dmQuickAction('restore all characters to full hp')">&#x2728; Full Heal All</button>
+          <button class="dm-btn" style="font-size:.72rem" onclick="chronQuickAction('new session')">&#x1F4D6; New Session</button>
+        </div>
+        <div class="dm-rest-row" style="margin-top:.5rem">
+          <button class="dm-btn" style="font-size:.72rem" onclick="chronQuickAction('advance one day')">&#x1F4C5; Advance Day</button>
+          <button class="dm-btn" style="font-size:.72rem" onclick="chronQuickAction('clear all conditions from all characters')">&#x1FA79; Clear Conditions</button>
+        </div>
+        <div class="dm-rest-row" style="margin-top:.5rem">
+          <button class="dm-btn dm-btn-danger" style="font-size:.72rem" onclick="dmQuickAction('set all hp to 0')">&#x1F480; TPK (0 HP)</button>
+          <button class="dm-btn" style="font-size:.72rem" onclick="dmAddLogEntry()">&#x1F4DD; Log Note</button>
         </div>
       </div>
+
+      <!-- PARTY STATUS -->
       <div class="dm-card">
         <div class="dm-card-title"><span class="dm-card-icon">&#x2665;</span>Party Status</div>
         <div id="dm-party-hp"></div>
       </div>
+
+      <!-- SESSION LOG -->
       <div class="dm-card" style="grid-column:1/-1">
         <div class="dm-card-title"><span class="dm-card-icon">&#x1F4DC;</span>Session Log</div>
-        <div style="font-size:var(--fs-sm);color:rgba(245,237,216,.4);font-style:italic;margin-bottom:.6rem;">Notes, NPCs, plot threads, and events. Saved to the Chronicle.</div>
+        <div style="font-size:var(--fs-sm);color:rgba(245,237,216,.4);font-style:italic;margin-bottom:.6rem;">Timestamped notes saved to the Chronicle.</div>
         <div id="dm-session-log"></div>
         <div class="dm-log-input-row">
           <input class="dm-log-input" id="dm-log-input" type="text" placeholder="Note an event, NPC, clue, or plot thread..." onkeydown="if(event.key==='Enter')dmAddLogEntry()">
           <button class="dm-log-add-btn" onclick="dmAddLogEntry()">+ ADD</button>
         </div>
       </div>
+
     </div>
+
+    <!-- ═══ CHRONICLE SECTION ═══ -->
+    <div class="chronicle-section-banner">
+      <img src="https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Chronicle%20Tile.PNG" alt="The Chronicle" class="chronicle-banner-img" loading="lazy">
+      <div class="chronicle-banner-overlay">
+        <div class="chronicle-banner-title">The Chronicle</div>
+        <div class="chronicle-banner-sub">Campaign Records &middot; DM Eyes Only</div>
+      </div>
+    </div>
+
+    <!-- Chronicle AI input -->
+    <div class="dm-card" style="margin-top:0">
+      <div class="dm-card-title"><span class="dm-card-icon">&#x26A1;</span>Chronicle Update</div>
+      <div style="font-size:var(--fs-sm);color:rgba(245,237,216,.45);font-style:italic;margin-bottom:.75rem;">Describe what happened — NPCs, quests, loot, conditions, calendar all update automatically.</div>
+      <div class="chron-ai-bar">
+        <textarea class="chron-ai-input" id="chron-ai-input" rows="1"
+          placeholder="e.g. 'Mira the innkeeper is a secret Sorcerer spy, party does not know' or 'Party found 300gp and a +1 sword' or 'Lucian is poisoned for 2 days' or 'The Find the Dreamer quest is complete'"
+          oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+        <button class="chron-ai-btn" id="chron-ai-btn" onclick="chronicleAIUpdate()">&#x26A1; LOG</button>
+      </div>
+      <div class="dm-ai-thinking" id="chron-ai-thinking">
+        <div class="ai-spinner"></div><span id="chron-ai-progress">Updating records...</span>
+      </div>
+    </div>
+
+    <!-- Chronicle tabs -->
+    <div class="chronicle-tabs" style="margin-top:.5rem">
+      <button class="chron-tab active" onclick="switchChronTab('npcs',this)">&#x1F9D1; NPCs</button>
+      <button class="chron-tab" onclick="switchChronTab('quests',this)">&#x2694; Quests</button>
+      <button class="chron-tab" onclick="switchChronTab('calendar',this)">&#x1F4C5; Calendar</button>
+      <button class="chron-tab" onclick="switchChronTab('loot',this)">&#x1F4B0; Loot</button>
+      <button class="chron-tab" onclick="switchChronTab('conditions',this)">&#x1FA78; Conditions</button>
+    </div>
+
+    <div class="chron-panel active" id="panel-npcs">
+      <div class="npc-grid" id="npc-grid"><div class="chron-empty">No NPCs yet. Use Chronicle Update above.</div></div>
+    </div>
+    <div class="chron-panel" id="panel-quests">
+      <div id="quest-list"><div class="chron-empty">No quests recorded yet.</div></div>
+    </div>
+    <div class="chron-panel" id="panel-calendar">
+      <div class="calendar-box">
+        <div class="calendar-date" id="cal-date">Day 1 of the Campaign</div>
+        <div class="calendar-sub" id="cal-session">Session 1 &middot; Year of the Broken Dragon</div>
+      </div>
+      <div class="calendar-events"><div id="cal-events"><div class="chron-empty">No events recorded yet.</div></div></div>
+    </div>
+    <div class="chron-panel" id="panel-loot">
+      <div id="loot-list"><div class="chron-empty">No loot recorded yet.</div></div>
+    </div>
+    <div class="chron-panel" id="panel-conditions">
+      <div id="condition-list"><div class="chron-empty">No active conditions.</div></div>
+    </div>
+
   </div>
 </div>
-
 
 <!-- WORLD PAGE -->
 <div class="page" id="page-world">
   <div class="world-container">
     <div class="sheet-topbar">
-      <button class="back-btn" onclick="showRoster()">◂ ROSTER</button>
+      <button class="back-btn" onclick="showRoster()">&#x25C2; ROSTER</button>
       <div>
         <div class="sheet-char-name" style="font-family:'Cinzel Decorative',cursive;font-size:clamp(1.05rem,4vw,1.55rem);background:linear-gradient(135deg,var(--amethyst-glow),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">World of Ora</div>
         <div class="sheet-char-sub">Campaign Lore &middot; Factions &middot; The Dream</div>
       </div>
     </div>
-
-    <!-- Story section label -->
     <div class="faction-section-title">The Story So Far</div>
-
-    <!-- Story slides — full images, text is baked into the art -->
     <div class="story-slide"><img src="https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Intro%201.png" alt="The Broken World" loading="lazy"></div>
     <div class="story-slide"><img src="https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Intro%202.png" alt="The Dream" loading="lazy"></div>
     <div class="story-slide"><img src="https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Intro%203.png" alt="The Last Guardian" loading="lazy"></div>
     <div class="story-slide"><img src="https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Intro%204.png" alt="The Call to Adventure" loading="lazy"></div>
     <div class="story-slide"><img src="https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Intro%205.png" alt="Character Creation Prompt" loading="lazy"></div>
-
-    <!-- Factions -->
     <div class="faction-section-title">Factions of Ora</div>
-
     <div class="faction-card" onclick="showFactionDetail('valeguard')">
       <img class="faction-card-img" src="https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Faction%20-%20Valeguard.png" alt="The Valeguard" loading="lazy">
       <div class="faction-card-footer">
-        <div>
-          <div class="faction-card-name">&#x2694;&#xFE0F; The Valeguard</div>
-          <div class="faction-card-sub">Keepers of Order. Shield of Ora.</div>
-        </div>
+        <div><div class="faction-card-name">&#x2694;&#xFE0F; The Valeguard</div><div class="faction-card-sub">Keepers of Order. Shield of Ora.</div></div>
         <div class="faction-tap-hint">TAP FOR DETAILS &#x276F;</div>
       </div>
     </div>
-
     <div class="faction-card" onclick="showFactionDetail('keepers')">
       <img class="faction-card-img" src="https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Faction%20-%20Keepers.png" alt="The Keepers of the First Memory" loading="lazy">
       <div class="faction-card-footer">
-        <div>
-          <div class="faction-card-name">&#x1F4DC; The Keepers of the First Memory</div>
-          <div class="faction-card-sub">Lore Keepers of Edra. Guardians of Truth.</div>
-        </div>
+        <div><div class="faction-card-name">&#x1F4DC; The Keepers of the First Memory</div><div class="faction-card-sub">Lore Keepers of Edra. Guardians of Truth.</div></div>
         <div class="faction-tap-hint">TAP FOR DETAILS &#x276F;</div>
       </div>
     </div>
-
     <div class="faction-card" onclick="showFactionDetail('roadbound')">
       <img class="faction-card-img" src="https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Faction%20-%20Merchants.png" alt="The Roadbound Compact" loading="lazy">
       <div class="faction-card-footer">
-        <div>
-          <div class="faction-card-name">&#x1F9ED; The Roadbound Compact</div>
-          <div class="faction-card-sub">Keeping Ora Supplied. Keeping It Alive.</div>
-        </div>
+        <div><div class="faction-card-name">&#x1F9ED; The Roadbound Compact</div><div class="faction-card-sub">Keeping Ora Supplied. Keeping It Alive.</div></div>
         <div class="faction-tap-hint">TAP FOR DETAILS &#x276F;</div>
       </div>
     </div>
-
     <div class="faction-card" onclick="showFactionDetail('roamers')">
       <img class="faction-card-img" src="https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Faction%20-%20Roamers.png" alt="The Roamers" loading="lazy">
       <div class="faction-card-footer">
-        <div>
-          <div class="faction-card-name">&#x1F33F; The Roamers</div>
-          <div class="faction-card-sub">Wanderers of the Wounded Wild.</div>
-        </div>
+        <div><div class="faction-card-name">&#x1F33F; The Roamers</div><div class="faction-card-sub">Wanderers of the Wounded Wild.</div></div>
         <div class="faction-tap-hint">TAP FOR DETAILS &#x276F;</div>
       </div>
     </div>
-
   </div>
 </div>
-
 
 <!-- PIN OVERLAY -->
 <div class="pin-overlay" id="pin-overlay">
@@ -740,54 +809,6 @@
   <button class="pin-cancel" onclick="pinCancel()">CANCEL</button>
 </div>
 
-<!-- CHRONICLE PAGE -->
-<div class="page" id="page-chronicle">
-  <div class="chronicle-container">
-    <div class="sheet-topbar">
-      <button class="back-btn" onclick="showRoster()">&#x25C2; ROSTER</button>
-      <div>
-        <div class="sheet-char-name" style="font-family:'Cinzel Decorative',cursive;font-size:clamp(1.05rem,4vw,1.55rem);background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">The Chronicle</div>
-        <div class="sheet-char-sub">Campaign Records &middot; DM Eyes Only</div>
-      </div>
-      <button class="chronicle-lock-btn" onclick="lockDMAccess()">&#x1F512; LOCK</button>
-    </div>
-    <div class="chronicle-tabs">
-      <button class="chron-tab active" onclick="switchChronTab('npcs',this)">&#x1F9D1; NPCs</button>
-      <button class="chron-tab" onclick="switchChronTab('quests',this)">&#x2694; Quests</button>
-      <button class="chron-tab" onclick="switchChronTab('calendar',this)">&#x1F4C5; Calendar</button>
-      <button class="chron-tab" onclick="switchChronTab('loot',this)">&#x1F4B0; Loot</button>
-      <button class="chron-tab" onclick="switchChronTab('conditions',this)">&#x1FA78; Conditions</button>
-    </div>
-    <div class="chron-ai-bar">
-      <textarea class="chron-ai-input" id="chron-ai-input" rows="1"
-        placeholder="Describe what happened in plain language. e.g. 'Mira the innkeeper is a secret Sorcerer spy, party does not know' or 'Party found 300gp and a +1 sword, split gold evenly' or 'Lucian is poisoned for 2 days'"
-        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
-      <button class="chron-ai-btn" id="chron-ai-btn" onclick="chronicleAIUpdate()">&#x26A1; LOG</button>
-    </div>
-    <div class="dm-ai-thinking" id="chron-ai-thinking" style="margin-bottom:.7rem">
-      <div class="ai-spinner"></div><span id="chron-ai-progress">Updating records...</span>
-    </div>
-    <div class="chron-panel active" id="panel-npcs">
-      <div class="npc-grid" id="npc-grid"><div class="chron-empty">No NPCs yet. Use the input above to add them.</div></div>
-    </div>
-    <div class="chron-panel" id="panel-quests">
-      <div id="quest-list"><div class="chron-empty">No quests recorded yet.</div></div>
-    </div>
-    <div class="chron-panel" id="panel-calendar">
-      <div class="calendar-box">
-        <div class="calendar-date" id="cal-date">Day 1 of the Campaign</div>
-        <div class="calendar-sub" id="cal-session">Session 1 &middot; Year of the Broken Dragon</div>
-      </div>
-      <div class="calendar-events"><div id="cal-events"><div class="chron-empty">No events recorded yet.</div></div></div>
-    </div>
-    <div class="chron-panel" id="panel-loot">
-      <div id="loot-list"><div class="chron-empty">No loot recorded yet.</div></div>
-    </div>
-    <div class="chron-panel" id="panel-conditions">
-      <div id="condition-list"><div class="chron-empty">No active conditions.</div></div>
-    </div>
-  </div>
-</div>
 
 <div class="detail-overlay" id="detail-overlay" onclick="closeDetail()"></div>
 <div class="detail-panel" id="detail-panel">
@@ -1070,23 +1091,6 @@ function renderRoster() {
   dmTile.onclick = () => requirePin('dm');
   grid.appendChild(dmTile);
 
-  // Chronicle tile
-  const chronTile = document.createElement('div');
-  chronTile.className = 'char-tile chronicle-tile';
-  chronTile.style.setProperty('--tile-color','var(--topaz-light)');
-  chronTile.style.setProperty('--tile-color-light','var(--gold-light)');
-  chronTile.style.setProperty('--tile-glow','rgba(201,162,39,.35)');
-  chronTile.style.setProperty('--tile-bg','var(--topaz)');
-  chronTile.innerHTML = `
-    <div class="char-tile-border"></div>
-    <img class="char-tile-img" src="https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Chronicle%20Tile.PNG" alt="The Chronicle" loading="lazy" style="object-position:center center;">
-    <div class="char-tile-shimmer"></div>
-    <div class="char-tile-footer">
-      <div class="char-tile-name" style="color:var(--gold-light)">The Chronicle</div>
-      <div class="char-tile-class">DM Records</div>
-    </div>`;
-  chronTile.onclick = () => requirePin('chronicle');
-  grid.appendChild(chronTile);
 }
 
 function openSheet(charId) {
@@ -1204,7 +1208,7 @@ function showRoster(){
   document.getElementById('page-sheet').classList.remove('active');
   document.getElementById('page-dm').classList.remove('active');
   document.getElementById('page-world').classList.remove('active');
-  document.getElementById('page-chronicle').classList.remove('active');
+  
   document.getElementById('page-roster').classList.add('active');
   renderRoster();
   window.scrollTo(0,0);
@@ -1272,11 +1276,14 @@ async function saveDMState() {
 // ── Open DM page ──────────────────────────
 function openDMPage() {
   stopParticles();
-  document.getElementById('page-roster').classList.remove('active');
-  document.getElementById('page-sheet').classList.remove('active');
+  ['page-roster','page-sheet','page-world'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('active');
+  });
   document.getElementById('page-dm').classList.add('active');
   window.scrollTo(0,0);
   renderDMPage();
+  renderChronicle();
 }
 
 function showRosterFromDM() {
@@ -1902,6 +1909,17 @@ Current state summary: ${JSON.stringify({
   }
 }
 
+
+
+function chronQuickAction(action) {
+  const input = document.getElementById('chron-ai-input');
+  if (input) {
+    input.value = action;
+    input.style.height = 'auto';
+    input.style.height = input.scrollHeight + 'px';
+  }
+  chronicleAIUpdate();
+}
 
 // ═══════════════════════════════════════════
 // FACTION DATA
