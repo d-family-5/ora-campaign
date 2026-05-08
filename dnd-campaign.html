@@ -846,13 +846,23 @@ async function fetchWithTimeout(url, options, ms=8000) {
 
 async function dbGet(id) {
   try {
-    const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/characters?id=eq.${id}&select=data`, {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-    });
-    if (!res.ok) { console.warn('dbGet HTTP error:', res.status); return null; }
+    const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/characters?id=eq.${encodeURIComponent(id)}&select=data`, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    }, 5000);
+    if (!res.ok) {
+      console.warn('dbGet HTTP', res.status, await res.text().catch(()=>''));
+      return null;
+    }
     const rows = await res.json();
-    return rows.length ? rows[0].data : null;
-  } catch(e) { return null; }
+    return (Array.isArray(rows) && rows.length) ? rows[0].data : null;
+  } catch(e) {
+    console.warn('dbGet error:', e.name, e.message);
+    return null;
+  }
 }
 
 async function dbSave(id, data) {
@@ -1019,15 +1029,34 @@ async function init() {
   }
 
   // Hard 5-second safety net — loading screen ALWAYS dismisses
-  const safetyTimer = setTimeout(dismissLoading, 5000);
+  const safetyTimer = setTimeout(() => {
+    console.warn('Safety timer fired — dismissing loading screen');
+    dismissLoading();
+  }, 5000);
 
   try {
     for (const c of characters) {
       if (c.placeholder) continue;
       try {
+        console.log('Loading:', c.id);
         const saved = await dbGet(c.id);
-        if (saved) { Object.assign(c, saved); }
-        else { await dbSave(c.id, c); }
+        if (saved) {
+          // Strip any old base64 image data that may have been saved previously
+          // Images now come from GitHub URLs, not embedded data
+          delete saved.tileImage;
+          delete saved.bannerImage;
+          // Also strip any keys whose value is a long base64 string
+          Object.keys(saved).forEach(k => {
+            if (typeof saved[k] === 'string' && saved[k].startsWith('data:image')) {
+              delete saved[k];
+            }
+          });
+          Object.assign(c, saved);
+          console.log('Loaded OK:', c.id);
+        } else {
+          console.log('No saved data, seeding:', c.id);
+          await dbSave(c.id, c);
+        }
       } catch(e) { console.warn('Load failed:', c.id, e); }
     }
     try { await loadDMState(); } catch(e) { console.warn('DM state load failed', e); }
