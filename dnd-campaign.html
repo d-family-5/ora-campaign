@@ -625,6 +625,63 @@
   .history-result.level    { color:var(--amethyst-glow); }
   .history-result.spell    { color:var(--sapphire-glow); }
 
+
+  /* ═══ SESSION LOG — ORGANISED ═══ */
+  .session-block { margin-bottom:1rem; }
+
+  .session-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:.5rem .7rem; border-radius:4px; cursor:pointer;
+    background:linear-gradient(135deg,rgba(201,162,39,.12),rgba(201,162,39,.06));
+    border:1px solid rgba(201,162,39,.25); margin-bottom:.4rem;
+    user-select:none; touch-action:manipulation;
+    transition:background .15s;
+  }
+  .session-header:hover { background:linear-gradient(135deg,rgba(201,162,39,.2),rgba(201,162,39,.1)); }
+  .session-header-left { display:flex; align-items:center; gap:.6rem; }
+  .session-number {
+    font-family:'Cinzel',serif; font-size:var(--fs-xs); font-weight:700;
+    color:var(--gold-light); letter-spacing:.1em;
+  }
+  .session-date {
+    font-family:'Cinzel',serif; font-size:.7rem;
+    color:rgba(245,237,216,.35); letter-spacing:.06em;
+  }
+  .session-chevron {
+    font-size:.7rem; color:rgba(201,162,39,.45);
+    transition:transform .25s;
+  }
+  .session-chevron.collapsed { transform:rotate(-90deg); }
+
+  .session-body { padding-left:.3rem; }
+  .session-body.collapsed { display:none; }
+
+  /* Auto events — collapsible sub-section */
+  .auto-events-toggle {
+    display:flex; align-items:center; gap:.4rem;
+    font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.1em;
+    color:rgba(245,237,216,.3); cursor:pointer; padding:.25rem 0 .35rem;
+    user-select:none; touch-action:manipulation; border:none; background:none;
+  }
+  .auto-events-toggle:hover { color:rgba(245,237,216,.5); }
+  .auto-events-toggle .ae-count {
+    background:rgba(245,237,216,.08); border-radius:10px;
+    padding:.05rem .35rem; font-size:.6rem;
+  }
+  .auto-events-list { padding-left:.5rem; }
+  .auto-events-list.hidden { display:none; }
+
+  /* Entry types */
+  .dm-log-entry.manual {
+    border-left:2px solid rgba(201,162,39,.3);
+    padding-left:.6rem; margin-left:.1rem;
+  }
+  .dm-log-entry.auto {
+    opacity:.65;
+  }
+  .dm-log-entry.auto .dm-log-time { color:rgba(245,237,216,.3); }
+  .dm-log-entry.auto .dm-log-text { font-size:var(--fs-xs); font-style:italic; }
+
 </style>
 </head>
 <body>
@@ -686,7 +743,7 @@
         </div>
         <div class="dm-rest-row" style="margin-top:.5rem">
           <button class="dm-btn" style="font-size:.72rem" onclick="dmQuickAction('restore all characters to full hp')">&#x2728; Full Heal All</button>
-          <button class="dm-btn" style="font-size:.72rem" onclick="chronQuickAction('new session')">&#x1F4D6; New Session</button>
+          <button class="dm-btn" style="font-size:.72rem" onclick="startNewSession()">&#x1F4D6; New Session</button>
         </div>
         <div class="dm-rest-row" style="margin-top:.5rem">
           <button class="dm-btn" style="font-size:.72rem" onclick="chronQuickAction('advance one day')">&#x1F4C5; Advance Day</button>
@@ -1398,7 +1455,9 @@ Only include changed fields. For currency, provide the NEW total (not the delta)
 const DM_ID = 'dm-master';
 let dmState = {
   sessionLog: [],
-  globalUpdateLog: []
+  globalUpdateLog: [],
+  currentSession: 0,
+  sessionStarted: false
 };
 
 async function loadDMState() {
@@ -1487,18 +1546,111 @@ function renderPartyHP() {
   }).join('');
 }
 
+function startNewSession() {
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+  dmState.currentSession = (dmState.currentSession || 1) + 1;
+  dmState.sessionLog.push({
+    time: now.toLocaleDateString('en-US', {month:'short', day:'numeric'}) + ' ' +
+          now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'}),
+    text: `SESSION ${dmState.currentSession} BEGINS — ${dateStr}`,
+    session: dmState.currentSession,
+    auto: false,
+    isSessionStart: true
+  });
+  if (chronicleState.calendar) chronicleState.calendar.session = dmState.currentSession;
+  saveChronicleState();
+  saveDMState();
+  renderSessionLog();
+  showSaveStatus('saved', `✦ Session ${dmState.currentSession} started`);
+}
+
 function renderSessionLog() {
   const container = document.getElementById('dm-session-log');
   if (!container) return;
   if (!dmState.sessionLog.length) {
-    container.innerHTML = '<div class="dm-log-empty">No entries yet — add your first session note below.</div>';
+    container.innerHTML = '<div class="dm-log-empty">No entries yet.</div>';
     return;
   }
-  container.innerHTML = dmState.sessionLog.slice().reverse().map((entry, i) => `
-    <div class="dm-log-entry">
-      <div class="dm-log-time">${entry.time}</div>
-      <div class="dm-log-text">${entry.text}</div>
-    </div>`).join('');
+
+  // Group by session number
+  const sessions = {};
+  const sessionDates = {};
+  dmState.sessionLog.forEach(entry => {
+    const s = entry.session || 0;
+    if (!sessions[s]) { sessions[s] = []; sessionDates[s] = entry.time; }
+    sessions[s].push(entry);
+  });
+
+  const sessionNums = Object.keys(sessions).map(Number).sort((a,b) => b - a);
+
+  container.innerHTML = sessionNums.map(sNum => {
+    const entries = sessions[sNum];
+    const manualEntries = entries.filter(e => !e.auto && !e.isSessionStart);
+    const autoEntries   = entries.filter(e => e.auto);
+    const startEntry    = entries.find(e => e.isSessionStart);
+    const blockId = `sb-${sNum}`;
+    const autoId  = `ae-${sNum}`;
+
+    const manualHTML = manualEntries.length
+      ? manualEntries.map(e => `
+          <div class="dm-log-entry manual">
+            <div class="dm-log-time">${e.time}</div>
+            <div class="dm-log-text">${e.text}</div>
+          </div>`).join('')
+      : '<div style="font-size:var(--fs-xs);color:rgba(245,237,216,.25);font-style:italic;padding:.3rem 0 .2rem">No manual notes this session.</div>';
+
+    const autoHTML = autoEntries.length ? `
+      <button class="auto-events-toggle" onclick="toggleAutoEvents('${autoId}')">
+        <span id="ae-arrow-${sNum}">&#x25B8; AUTOMATIC EVENTS</span>
+        <span class="ae-count">${autoEntries.length}</span>
+      </button>
+      <div class="auto-events-list hidden" id="${autoId}">
+        ${autoEntries.map(e => `
+          <div class="dm-log-entry auto">
+            <div class="dm-log-time">${e.time}</div>
+            <div class="dm-log-text">${e.text}</div>
+          </div>`).join('')}
+      </div>` : '';
+
+    return `
+      <div class="session-block">
+        <div class="session-header" onclick="toggleSessionBlock('${blockId}')">
+          <div class="session-header-left">
+            <span class="session-chevron" id="chev-${blockId}">&#x25BC;</span>
+            <span class="session-number">SESSION ${sNum}</span>
+            <span class="session-date">${sessionDates[sNum]}</span>
+          </div>
+          <span style="font-family:'Cinzel',serif;font-size:.65rem;color:rgba(245,237,216,.3)">
+            ${manualEntries.length} note${manualEntries.length!==1?'s':''} &middot; ${autoEntries.length} auto
+          </span>
+        </div>
+        <div class="session-body" id="body-${blockId}">
+          ${startEntry ? `<div style="font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.12em;color:rgba(201,162,39,.4);padding:.25rem 0 .5rem;text-align:center">&#x2756; ${startEntry.text} &#x2756;</div>` : ''}
+          ${manualHTML}
+          ${autoHTML}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function toggleSessionBlock(blockId) {
+  const body = document.getElementById('body-' + blockId);
+  const chev = document.getElementById('chev-' + blockId);
+  if (!body) return;
+  const isCollapsed = body.classList.toggle('collapsed');
+  if (chev) chev.classList.toggle('collapsed', isCollapsed);
+}
+
+function toggleAutoEvents(autoId) {
+  const list = document.getElementById(autoId);
+  if (!list) return;
+  list.classList.toggle('hidden');
+  const sNum = autoId.replace('ae-','');
+  const arrow = document.getElementById('ae-arrow-' + sNum);
+  if (arrow) arrow.innerHTML = list.classList.contains('hidden')
+    ? '&#x25B8; AUTOMATIC EVENTS'
+    : '&#x25BE; AUTOMATIC EVENTS';
 }
 
 
@@ -1511,7 +1663,9 @@ async function dmAddLogEntry() {
   dmState.sessionLog.push({
     time: now.toLocaleDateString('en-US', {month:'short', day:'numeric'}) + ' ' +
           now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'}),
-    text
+    text,
+    session: dmState.currentSession || 0,
+    auto: false
   });
   input.value = '';
   renderSessionLog();
@@ -1598,7 +1752,7 @@ Current character: ${JSON.stringify({name:c.name,class:c.class,level:c.level,hp:
   // Save DM log
   const now = new Date();
   const timeStr = now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  dmState.sessionLog.push({time:timeStr, text:`[Global] ${input} (applied to ${selected.map(c=>c.name).join(', ')})`});
+  dmState.sessionLog.push({time:timeStr, text:`[Global] ${input} (applied to ${selected.map(c=>c.name).join(', ')})`, session:dmState.currentSession||1, auto:true});
   await saveDMState();
 
   thinking.classList.remove('visible');
@@ -2051,7 +2205,7 @@ Current state summary: ${JSON.stringify({
     // Log to session log too
     const now = new Date();
     const timeStr = now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-    dmState.sessionLog.push({time: timeStr, text: '[Chronicle] ' + (parsed.summary||input)});
+    dmState.sessionLog.push({time: timeStr, text: '[Chronicle] ' + (parsed.summary||input), session:dmState.currentSession||1, auto:true});
 
     await saveChronicleState();
     await saveDMState();
