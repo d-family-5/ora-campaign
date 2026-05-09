@@ -618,8 +618,8 @@
     border:1px solid rgba(201,162,39,.3);
   }
   /* History entry types */
-  .history-result.currency { color:var(--topaz-glow); }
-  .history-result.loot     { color:var(--emerald-glow); }
+  .history-result.currency { color:#f0c040; }
+  .history-result.loot     { color:var(--topaz-glow); }
   .history-result.damage   { color:var(--ruby-glow); }
   .history-result.heal     { color:var(--emerald-glow); }
   .history-result.level    { color:var(--amethyst-glow); }
@@ -1177,6 +1177,20 @@ function openSheet(charId) {
   window.scrollTo(0,0);
 }
 
+
+// History entry colour categorisation — must be global for template literal access
+function historyClass(result) {
+  const r = (result||'').toLowerCase();
+  if (r.includes('gp') || r.includes('gold') || r.includes('coin') || r.includes('sp') || r.includes('cp') || r.includes('pp')) return 'currency';
+  if (r.includes('loot') || r.includes('found') || r.includes('reward') || r.includes('item') || r.includes('equipment')) return 'loot';
+  if (r.includes('damage') || r.includes('hurt') || r.includes('wound') || r.includes('injur')) return 'damage';
+  if (r.includes('heal') || r.includes('rest') || r.includes('restored') || r.includes('recover')) return 'heal';
+  if (r.includes('level') || r.includes('leveled') || r.includes('levelled') || r.includes('gained')) return 'level';
+  if (r.includes('spell') || r.includes('learned') || r.includes('magic') || r.includes('cast')) return 'spell';
+  if (r.includes('hp') || r.includes('hit point')) return 'damage';
+  return '';
+}
+
 function renderSheetHTML(c) {
   const abs=c.abilities,pb=c.profBonus,fmt=n=>n>=0?'+'+n:''+n;
   const imgs=CHAR_IMAGES[c.id];
@@ -1227,17 +1241,7 @@ function renderSheetHTML(c) {
       </div>
     </div>`;
 
-  // History — categorise entries for colour coding
-  function historyClass(result) {
-    const r = (result||'').toLowerCase();
-    if (r.includes('gp') || r.includes('gold') || r.includes('coin') || r.includes('sp') || r.includes('cp') || r.includes('pp')) return 'currency';
-    if (r.includes('loot') || r.includes('found') || r.includes('reward')) return 'loot';
-    if (r.includes('damage') || r.includes('hp') || r.includes('hurt') || r.includes('wound')) return 'damage';
-    if (r.includes('heal') || r.includes('rest') || r.includes('restored')) return 'heal';
-    if (r.includes('level') || r.includes('leveled') || r.includes('levelled')) return 'level';
-    if (r.includes('spell') || r.includes('learned') || r.includes('magic')) return 'spell';
-    return '';
-  }
+
 
   // Faction affiliation
   const factionKey = c.faction || null;
@@ -1364,7 +1368,19 @@ Only include changed fields. For currency, provide the NEW total (not the delta)
       Object.assign(c.currency, ch.currency);
     }
     if(ch.abilities)Object.entries(ch.abilities).forEach(([k,v])=>{if(c.abilities[k])c.abilities[k]={...c.abilities[k],...v};});
-    if(ch.new_weapons)c.weapons.push(...ch.new_weapons);if(ch.new_spells)c.spells.push(...ch.new_spells);if(ch.new_features)c.features.push(...ch.new_features);if(ch.new_inventory)c.inventory.push(...ch.new_inventory);if(ch.new_proficiencies)c.proficiencies.push(...ch.new_proficiencies);
+    if(ch.new_weapons)c.weapons.push(...ch.new_weapons);
+    if(ch.new_spells)c.spells.push(...ch.new_spells);
+    if(ch.new_features)c.features.push(...ch.new_features);
+    if(ch.new_inventory)c.inventory.push(...ch.new_inventory);
+    if(ch.new_proficiencies)c.proficiencies.push(...ch.new_proficiencies);
+    if(ch.remove_inventory)c.inventory=c.inventory.filter(i=>!ch.remove_inventory.includes(i));
+    if(ch.hitDice)c.hitDice=ch.hitDice;
+    if(ch.passivePerception!==undefined)c.passivePerception=ch.passivePerception;
+    if(ch.profBonus!==undefined)c.profBonus=ch.profBonus;
+    if(ch.deathSaves)Object.assign(c.deathSaves,ch.deathSaves);
+    if(ch.reset_spell_slots&&c.spellcasting)c.spellcasting.slots.forEach(s=>s.used=0);
+    // Auto-recalc passivePerception if WIS changed
+    if(ch.abilities?.WIS)c.passivePerception=10+c.abilities.WIS.mod+(c.skills?.Perception?.prof?c.profBonus:0);
     const now=new Date();
     c.history.push({time:now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),input,result:parsed.summary||'Changes applied.'});
     closeModal();
