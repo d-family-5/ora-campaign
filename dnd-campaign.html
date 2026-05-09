@@ -313,14 +313,7 @@
   .dm-log-text { font-size:var(--fs-base); color:rgba(245,237,216,.7); line-height:1.4; }
   .dm-log-empty { font-size:var(--fs-base); color:rgba(245,237,216,.28); font-style:italic; text-align:center; padding:1.2rem 0; }
 
-  .dm-log-input-row { display:flex; gap:.5rem; margin-top:.6rem; }
-  .dm-log-input { flex:1; background:rgba(0,0,0,.4); border:1px solid rgba(201,162,39,.3); border-radius:4px; color:var(--parchment); font-family:'Crimson Text',serif; font-size:var(--fs-base); padding:.5rem .7rem; outline:none; transition:border-color .2s; -webkit-appearance:none; }
-  .dm-log-input:focus { border-color:rgba(201,162,39,.6); }
-  .dm-log-input::placeholder { color:rgba(245,237,216,.22); font-style:italic; }
-  .dm-log-add-btn { font-family:'Cinzel',serif; font-size:var(--fs-xs); padding:.5rem .9rem; border-radius:3px; cursor:pointer; border:1px solid rgba(201,162,39,.4); color:var(--gold-light); background:rgba(201,162,39,.12); transition:all .2s; white-space:nowrap; touch-action:manipulation; }
-  .dm-log-add-btn:hover { background:rgba(201,162,39,.25); }
-
-  /* Party HP overview */
+              /* Party HP overview */
   .dm-party-row { display:flex; align-items:center; gap:.7rem; padding:.4rem 0; border-bottom:1px solid rgba(201,162,39,.07); }
   .dm-party-row:last-child { border-bottom:none; }
   .dm-party-name { font-family:'Cinzel',serif; font-size:var(--fs-xs); color:rgba(245,237,216,.7); flex:1; letter-spacing:.04em; }
@@ -769,13 +762,7 @@
         <div class="dm-card-title"><span class="dm-card-icon">&#x1F4DC;</span>Session Log</div>
         <div style="font-size:var(--fs-sm);color:rgba(245,237,216,.4);font-style:italic;margin-bottom:.6rem;">Everything logged here automatically. Add a manual note below.</div>
         <div id="dm-session-log"></div>
-        <div class="dm-log-input-row" style="margin-top:.6rem">
-          <input class="dm-log-input" id="dm-log-input" type="text"
-            style="border-color:rgba(201,162,39,.45)"
-            placeholder="Quick story note — bypasses the AI, logs instantly..."
-            onkeydown="if(event.key==='Enter')dmAddLogEntry()">
-          <button class="dm-log-add-btn" onclick="dmAddLogEntry()">+ ADD</button>
-        </div>
+
       </div>
 
     </div>
@@ -1632,23 +1619,6 @@ function toggleAutoEvents(autoId) {
 }
 
 
-async function dmAddLogEntry() {
-  const input = document.getElementById('dm-log-input');
-  const text = input.value.trim();
-  if (!text) return;
-  const now = new Date();
-  dmState.sessionLog.push({
-    time: now.toLocaleDateString('en-US', {month:'short', day:'numeric'}) + ' ' +
-          now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'}),
-    text,
-    session: dmState.currentSession || 0,
-    auto: false
-  });
-  input.value = '';
-  renderSessionLog();
-  await saveDMState();
-}
-
 // ═══════════════════════════════════════════
 // SAVING THROW REFERENCE DATA
 // (kept in JS globals — never embedded in HTML strings)
@@ -2118,8 +2088,7 @@ Current chronicle: ${JSON.stringify({
     await saveDMState();
 
     if (inputEl) { inputEl.value = ''; inputEl.style.height = 'auto'; }
-    renderPartyHP();
-    renderSessionLog();
+    renderDMPage();
     showSaveStatus('saved', '&#x2713; Chronicle updated');
 
   } catch(e) {
@@ -2131,7 +2100,7 @@ Current chronicle: ${JSON.stringify({
     dmState.sessionLog.push({ time:timeStr, text:input, session:dmState.currentSession||0, auto:false });
     saveDMState();
     if (inputEl) { inputEl.value = ''; inputEl.style.height='auto'; }
-    renderSessionLog();
+    renderDMPage();
     showSaveStatus('saved', '&#x2713; Logged as note');
   } finally {
     if (btn) btn.disabled = false;
