@@ -68,7 +68,7 @@
   .app-header{text-align:center;padding:1rem 1rem .7rem;}
   .app-header::after{content:'';display:block;width:70%;height:1px;margin:.6rem auto 0;background:linear-gradient(90deg,transparent,var(--gold),var(--gold-light),var(--gold),transparent);}
   .app-title{font-family:'Cinzel Decorative',cursive;font-weight:900;font-size:clamp(1.5rem,6vw,2.6rem);background:linear-gradient(135deg,var(--gold),var(--gold-light),var(--topaz-glow),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 2px 8px rgba(201,162,39,.4));}
-  .app-subtitle{font-family:'Cinzel',serif;font-size:var(--fs-xs);letter-spacing:.22em;color:rgba(201,162,39,.6);text-transform:uppercase;margin-top:.2rem;}
+  
   .save-status{position:fixed;bottom:1rem;right:1rem;z-index:200;font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.08em;padding:.35rem .8rem;border-radius:20px;transition:all .4s ease;pointer-events:none;opacity:0;}
   .save-status.saving{opacity:1;background:rgba(196,106,255,.15);border:1px solid rgba(196,106,255,.4);color:var(--amethyst-glow);}
   .save-status.saved{opacity:1;background:rgba(61,220,151,.12);border:1px solid rgba(61,220,151,.35);color:var(--emerald-glow);}
@@ -94,9 +94,9 @@
   .char-tile-class{font-family:'Crimson Text',serif;font-style:italic;font-size:clamp(.7rem,2.1vw,.88rem);color:rgba(245,237,216,.55);position:relative;z-index:1;margin-top:.18rem;}
   .char-tile-level{font-family:'Cinzel',serif;font-size:clamp(.58rem,1.7vw,.7rem);letter-spacing:.1em;color:var(--tile-color);position:relative;z-index:1;margin-top:.28rem;opacity:.75;}
   .char-tile-hp{position:absolute;top:7px;right:8px;z-index:1;font-family:'Cinzel',serif;font-size:clamp(.58rem,1.7vw,.7rem);color:var(--ruby-glow);opacity:.88;}
-  .add-character-tile{border:2px dashed rgba(201,162,39,.3);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:3/4;cursor:pointer;transition:all .25s;background:rgba(201,162,39,.03);gap:.55rem;color:rgba(201,162,39,.4);font-family:'Cinzel',serif;font-size:var(--fs-xs);letter-spacing:.1em;}
-  .add-character-tile:hover{border-color:rgba(201,162,39,.7);color:rgba(201,162,39,.8);background:rgba(201,162,39,.07);}
-  .add-icon{font-size:1.7rem;}
+  
+  
+  
   .sheet-container{max-width:960px;margin:0 auto;padding:.7rem .85rem 4rem;}
   @media(min-width:600px){.sheet-container{padding:1rem 1.4rem 4rem;}}
   .sheet-topbar{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.9rem;padding-bottom:.75rem;border-bottom:1px solid rgba(201,162,39,.2);}
@@ -231,15 +231,7 @@
   .ruby-accent{color:var(--ruby-glow);}.emerald-accent{color:var(--emerald-glow);}
 
   /* ═══ DM TILE ═══ */
-  .dm-tile {
-    position:relative; cursor:pointer; border-radius:6px; overflow:hidden;
-    transition:transform .25s,box-shadow .25s;
-    display:flex; flex-direction:column; align-items:center;
-    justify-content:center; text-align:center;
-    padding:.85rem .6rem .8rem; aspect-ratio:3/4;
-    background: linear-gradient(160deg, rgba(15,10,5,.95), rgba(25,18,8,.9));
-    border: 1px solid rgba(201,162,39,.5);
-  }
+  
   .dm-tile::after {
     content:''; position:absolute; inset:5px;
     border:1px solid rgba(201,162,39,.18); border-radius:3px; pointer-events:none;
@@ -249,36 +241,26 @@
     box-shadow:0 10px 32px rgba(0,0,0,.6), 0 0 20px rgba(201,162,39,.25);
     border-color: var(--gold-light);
   }
-  .dm-tile-crown { font-size:clamp(2rem,8vw,3rem); margin-bottom:.5rem; filter:drop-shadow(0 0 12px rgba(201,162,39,.6)); line-height:1; }
+  
   .dm-tile-name { font-family:'Cinzel',serif; font-weight:700; font-size:clamp(.78rem,2.5vw,1.05rem); color:var(--gold-light); letter-spacing:.05em; line-height:1.2; }
   .dm-tile-sub  { font-family:'Crimson Text',serif; font-style:italic; font-size:clamp(.72rem,2.1vw,.9rem); color:rgba(245,237,216,.5); margin-top:.2rem; }
   /* Animated shimmer border on DM tile */
-  .dm-tile-glow {
-    position:absolute; inset:0; border-radius:6px; pointer-events:none;
-    background: conic-gradient(from 0deg, transparent 0%, rgba(201,162,39,.15) 20%, transparent 40%);
-    animation: dm-spin 6s linear infinite; opacity:.6;
-  }
-  @keyframes dm-spin { to { transform: rotate(360deg); } }
+  
+   }
 
   /* ═══ DM PAGE ═══ */
   .dm-container { max-width:960px; margin:0 auto; padding:.7rem .85rem 4rem; }
   @media(min-width:600px){ .dm-container { padding:1rem 1.4rem 4rem; } }
 
-  .dm-header-banner {
-    background: linear-gradient(135deg, rgba(30,20,5,.95), rgba(15,10,2,.98));
-    border:1px solid rgba(201,162,39,.4); border-radius:6px;
-    padding:1.2rem 1.4rem; margin-bottom:1rem;
-    display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
-    position:relative; overflow:hidden;
-  }
+  
   .dm-header-banner::before {
     content:''; position:absolute; inset:0;
     background: radial-gradient(ellipse at 10% 50%, rgba(201,162,39,.06) 0%, transparent 60%);
     pointer-events:none;
   }
-  .dm-crown-large { font-size:2.8rem; filter:drop-shadow(0 0 14px rgba(201,162,39,.5)); flex-shrink:0; }
+  
   .dm-header-text .dm-title { font-family:'Cinzel Decorative',cursive; font-size:clamp(1.1rem,4vw,1.6rem); background:linear-gradient(135deg,var(--gold),var(--gold-light)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-  .dm-header-text .dm-sub { font-family:'Cinzel',serif; font-size:var(--fs-xs); color:rgba(245,237,216,.4); letter-spacing:.12em; margin-top:.2rem; }
+  .dm-header-text 
 
   /* DM section cards */
   .dm-grid { display:grid; grid-template-columns:1fr; gap:1rem; }
@@ -290,7 +272,7 @@
   .dm-card-icon { font-size:1rem; }
 
   /* Global update area */
-  .dm-textarea { width:100%; background:rgba(0,0,0,.4); border:1px solid rgba(201,162,39,.3); border-radius:4px; color:var(--parchment); font-family:'Crimson Text',serif; font-size:var(--fs-lg); padding:.75rem; resize:vertical; min-height:90px; outline:none; transition:border-color .2s; -webkit-appearance:none; }
+  
   .dm-textarea:focus { border-color:rgba(201,162,39,.6); }
   .dm-textarea::placeholder { color:rgba(245,237,216,.22); font-style:italic; }
 
@@ -317,12 +299,12 @@
   .dm-char-chip.all-chip.selected { background:rgba(201,162,39,.25); color:var(--gold-light); }
 
   /* Result log */
-  .dm-result-log { margin-top:.75rem; max-height:180px; overflow-y:auto; }
-  .dm-result-log::-webkit-scrollbar { width:3px; }
-  .dm-result-log::-webkit-scrollbar-thumb { background:rgba(201,162,39,.2); border-radius:2px; }
-  .dm-result-entry { padding:.4rem 0; border-bottom:1px solid rgba(201,162,39,.07); font-size:var(--fs-sm); color:var(--emerald-glow); font-family:'Cinzel',serif; font-size:var(--fs-xs); letter-spacing:.04em; }
+  
+  
+  
+  
   .dm-result-entry:last-child { border-bottom:none; }
-  .dm-result-entry.error { color:var(--ruby-glow); }
+  
 
   /* Session log */
   .dm-log-entry { padding:.55rem 0; border-bottom:1px solid rgba(201,162,39,.07); display:flex; gap:.75rem; align-items:flex-start; }
@@ -493,15 +475,15 @@
   /* ═══ CHRONICLE TILE ═══ */
   .chronicle-tile:hover,.chronicle-tile:active{transform:translateY(-3px);box-shadow:0 10px 32px rgba(0,0,0,.6),0 0 20px rgba(201,162,39,.3);}
   /* ═══ CHRONICLE PAGE ═══ */
-  .chronicle-container{max-width:960px;margin:0 auto;padding:.7rem .85rem 5rem;}
-  @media(min-width:600px){.chronicle-container{padding:1rem 1.4rem 5rem;}}
+  
+  @media(min-width:600px){}
   .chronicle-lock-btn{margin-left:auto;font-family:'Cinzel',serif;font-size:var(--fs-xs);letter-spacing:.1em;color:var(--ruby-glow);background:none;border:1px solid rgba(255,106,106,.3);padding:.4rem .85rem;border-radius:3px;cursor:pointer;transition:all .2s;touch-action:manipulation;}
   .chronicle-lock-btn:hover{background:rgba(255,106,106,.1);border-color:var(--ruby-glow);}
-  .chronicle-tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem;border-bottom:1px solid rgba(201,162,39,.15);padding-bottom:.75rem;}
+  
   .chron-tab{font-family:'Cinzel',serif;font-size:var(--fs-xs);letter-spacing:.08em;padding:.4rem .75rem;border-radius:3px;cursor:pointer;transition:all .2s;border:1px solid rgba(107,83,32,.35);color:rgba(245,237,216,.45);background:rgba(0,0,0,.2);touch-action:manipulation;}
   .chron-tab.active{border-color:var(--gold);color:var(--gold-light);background:rgba(201,162,39,.12);}
   .chron-tab:hover{color:rgba(245,237,216,.75);border-color:rgba(201,162,39,.5);}
-  .chron-panel{display:none;}.chron-panel.active{display:block;}
+  
   .chron-ai-bar{display:flex;gap:.5rem;margin-bottom:.9rem;align-items:flex-start;}
   .chron-ai-input{flex:1;background:rgba(0,0,0,.4);border:1px solid rgba(201,162,39,.3);border-radius:4px;color:var(--parchment);font-family:'Crimson Text',serif;font-size:var(--fs-base);padding:.6rem .75rem;outline:none;resize:none;min-height:44px;max-height:120px;transition:border-color .2s;-webkit-appearance:none;}
   .chron-ai-input:focus{border-color:rgba(201,162,39,.6);}
@@ -533,15 +515,15 @@
   .quest-title{font-family:'Cinzel',serif;font-size:var(--fs-sm);color:var(--gold-light);margin-bottom:.25rem;}
   .quest-desc{font-size:var(--fs-sm);color:rgba(245,237,216,.65);line-height:1.4;}
   .quest-clues{margin-top:.4rem;font-size:var(--fs-xs);color:var(--amethyst-glow);font-style:italic;}
-  .calendar-box{background:linear-gradient(135deg,rgba(25,18,8,.95),rgba(15,10,4,.98));border:1px solid rgba(107,83,32,.4);border-radius:5px;padding:1rem;text-align:center;margin-bottom:.9rem;}
-  .calendar-date{font-family:'Cinzel Decorative',cursive;font-size:clamp(1.1rem,4vw,1.6rem);background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.3rem;}
-  .calendar-sub{font-family:'Cinzel',serif;font-size:var(--fs-xs);color:rgba(245,237,216,.4);letter-spacing:.15em;}
-  .calendar-events{margin-top:.8rem;text-align:left;}
-  .cal-event{padding:.45rem 0;border-bottom:1px solid rgba(201,162,39,.07);display:flex;gap:.7rem;font-size:var(--fs-sm);align-items:flex-start;}
-  .cal-event:last-child{border-bottom:none;}
-  .cal-event-date{font-family:'Cinzel',serif;font-size:var(--fs-xs);color:var(--topaz-glow);white-space:nowrap;min-width:80px;}
-  .cal-event-text{color:rgba(245,237,216,.7);}
-  .cal-event-urgent{color:var(--ruby-glow);}
+  
+  
+  
+  
+  
+  
+  
+  
+  
   .loot-session{background:linear-gradient(135deg,rgba(25,18,8,.95),rgba(15,10,4,.98));border:1px solid rgba(107,83,32,.4);border-radius:5px;padding:.8rem;margin-bottom:.7rem;}
   .loot-session-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;padding-bottom:.4rem;border-bottom:1px solid rgba(201,162,39,.1);}
   .loot-session-name{font-family:'Cinzel',serif;font-size:var(--fs-sm);color:var(--gold-light);}
@@ -618,10 +600,7 @@
     border:1px solid rgba(201,162,39,.3);
   }
   /* History entry types */
-  /* Default unclassified entries */
-  .history-result { color:var(--emerald-glow); }
-  /* Classified entry colors */
-  .history-result.currency { color:#f0c040 !important; }
+
   .history-result.loot     { color:var(--topaz-glow) !important; }
   .history-result.damage   { color:var(--ruby-glow) !important; }
   .history-result.heal     { color:var(--emerald-glow) !important; }
@@ -725,36 +704,57 @@
       <button class="chronicle-lock-btn" onclick="lockDMAccess()">&#x1F512; LOCK</button>
     </div>
 
-    <div class="dm-grid">
-
-      <!-- GLOBAL UPDATE -->
-      <div class="dm-card" style="grid-column:1/-1">
-        <div class="dm-card-title"><span class="dm-card-icon">&#x26A1;</span>Global Update</div>
-        <div style="font-size:var(--fs-sm);color:rgba(245,237,216,.45);font-style:italic;margin-bottom:.75rem;">Select characters, describe what happens — updates all at once.</div>
-        <div class="dm-char-list" id="dm-char-chips"></div>
-        <textarea class="dm-textarea" id="dm-global-input" placeholder="e.g. 'Everyone completes a long rest' or 'The party takes 12 fire damage' or 'Award 300 XP to all'"></textarea>
-        <div class="dm-ai-thinking" id="dm-ai-thinking"><div class="ai-spinner"></div><span id="dm-ai-progress">Updating characters...</span></div>
-        <button class="dm-btn" id="dm-global-btn" onclick="dmGlobalUpdate()">&#x26A1; APPLY TO SELECTED CHARACTERS</button>
+    <!-- ═══ THE CHRONICLE — unified input ═══ -->
+    <div class="chronicle-section-banner">
+      <img src="https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Chronicle%20Tile.PNG" alt="The Chronicle" class="chronicle-banner-img" loading="lazy">
+      <div class="chronicle-banner-overlay">
+        <div class="chronicle-banner-title">The Chronicle</div>
+        <div class="chronicle-banner-sub">One input. Everything updates.</div>
       </div>
+    </div>
+
+    <div class="dm-card" style="margin-top:0">
+      <div class="dm-card-title"><span class="dm-card-icon">&#x26A1;</span>Chronicle
+        <span style="font-size:var(--fs-xs);font-family:'Crimson Text',serif;letter-spacing:0;font-weight:400;color:rgba(245,237,216,.4);margin-left:.4rem">— type anything that happened</span>
+      </div>
+      <div style="font-size:var(--fs-sm);color:rgba(245,237,216,.35);font-style:italic;margin-bottom:.65rem;line-height:1.45;">
+        Characters, NPCs, quests, loot, conditions, calendar — the scribe figures out what to update.
+      </div>
+
+      <!-- Character selector for when update affects players -->
+      <div class="dm-char-list" id="dm-char-chips"></div>
+
+      <div class="chron-ai-bar">
+        <textarea class="chron-ai-input" id="chronicle-master-input" rows="2"
+          placeholder="e.g. 'Long rest — everyone restored' or 'Party defeated the troll, found 150gp, Lucian took 12 damage' or 'Met an old wizard named Aldric who seemed suspicious' or 'The Find the Dreamer quest is complete'"
+          oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+        <button class="chron-ai-btn" id="chronicle-master-btn" onclick="chronicleMasterUpdate()">&#x26A1; LOG</button>
+      </div>
+      <div class="dm-ai-thinking" id="chronicle-master-thinking">
+        <div class="ai-spinner"></div><span id="chronicle-master-progress">Updating...</span>
+      </div>
+    </div>
+
+    <div class="dm-grid">
 
       <!-- QUICK ACTIONS -->
       <div class="dm-card">
         <div class="dm-card-title"><span class="dm-card-icon">&#x1F3B2;</span>Quick Actions</div>
         <div class="dm-rest-row">
-          <button class="dm-btn" style="font-size:.72rem" onclick="dmQuickAction('short rest')">&#x1F319; Short Rest</button>
-          <button class="dm-btn" style="font-size:.72rem" onclick="dmQuickAction('long rest')">&#x2B50; Long Rest</button>
+          <button class="dm-btn" style="font-size:.72rem" onclick="masterQuickAction('short rest — everyone may spend hit dice to recover HP')">&#x1F319; Short Rest</button>
+          <button class="dm-btn" style="font-size:.72rem" onclick="masterQuickAction('long rest — restore all HP to maximum, restore all spell slots')">&#x2B50; Long Rest</button>
         </div>
         <div class="dm-rest-row" style="margin-top:.5rem">
-          <button class="dm-btn" style="font-size:.72rem" onclick="dmQuickAction('restore all characters to full hp')">&#x2728; Full Heal All</button>
+          <button class="dm-btn" style="font-size:.72rem" onclick="masterQuickAction('restore all characters to full HP maximum')">&#x2728; Full Heal All</button>
           <button class="dm-btn" style="font-size:.72rem" onclick="startNewSession()">&#x1F4D6; New Session</button>
         </div>
         <div class="dm-rest-row" style="margin-top:.5rem">
-          <button class="dm-btn" style="font-size:.72rem" onclick="chronQuickAction('advance one day')">&#x1F4C5; Advance Day</button>
-          <button class="dm-btn" style="font-size:.72rem" onclick="chronQuickAction('clear all conditions from all characters')">&#x1FA79; Clear Conditions</button>
+          <button class="dm-btn" style="font-size:.72rem" onclick="masterQuickAction('advance the campaign calendar by one day')">&#x1F4C5; Advance Day</button>
+          <button class="dm-btn" style="font-size:.72rem" onclick="masterQuickAction('clear all active conditions from all characters')">&#x1FA79; Clear Conditions</button>
         </div>
         <div class="dm-rest-row" style="margin-top:.5rem">
-          <button class="dm-btn dm-btn-danger" style="font-size:.72rem" onclick="dmQuickAction('set all hp to 0')">&#x1F480; TPK (0 HP)</button>
-          <button class="dm-btn" style="font-size:.72rem" onclick="dmAddLogEntry()">&#x1F4DD; Log Note</button>
+          <button class="dm-btn dm-btn-danger" style="font-size:.72rem" onclick="masterQuickAction('set all characters HP to 0 — total party kill')">&#x1F480; TPK (0 HP)</button>
+          <button class="dm-btn" style="font-size:.72rem" onclick="document.getElementById('chronicle-master-input')?.focus()">&#x270F; Quick Note</button>
         </div>
       </div>
 
@@ -764,47 +764,23 @@
         <div id="dm-party-hp"></div>
       </div>
 
-    </div>
-
-    <!-- ═══ CHRONICLE SECTION ═══ -->
-    <div class="chronicle-section-banner">
-      <img src="https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Chronicle%20Tile.PNG" alt="The Chronicle" class="chronicle-banner-img" loading="lazy">
-      <div class="chronicle-banner-overlay">
-        <div class="chronicle-banner-title">The Chronicle</div>
-        <div class="chronicle-banner-sub">Campaign Records &middot; DM Eyes Only</div>
+      <!-- SESSION LOG — right after party status -->
+      <div class="dm-card" style="grid-column:1/-1">
+        <div class="dm-card-title"><span class="dm-card-icon">&#x1F4DC;</span>Session Log</div>
+        <div style="font-size:var(--fs-sm);color:rgba(245,237,216,.4);font-style:italic;margin-bottom:.6rem;">Everything logged here automatically. Add a manual note below.</div>
+        <div id="dm-session-log"></div>
+        <div class="dm-log-input-row" style="margin-top:.6rem">
+          <input class="dm-log-input" id="dm-log-input" type="text"
+            style="border-color:rgba(201,162,39,.45)"
+            placeholder="Quick story note — bypasses the AI, logs instantly..."
+            onkeydown="if(event.key==='Enter')dmAddLogEntry()">
+          <button class="dm-log-add-btn" onclick="dmAddLogEntry()">+ ADD</button>
+        </div>
       </div>
-    </div>
 
-    <!-- Chronicle AI input -->
-    <div class="dm-card" style="margin-top:0">
-      <div class="dm-card-title"><span class="dm-card-icon">&#x1F4DC;</span>Chronicle Update <span style="font-size:var(--fs-xs);font-family:'Crimson Text',serif;letter-spacing:0;font-weight:400;color:rgba(196,106,255,.5)">— AI record keeper</span></div>
-      <div style="font-size:var(--fs-sm);color:rgba(245,237,216,.45);font-style:italic;margin-bottom:.75rem;">Describe what happened — NPCs, quests, loot, conditions, calendar all update automatically.</div>
-      <div class="chron-ai-bar">
-        <textarea class="chron-ai-input" id="chron-ai-input" style="border-color:rgba(196,106,255,.35)" rows="1"
-          placeholder="e.g. 'Mira the innkeeper is a secret Sorcerer spy, party does not know' or 'Party found 300gp and a +1 sword' or 'Lucian is poisoned for 2 days' or 'The Find the Dreamer quest is complete'"
-          oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
-        <button class="chron-ai-btn" id="chron-ai-btn" onclick="chronicleAIUpdate()">&#x26A1; LOG</button>
-      </div>
-      <div class="dm-ai-thinking" id="chron-ai-thinking">
-        <div class="ai-spinner"></div><span id="chron-ai-progress">Updating records...</span>
-      </div>
     </div>
-
-    <!-- SESSION LOG — at the bottom since it grows over time -->
-    <div class="ornate-divider" style="margin-top:1.2rem">✦ · · · ✦ · · · ✦</div>
-    <div class="dm-card" style="margin-top:0">
-      <div class="dm-card-title"><span class="dm-card-icon">📜</span>Session Log</div>
-      <div style="font-size:var(--fs-sm);color:rgba(245,237,216,.4);font-style:italic;margin-bottom:.6rem;">Timestamped notes — grows as your campaign progresses.</div>
-      <div id="dm-session-log"></div>
-      <div class="dm-log-input-row">
-        <input class="dm-log-input" id="dm-log-input" style="border-color:rgba(201,162,39,.45)" type="text" placeholder="Type a story note, clue, or observation — this is YOUR DM journal..." onkeydown="if(event.key==='Enter')dmAddLogEntry()">
-        <button class="dm-log-add-btn" onclick="dmAddLogEntry()">+ ADD</button>
-      </div>
-    </div>
-
   </div>
 </div>
-
 <!-- WORLD PAGE -->
 <div class="page" id="page-world">
   <div class="world-container">
@@ -1238,19 +1214,6 @@ function openSheet(charId) {
 }
 
 
-// History entry colour categorisation — must be global for template literal access
-function historyClass(result) {
-  const r = (result||'').toLowerCase();
-  if (r.includes('gp') || r.includes('gold') || r.includes('coin') || r.includes('sp') || r.includes('cp') || r.includes('pp')) return 'currency';
-  if (r.includes('loot') || r.includes('found') || r.includes('reward') || r.includes('item') || r.includes('equipment')) return 'loot';
-  if (r.includes('damage') || r.includes('hurt') || r.includes('wound') || r.includes('injur')) return 'damage';
-  if (r.includes('heal') || r.includes('rest') || r.includes('restored') || r.includes('recover')) return 'heal';
-  if (r.includes('level') || r.includes('leveled') || r.includes('levelled') || r.includes('gained')) return 'level';
-  if (r.includes('spell') || r.includes('learned') || r.includes('magic') || r.includes('cast')) return 'spell';
-  if (r.includes('hp') || r.includes('hit point')) return 'damage';
-  return '';
-}
-
 function renderSheetHTML(c) {
   const abs=c.abilities,pb=c.profBonus,fmt=n=>n>=0?'+'+n:''+n;
   const imgs=CHAR_IMAGES[c.id];
@@ -1302,7 +1265,6 @@ function renderSheetHTML(c) {
     </div>`;
 
 
-
   // Faction affiliation
   const factionKey = c.faction || null;
   const factionData = factionKey && typeof FACTIONS !== 'undefined' ? FACTIONS[factionKey] : null;
@@ -1319,14 +1281,16 @@ function renderSheetHTML(c) {
   const dsHTML=['SUCCESS','FAILURE'].map(type=>{const count=type==='SUCCESS'?c.deathSaves.successes:c.deathSaves.failures,cls=type==='SUCCESS'?'success':'failure';return `<div class="saves-row"><span>${type}</span><div class="save-dots">${[0,1,2].map(i=>`<div class="save-dot ${i<count?cls:''}"></div>`).join('')}</div></div>`;}).join('');
   const histHTML=c.history.length===0
     ?`<div class="history-empty">No updates yet — use ✦ Update to begin.</div>`
-    :c.history.slice().reverse().map(h=>`
-      <div class="history-entry">
+    :c.history.slice().reverse().map(h=>{
+      const color = sessionEntryColor(h.result + ' ' + h.input);
+      return `<div class="history-entry">
         <div class="history-time">${h.time}</div>
         <div>
           <div class="history-text">"${h.input}"</div>
-          <div class="history-result ${historyClass(h.result)}">↳ ${h.result}</div>
+          <div class="history-result" style="color:${color}">↳ ${h.result}</div>
         </div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
 
   return portraitHTML+`
     <div class="sheet-grid">
@@ -1490,12 +1454,6 @@ function openDMPage() {
   renderChronicle();
 }
 
-function showRosterFromDM() {
-  document.getElementById('page-dm').classList.remove('active');
-  document.getElementById('page-roster').classList.add('active');
-  renderRoster();
-}
-
 // ── Render DM page dynamic parts ─────────
 function renderDMPage() {
   renderDMCharChips();
@@ -1568,6 +1526,19 @@ function startNewSession() {
   showSaveStatus('saved', `✦ Session ${dmState.currentSession} started`);
 }
 
+function sessionEntryColor(text) {
+  const t = (text||'').toLowerCase();
+  if (t.includes('gp') || t.includes('gold') || t.includes('coin') || t.includes(' sp') || t.includes(' cp') || t.includes(' pp') || t.includes('currency') || t.includes('paid') || t.includes('bribe') || t.includes('bought') || t.includes('sold')) return '#f0c040';
+  if (t.includes('loot') || t.includes('found') || t.includes('reward') || t.includes('item') || t.includes('equipment') || t.includes('chest') || t.includes('treasure')) return 'var(--topaz-glow)';
+  if (t.includes('damage') || t.includes('hurt') || t.includes('wound') || t.includes('dead') || t.includes('died') || t.includes('kill') || t.includes('attack') || t.includes('struck')) return 'var(--ruby-glow)';
+  if (t.includes('heal') || t.includes('rest') || t.includes('restored') || t.includes('recover') || t.includes('full hp')) return 'var(--emerald-glow)';
+  if (t.includes('level') || t.includes('leveled') || t.includes('levelled') || t.includes('gained ability') || t.includes('new feature')) return 'var(--amethyst-glow)';
+  if (t.includes('spell') || t.includes('learned') || t.includes('magic') || t.includes('cast') || t.includes('ritual')) return 'var(--sapphire-glow)';
+  if (t.includes('npc') || t.includes('met') || t.includes('talked') || t.includes('spoke') || t.includes('ally') || t.includes('enemy')) return 'var(--jade-glow)';
+  if (t.includes('quest') || t.includes('mission') || t.includes('task') || t.includes('completed') || t.includes('failed')) return 'var(--garnet-glow)';
+  return 'rgba(245,237,216,.65)'; // default — readable parchment
+}
+
 function renderSessionLog() {
   const container = document.getElementById('dm-session-log');
   if (!container) return;
@@ -1596,11 +1567,13 @@ function renderSessionLog() {
     const autoId  = `ae-${sNum}`;
 
     const manualHTML = manualEntries.length
-      ? manualEntries.map(e => `
-          <div class="dm-log-entry manual">
+      ? manualEntries.map(e => {
+          const color = sessionEntryColor(e.text);
+          return `<div class="dm-log-entry manual">
             <div class="dm-log-time">${e.time}</div>
-            <div class="dm-log-text">${e.text}</div>
-          </div>`).join('')
+            <div class="dm-log-text" style="color:${color};font-weight:500">${e.text}</div>
+          </div>`;
+        }).join('')
       : '<div style="font-size:var(--fs-xs);color:rgba(245,237,216,.25);font-style:italic;padding:.3rem 0 .2rem">No manual notes this session.</div>';
 
     const autoHTML = autoEntries.length ? `
@@ -1609,11 +1582,13 @@ function renderSessionLog() {
         <span class="ae-count">${autoEntries.length}</span>
       </button>
       <div class="auto-events-list hidden" id="${autoId}">
-        ${autoEntries.map(e => `
-          <div class="dm-log-entry auto">
+        ${autoEntries.map(e => {
+          const color = sessionEntryColor(e.text);
+          return `<div class="dm-log-entry auto">
             <div class="dm-log-time">${e.time}</div>
-            <div class="dm-log-text">${e.text}</div>
-          </div>`).join('')}
+            <div class="dm-log-text" style="color:${color}">${e.text}</div>
+          </div>`;
+        }).join('')}
       </div>` : '';
 
     return `
@@ -1657,7 +1632,6 @@ function toggleAutoEvents(autoId) {
 }
 
 
-
 async function dmAddLogEntry() {
   const input = document.getElementById('dm-log-input');
   const text = input.value.trim();
@@ -1674,99 +1648,6 @@ async function dmAddLogEntry() {
   renderSessionLog();
   await saveDMState();
 }
-
-function dmQuickAction(action) {
-  document.getElementById('dm-global-input').value = action;
-  // Auto-select all
-  document.querySelectorAll('.dm-char-chip').forEach(c => c.classList.add('selected'));
-  dmGlobalUpdate();
-}
-
-async function dmGlobalUpdate() {
-  const input = document.getElementById('dm-global-input').value.trim();
-  if (!input) return;
-
-  const selectedIds = getSelectedCharIds();
-  if (!selectedIds.length) { alert('Select at least one character.'); return; }
-
-  const btn = document.getElementById('dm-global-btn');
-  const thinking = document.getElementById('dm-ai-thinking');
-  const progress = document.getElementById('dm-ai-progress');
-  btn.disabled = true;
-  thinking.classList.add('visible');
-
-  const selected = characters.filter(c => selectedIds.includes(c.id));
-  const results = [];
-
-  for (const c of selected) {
-    progress.textContent = `Updating ${c.name}...`;
-    try {
-      const sys = `You are a D&D 5e (2024 PHB) character sheet assistant. The DM is applying a global change to a character.
-Return ONLY valid JSON (no markdown, no preamble):
-{"summary":"one sentence what changed for this character","changes":{"hp_current":n,"hp_max":n,"level":n,"ac":n,"initiative":n,"speed":n,"inspiration":bool,"abilities":{"STR":{"score":n,"mod":n}},"new_weapons":[{"name":"","atkBonus":"","damage":"","notes":""}],"new_spells":[{"level":0,"name":"","castTime":"","concentration":false,"ritual":false,"material":false}],"new_features":[{"name":"","desc":""}],"new_inventory":[""],"new_proficiencies":[""]}}
-Only include fields that actually change. For a long rest: restore hp_current to hp_max, restore all spell slots to full.
-Current character: ${JSON.stringify({name:c.name,class:c.class,level:c.level,hp:c.hp,ac:c.ac,abilities:c.abilities,spellcasting:c.spellcasting,features:c.features.map(f=>f.name),inspiration:c.inspiration})}`;
-
-      const res = await fetch("https://ora-proxy.cdpractical.workers.dev", {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({model:"gemini-2.0-flash", max_tokens:800, system:sys, messages:[{role:"user",content:input}]})
-      });
-      const data = await res.json();
-      const text = data.content?.map(i=>i.text||'').join('')||'';
-      const parsed = JSON.parse(text.replace(/```json|```/g,'').trim());
-      const ch = parsed.changes || {};
-
-      // Apply changes
-      if(ch.hp_current!==undefined)c.hp.current=ch.hp_current;
-      if(ch.hp_max!==undefined)c.hp.max=ch.hp_max;
-      if(ch.level!==undefined)c.level=ch.level;
-      if(ch.ac!==undefined)c.ac=ch.ac;
-      if(ch.initiative!==undefined)c.initiative=ch.initiative;
-      if(ch.speed!==undefined)c.speed=ch.speed;
-      if(ch.inspiration!==undefined)c.inspiration=ch.inspiration;
-      if(ch.abilities)Object.entries(ch.abilities).forEach(([k,v])=>{if(c.abilities[k])c.abilities[k]={...c.abilities[k],...v};});
-
-      // Handle long rest spell slot restoration specially
-      if(input.toLowerCase().includes('long rest') && c.spellcasting) {
-        c.spellcasting.slots.forEach(s => s.used = 0);
-      }
-      if(ch.new_weapons)c.weapons.push(...ch.new_weapons);
-      if(ch.new_spells)c.spells.push(...ch.new_spells);
-      if(ch.new_features)c.features.push(...ch.new_features);
-      if(ch.new_inventory)c.inventory.push(...ch.new_inventory);
-      if(ch.new_proficiencies)c.proficiencies.push(...ch.new_proficiencies);
-
-      // Log to character history
-      const now = new Date();
-      const timeStr = now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-      c.history.push({time:timeStr, input:`[DM] ${input}`, result:parsed.summary||'DM update applied.'});
-
-      await dbSave(c.id, c);
-      results.push({ok:true, msg:`${c.name}: ${parsed.summary||'updated'}`});
-
-    } catch(e) {
-      const msg = e.message.includes('Load failed') || e.message.includes('NetworkError') || e.message.includes('fetch')
-        ? `${c.name}: network unavailable — will work when deployed`
-        : `${c.name}: ${e.message}`;
-      results.push({ok:false, msg});
-    }
-  }
-
-  // Save DM log
-  const now = new Date();
-  const timeStr = now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  dmState.sessionLog.push({time:timeStr, text:`[Global] ${input} (applied to ${selected.map(c=>c.name).join(', ')})`, session:dmState.currentSession||1, auto:true});
-  await saveDMState();
-
-  thinking.classList.remove('visible');
-  btn.disabled = false;
-  document.getElementById('dm-global-input').value = '';
-
-  renderPartyHP();
-  renderSessionLog();
-  showSaveStatus('saved', `&#x2713; Updated ${results.filter(r=>r.ok).length}/${selected.length} characters`);
-}
-
 
 // ═══════════════════════════════════════════
 // SAVING THROW REFERENCE DATA
@@ -1831,7 +1712,6 @@ document.addEventListener('click', function(e) {
     ]
   });
 });
-
 
 
 // ═══════════════════════════════════════════
@@ -1945,25 +1825,6 @@ async function saveChronicleState() {
   } catch(e) { showSaveStatus('error', '&#x2715; Save failed'); }
 }
 
-// ─── Open Chronicle page ───────────────────
-function openChroniclePage() {
-  stopParticles();
-  ['page-roster','page-sheet','page-dm','page-world'].forEach(id =>
-    document.getElementById(id)?.classList.remove('active')
-  );
-  document.getElementById('page-chronicle').classList.add('active');
-  window.scrollTo(0,0);
-  renderChronicle();
-}
-
-function switchChronTab(name, btn) {
-  document.querySelectorAll('.chron-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.chron-panel').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-  const panel = document.getElementById('panel-' + name);
-  if (panel) panel.classList.add('active');
-}
-
 function renderChronicle() {
   renderNPCs();
   renderQuests();
@@ -1995,7 +1856,7 @@ function renderNPCs() {
 function editNPC(idx) {
   const npc = chronicleState.npcs[idx];
   if (!npc) return;
-  const input = document.getElementById('chron-ai-input');
+  const input = document.getElementById('chronicle-master-input');
   if (input) {
     input.value = `Update NPC ${npc.name}: `;
     input.focus();
@@ -2092,150 +1953,186 @@ function renderConditions() {
     </div>`).join('');
 }
 
-// ─── AI Chronicle Update ──────────────────
-async function chronicleAIUpdate() {
-  const inputEl = document.getElementById('chron-ai-input');
+// ═══════════════════════════════════════════
+// CHRONICLE MASTER — unified DM input router
+// ═══════════════════════════════════════════
+function masterQuickAction(action) {
+  const input = document.getElementById('chronicle-master-input');
+  if (input) {
+    input.value = action;
+    input.style.height = 'auto';
+    input.style.height = input.scrollHeight + 'px';
+  }
+  chronicleMasterUpdate();
+}
+
+async function chronicleMasterUpdate() {
+  const inputEl = document.getElementById('chronicle-master-input');
   const input = inputEl ? inputEl.value.trim() : '';
   if (!input) return;
 
-  const btn = document.getElementById('chron-ai-btn');
-  const thinking = document.getElementById('chron-ai-thinking');
+  const btn      = document.getElementById('chronicle-master-btn');
+  const thinking = document.getElementById('chronicle-master-thinking');
+  const progress = document.getElementById('chronicle-master-progress');
   if (btn) btn.disabled = true;
   if (thinking) thinking.classList.add('visible');
 
+  // Get selected characters (default all non-placeholder)
+  const selectedIds = getSelectedCharIds();
+  const selected = characters.filter(c => selectedIds.includes(c.id));
+
   try {
-    const systemPrompt = `You are a D&D 5e campaign record keeper. The DM describes what happened and you update the campaign records.
-Return ONLY valid JSON (no markdown):
+    const sys = `You are the DM assistant for a D&D 5e (2024 PHB) campaign. 
+The DM has typed a free-form note. Determine what it affects and return ONLY valid JSON (no markdown):
 {
-  "summary": "one sentence",
-  "updates": {
-    "new_npcs": [{"name":"","faction":"","location":"","status":"alive|dead|unknown|ally|hostile","publicNotes":"what party knows","privateNotes":"DM secrets the party does NOT know"}],
+  "summary": "one sentence of what happened",
+  "affects_characters": true/false,
+  "affects_chronicle": true/false,
+  "log_as_manual": true/false,
+  "character_changes": {
+    "apply_to": "all" or "named:<CharacterName>",
+    "hp_current": n, "hp_max": n, "level": n, "ac": n,
+    "inspiration": bool,
+    "currency": {"cp":n,"sp":n,"ep":n,"gp":n,"pp":n},
+    "reset_spell_slots": false,
+    "new_weapons": [{"name":"","atkBonus":"","damage":"","notes":""}],
+    "new_spells": [{"level":0,"name":"","castTime":"","concentration":false,"ritual":false,"material":false}],
+    "new_features": [{"name":"","desc":""}],
+    "new_inventory": [""],
+    "remove_inventory": [""],
+    "new_conditions": [{"character":"","name":"","duration":""}],
+    "clear_conditions": ["CharacterName:ConditionName"]
+  },
+  "chronicle_updates": {
+    "new_npcs": [{"name":"","faction":"","location":"","status":"alive","publicNotes":"","privateNotes":""}],
     "update_npcs": [{"name":"","status":"","publicNotes":"","privateNotes":""}],
     "new_quests": [{"title":"","description":"","status":"active","clues":[]}],
     "update_quests": [{"title":"","status":"active|completed|failed","clues":[]}],
-    "calendar": {"date":"","session":0,"era":"","new_events":[{"date":"","text":"","urgent":false}]},
-    "new_loot": [{"encounter":"","totalGold":0,"items":[{"name":"","magic":false,"recipient":""}]}],
-    "new_conditions": [{"character":"","name":"","duration":"","active":true}],
-    "clear_conditions": ["CharacterName:ConditionName"]
+    "calendar": {"date":"","new_events":[{"date":"","text":"","urgent":false}]},
+    "new_loot": [{"encounter":"","totalGold":0,"items":[{"name":"","magic":false,"recipient":""}]}]
   }
 }
-Only include fields that actually change. Private NPC notes are NEVER visible to players.
-Current state summary: ${JSON.stringify({
-  npcs: chronicleState.npcs.map(n => n.name + '(' + (n.status||'?') + ')'),
-  quests: chronicleState.quests.map(q => q.title + '(' + (q.status||'?') + ')'),
-  calendar: chronicleState.calendar.date,
-  activeConditions: chronicleState.conditions.filter(c=>c.active!==false).map(c=>c.character+':'+c.name)
+Rules:
+- log_as_manual=true for story/NPC/plot events the DM typed themselves
+- log_as_manual=false for mechanical events (rests, damage, loot splits)  
+- Only include fields that actually change
+- For long rest: reset_spell_slots=true, hp_current=hp_max for each character
+- For currency splits like "200gp split evenly among ${selected.length} players": divide and set new gp total
+Current characters: ${JSON.stringify(selected.map(c=>({
+  name:c.name, hp:c.hp, currency:c.currency||{cp:0,sp:0,ep:0,gp:0,pp:0},
+  spellcasting:c.spellcasting?.slots?.map(s=>({level:s.level,used:s.used,total:s.total}))
+})))}
+Current chronicle: ${JSON.stringify({
+  npcs: chronicleState.npcs?.map(n=>n.name+'('+n.status+')'),
+  quests: chronicleState.quests?.map(q=>q.title+'('+q.status+')'),
+  date: chronicleState.calendar?.date
 })}`;
 
-    const res = await fetch("https://ora-proxy.cdpractical.workers.dev", {
-      method:"POST", headers:{"Content-Type":"application/json"},
+    const res = await fetchWithTimeout('https://ora-proxy.cdpractical.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model:"gemini-2.0-flash", max_tokens:1000,
-        system: systemPrompt,
-        messages:[{role:"user", content:input}]
+        model: 'gemini-2.0-flash', max_tokens: 1200,
+        system: sys,
+        messages: [{ role: 'user', content: input }]
       })
-    });
+    }, 12000);
+
     const data = await res.json();
     const text = data.content?.map(i=>i.text||'').join('')||'';
+    let cleanText = text.replace(/^```json\s*/i,'').replace(/^```\s*/i,'').replace(/```\s*$/i,'').trim();
+    const fb = cleanText.indexOf('{'); const lb = cleanText.lastIndexOf('}');
+    if (fb !== -1) cleanText = cleanText.slice(fb, lb+1);
+    const parsed = JSON.parse(cleanText);
 
-    // Gemini sometimes wraps JSON in markdown fences — strip aggressively
-    let cleanText = text
-      .replace(/^```json\s*/i, '')
-      .replace(/^```\s*/i, '')
-      .replace(/```\s*$/i, '')
-      .trim();
+    const now = new Date();
+    const timeStr = now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+
+                    now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
 
-    // Find the first { and last } to extract just the JSON object
-    const firstBrace = cleanText.indexOf('{');
-    const lastBrace  = cleanText.lastIndexOf('}');
-    if (firstBrace !== -1 && lastBrace !== -1) {
-      cleanText = cleanText.slice(firstBrace, lastBrace + 1);
-    }
+    // ── Apply character changes ──────────────────────────────────────────
+    if (parsed.affects_characters && parsed.character_changes) {
+      const ch = parsed.character_changes;
+      const applyTo = ch.apply_to === 'all' ? selected
+        : selected.filter(c => ch.apply_to?.toLowerCase().includes(c.name.toLowerCase()));
 
-    let parsed;
-    try {
-      parsed = JSON.parse(cleanText);
-    } catch(parseErr) {
-      console.warn('Chronicle JSON parse failed:', parseErr.message, '\nRaw text:', text.slice(0,300));
-      alert('The scribe could not parse the response. Try rephrasing your entry.');
-      return;
-    }
-
-    const u = parsed.updates || {};
-
-    // Apply NPC updates
-    if (u.new_npcs?.length) chronicleState.npcs.push(...u.new_npcs);
-    if (u.update_npcs?.length) {
-      u.update_npcs.forEach(upd => {
-        const existing = chronicleState.npcs.find(n => n.name.toLowerCase() === upd.name.toLowerCase());
-        if (existing) Object.assign(existing, upd);
-      });
-    }
-    // Apply quest updates
-    if (u.new_quests?.length) chronicleState.quests.push(...u.new_quests);
-    if (u.update_quests?.length) {
-      u.update_quests.forEach(upd => {
-        const existing = chronicleState.quests.find(q => q.title.toLowerCase().includes(upd.title.toLowerCase()));
-        if (existing) {
-          if (upd.status) existing.status = upd.status;
-          if (upd.clues?.length) existing.clues = [...(existing.clues||[]), ...upd.clues];
+      for (const c of applyTo) {
+        if (ch.hp_current !== undefined) c.hp.current = Math.max(0, Math.min(ch.hp_current, c.hp.max));
+        if (ch.hp_max !== undefined) c.hp.max = ch.hp_max;
+        if (ch.level !== undefined) c.level = ch.level;
+        if (ch.ac !== undefined) c.ac = ch.ac;
+        if (ch.inspiration !== undefined) c.inspiration = ch.inspiration;
+        if (ch.currency) { c.currency = c.currency||{cp:0,sp:0,ep:0,gp:0,pp:0}; Object.assign(c.currency, ch.currency); }
+        if (ch.reset_spell_slots && c.spellcasting) c.spellcasting.slots.forEach(s=>s.used=0);
+        if (ch.new_weapons?.length) c.weapons.push(...ch.new_weapons);
+        if (ch.new_spells?.length) c.spells.push(...ch.new_spells);
+        if (ch.new_features?.length) c.features.push(...ch.new_features);
+        if (ch.new_inventory?.length) c.inventory.push(...ch.new_inventory);
+        if (ch.remove_inventory?.length) c.inventory = c.inventory.filter(i=>!ch.remove_inventory.includes(i));
+        if (ch.new_conditions?.length) chronicleState.conditions = chronicleState.conditions||[];
+        if (ch.new_conditions?.length) chronicleState.conditions.push(...ch.new_conditions.map(cd=>({...cd,active:true,session:dmState.currentSession||0})));
+        if (ch.clear_conditions?.length) {
+          ch.clear_conditions.forEach(key=>{
+            const [char,cond]=key.split(':');
+            const existing=chronicleState.conditions?.find(c=>c.character?.toLowerCase()===char?.toLowerCase()&&c.name?.toLowerCase()===cond?.toLowerCase());
+            if(existing)existing.active=false;
+          });
         }
-      });
-    }
-    // Calendar
-    if (u.calendar) {
-      if (u.calendar.date) chronicleState.calendar.date = u.calendar.date;
-      if (u.calendar.session) chronicleState.calendar.session = u.calendar.session;
-      if (u.calendar.era) chronicleState.calendar.era = u.calendar.era;
-      if (u.calendar.new_events?.length) {
-        chronicleState.calendar.events = [...(chronicleState.calendar.events||[]), ...u.calendar.new_events];
+        // Auto-recalc passive perception if WIS changed
+        if (ch.abilities?.WIS) c.passivePerception = 10 + c.abilities.WIS.mod + (c.skills?.Perception?.prof ? c.profBonus : 0);
+        // Log to character history
+        c.history.push({ time:timeStr, input, result: parsed.summary||input });
+        await dbSave(c.id, c);
       }
     }
-    // Loot
-    if (u.new_loot?.length) chronicleState.loot.push(...u.new_loot);
-    // Conditions
-    if (u.new_conditions?.length) chronicleState.conditions.push(...u.new_conditions);
-    if (u.clear_conditions?.length) {
-      u.clear_conditions.forEach(key => {
-        const [char, cond] = key.split(':');
-        const existing = chronicleState.conditions.find(c =>
-          c.character.toLowerCase()===char.toLowerCase() && c.name.toLowerCase()===cond.toLowerCase()
-        );
-        if (existing) existing.active = false;
+
+    // ── Apply chronicle changes ──────────────────────────────────────────
+    if (parsed.affects_chronicle && parsed.chronicle_updates) {
+      const u = parsed.chronicle_updates;
+      if (u.new_npcs?.length) chronicleState.npcs = chronicleState.npcs||[]; chronicleState.npcs?.push(...(u.new_npcs||[]));
+      if (u.update_npcs?.length) u.update_npcs.forEach(upd=>{
+        const ex = chronicleState.npcs?.find(n=>n.name.toLowerCase()===upd.name.toLowerCase());
+        if(ex) Object.assign(ex, upd);
       });
+      if (u.new_quests?.length) { chronicleState.quests = chronicleState.quests||[]; chronicleState.quests.push(...u.new_quests); }
+      if (u.update_quests?.length) u.update_quests.forEach(upd=>{
+        const ex = chronicleState.quests?.find(q=>q.title.toLowerCase().includes(upd.title.toLowerCase()));
+        if(ex){ if(upd.status)ex.status=upd.status; if(upd.clues?.length)ex.clues=[...(ex.clues||[]),...upd.clues]; }
+      });
+      if (u.calendar) {
+        if(u.calendar.date) chronicleState.calendar.date = u.calendar.date;
+        if(u.calendar.new_events?.length) chronicleState.calendar.events=[...(chronicleState.calendar.events||[]),...u.calendar.new_events];
+      }
+      if (u.new_loot?.length) { chronicleState.loot = chronicleState.loot||[]; chronicleState.loot.push(...u.new_loot); }
+      await saveChronicleState();
     }
 
-    // Log to session log too
-    const now = new Date();
-    const timeStr = now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-    dmState.sessionLog.push({time: timeStr, text: '[Chronicle] ' + (parsed.summary||input), session:dmState.currentSession||1, auto:true});
-
-    await saveChronicleState();
+    // ── Log to session log ───────────────────────────────────────────────
+    const isManual = parsed.log_as_manual !== false &&
+      !input.toLowerCase().match(/^(long rest|short rest|full heal|restore|set.*hp|tpk|advance day|clear condition)/);
+    dmState.sessionLog.push({
+      time: timeStr,
+      text: parsed.summary || input,
+      session: dmState.currentSession || 0,
+      auto: !isManual
+    });
     await saveDMState();
+
+    if (inputEl) { inputEl.value = ''; inputEl.style.height = 'auto'; }
+    renderPartyHP();
     renderSessionLog();
-
-    if (inputEl) inputEl.value = '';
-    inputEl.style.height = 'auto';
-
-    // Auto-switch to the most relevant tab based on what changed
-    const tabMap = [
-      [u.new_npcs?.length || u.update_npcs?.length, 'npcs'],
-      [u.new_quests?.length || u.update_quests?.length, 'quests'],
-      [u.calendar && (u.calendar.date || u.calendar.new_events?.length), 'calendar'],
-      [u.new_loot?.length, 'loot'],
-      [u.new_conditions?.length || u.clear_conditions?.length, 'conditions'],
-    ];
-    const activeTab = tabMap.find(([condition]) => condition);
-    if (activeTab) {
-      const tabName = activeTab[1];
-      const tabBtn = document.querySelector(`.chron-tab[onclick*="${tabName}"]`);
-      if (tabBtn) switchChronTab(tabName, tabBtn);
-    }
-
-    renderChronicle();
+    showSaveStatus('saved', '&#x2713; Chronicle updated');
 
   } catch(e) {
-    alert('Chronicle scribe error: ' + e.message);
+    console.warn('Chronicle master error:', e);
+    // Fallback: just log as manual note
+    const now = new Date();
+    const timeStr = now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+
+                    now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    dmState.sessionLog.push({ time:timeStr, text:input, session:dmState.currentSession||0, auto:false });
+    saveDMState();
+    if (inputEl) { inputEl.value = ''; inputEl.style.height='auto'; }
+    renderSessionLog();
+    showSaveStatus('saved', '&#x2713; Logged as note');
   } finally {
     if (btn) btn.disabled = false;
     if (thinking) thinking.classList.remove('visible');
@@ -2243,19 +2140,6 @@ Current state summary: ${JSON.stringify({
 }
 
 
-
-function chronQuickAction(action) {
-  const input = document.getElementById('chron-ai-input');
-  if (input) {
-    input.value = action;
-    input.style.height = 'auto';
-    input.style.height = input.scrollHeight + 'px';
-  }
-  chronicleAIUpdate();
-}
-
-// ═══════════════════════════════════════════
-// FACTION DATA
 // ═══════════════════════════════════════════
 const FACTIONS = {
   valeguard: {
