@@ -190,7 +190,7 @@
   .history-entry:last-child{border-bottom:none;}
   .history-time{font-family:'Cinzel',serif;font-size:var(--fs-xs);color:rgba(201,162,39,.45);white-space:nowrap;min-width:90px;}
   .history-text{font-size:var(--fs-base);color:rgba(245,237,216,.55);font-style:italic;}
-  .history-result{font-family:'Cinzel',serif;font-size:var(--fs-xs);color:var(--emerald-glow);margin-top:.18rem;}
+  .history-result{font-family:'Cinzel',serif;font-size:var(--fs-xs);margin-top:.18rem;}
   .history-empty{font-size:var(--fs-base);color:rgba(245,237,216,.3);font-style:italic;text-align:center;padding:1rem 0;}
   .detail-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;touch-action:none;}
   .detail-overlay.open{display:block;}
@@ -618,12 +618,15 @@
     border:1px solid rgba(201,162,39,.3);
   }
   /* History entry types */
-  .history-result.currency { color:#f0c040; }
-  .history-result.loot     { color:var(--topaz-glow); }
-  .history-result.damage   { color:var(--ruby-glow); }
-  .history-result.heal     { color:var(--emerald-glow); }
-  .history-result.level    { color:var(--amethyst-glow); }
-  .history-result.spell    { color:var(--sapphire-glow); }
+  /* Default unclassified entries */
+  .history-result { color:var(--emerald-glow); }
+  /* Classified entry colors */
+  .history-result.currency { color:#f0c040 !important; }
+  .history-result.loot     { color:var(--topaz-glow) !important; }
+  .history-result.damage   { color:var(--ruby-glow) !important; }
+  .history-result.heal     { color:var(--emerald-glow) !important; }
+  .history-result.level    { color:var(--amethyst-glow) !important; }
+  .history-result.spell    { color:var(--sapphire-glow) !important; }
 
 
   /* ═══ SESSION LOG — ORGANISED ═══ */
@@ -774,10 +777,10 @@
 
     <!-- Chronicle AI input -->
     <div class="dm-card" style="margin-top:0">
-      <div class="dm-card-title"><span class="dm-card-icon">&#x26A1;</span>Chronicle Update</div>
+      <div class="dm-card-title"><span class="dm-card-icon">&#x1F4DC;</span>Chronicle Update <span style="font-size:var(--fs-xs);font-family:'Crimson Text',serif;letter-spacing:0;font-weight:400;color:rgba(196,106,255,.5)">— AI record keeper</span></div>
       <div style="font-size:var(--fs-sm);color:rgba(245,237,216,.45);font-style:italic;margin-bottom:.75rem;">Describe what happened — NPCs, quests, loot, conditions, calendar all update automatically.</div>
       <div class="chron-ai-bar">
-        <textarea class="chron-ai-input" id="chron-ai-input" rows="1"
+        <textarea class="chron-ai-input" id="chron-ai-input" style="border-color:rgba(196,106,255,.35)" rows="1"
           placeholder="e.g. 'Mira the innkeeper is a secret Sorcerer spy, party does not know' or 'Party found 300gp and a +1 sword' or 'Lucian is poisoned for 2 days' or 'The Find the Dreamer quest is complete'"
           oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
         <button class="chron-ai-btn" id="chron-ai-btn" onclick="chronicleAIUpdate()">&#x26A1; LOG</button>
@@ -794,7 +797,7 @@
       <div style="font-size:var(--fs-sm);color:rgba(245,237,216,.4);font-style:italic;margin-bottom:.6rem;">Timestamped notes — grows as your campaign progresses.</div>
       <div id="dm-session-log"></div>
       <div class="dm-log-input-row">
-        <input class="dm-log-input" id="dm-log-input" type="text" placeholder="Note an event, NPC, clue, or plot thread..." onkeydown="if(event.key==='Enter')dmAddLogEntry()">
+        <input class="dm-log-input" id="dm-log-input" style="border-color:rgba(201,162,39,.45)" type="text" placeholder="Type a story note, clue, or observation — this is YOUR DM journal..." onkeydown="if(event.key==='Enter')dmAddLogEntry()">
         <button class="dm-log-add-btn" onclick="dmAddLogEntry()">+ ADD</button>
       </div>
     </div>
