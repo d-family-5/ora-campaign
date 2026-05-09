@@ -760,7 +760,7 @@
       <!-- SESSION LOG — right after party status -->
       <div class="dm-card" style="grid-column:1/-1">
         <div class="dm-card-title"><span class="dm-card-icon">&#x1F4DC;</span>Session Log</div>
-        <div style="font-size:var(--fs-sm);color:rgba(245,237,216,.4);font-style:italic;margin-bottom:.6rem;">Everything logged here automatically. Add a manual note below.</div>
+        <div style="font-size:var(--fs-sm);color:rgba(245,237,216,.4);font-style:italic;margin-bottom:.6rem;">Everything logged here automatically — story entries shown prominently.</div>
         <div id="dm-session-log"></div>
 
       </div>
@@ -1417,7 +1417,11 @@ let dmState = {
 async function loadDMState() {
   try {
     const saved = await dbGet(DM_ID);
-    if (saved) Object.assign(dmState, saved);
+    if (saved) {
+      Object.assign(dmState, saved);
+      // Ensure currentSession is always a valid number
+      if (typeof dmState.currentSession !== 'number') dmState.currentSession = 0;
+    }
   } catch(e) { console.warn('Could not load DM state', e); }
 }
 
@@ -1933,10 +1937,10 @@ function masterQuickAction(action) {
     input.style.height = 'auto';
     input.style.height = input.scrollHeight + 'px';
   }
-  chronicleMasterUpdate();
+  chronicleMasterUpdate(true); // force auto — quick actions are always mechanical
 }
 
-async function chronicleMasterUpdate() {
+async function chronicleMasterUpdate(forceAuto = false) {
   const inputEl = document.getElementById('chronicle-master-input');
   const input = inputEl ? inputEl.value.trim() : '';
   if (!input) return;
@@ -2077,13 +2081,15 @@ Current chronicle: ${JSON.stringify({
     }
 
     // ── Log to session log ───────────────────────────────────────────────
-    const isManual = parsed.log_as_manual !== false &&
-      !input.toLowerCase().match(/^(long rest|short rest|full heal|restore|set.*hp|tpk|advance day|clear condition)/);
+    // Determine if this is a story/manual entry or a mechanical/auto entry
+    const mechanicalPatterns = /^(long rest|short rest|full heal|restore all|set all|tpk|advance day|clear condition|new session)/i;
+    const isMechanical = forceAuto || mechanicalPatterns.test(input.trim()) || parsed.log_as_manual === false;
+    const entryText = parsed.summary || input;
     dmState.sessionLog.push({
       time: timeStr,
-      text: parsed.summary || input,
-      session: dmState.currentSession || 0,
-      auto: !isManual
+      text: entryText,
+      session: dmState.currentSession,
+      auto: isMechanical
     });
     await saveDMState();
 
@@ -2097,7 +2103,7 @@ Current chronicle: ${JSON.stringify({
     const now = new Date();
     const timeStr = now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+
                     now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-    dmState.sessionLog.push({ time:timeStr, text:input, session:dmState.currentSession||0, auto:false });
+    dmState.sessionLog.push({ time:timeStr, text:input, session:dmState.currentSession, auto:false });
     saveDMState();
     if (inputEl) { inputEl.value = ''; inputEl.style.height='auto'; }
     renderDMPage();
