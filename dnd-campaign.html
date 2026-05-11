@@ -686,6 +686,7 @@
   .qt-danger{color:var(--garnet-glow);border-color:rgba(255,106,152,.35);background:rgba(255,106,152,.08);}
 
 </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 <div class="loading-screen" id="loading-screen">
@@ -1972,7 +1973,9 @@ function renderPartyHP() {
 function startNewSession() {
   const now = new Date();
   const dateStr = now.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
-  dmState.currentSession = (dmState.currentSession || 1) + 1;
+  const closingSession = dmState.currentSession || 0;
+  generateSessionPDF(closingSession, dateStr);
+  dmState.currentSession = closingSession + 1;
   dmState.sessionLog.push({
     time: now.toLocaleDateString('en-US', {month:'short', day:'numeric'}) + ' ' +
           now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'}),
@@ -1986,6 +1989,146 @@ function startNewSession() {
   saveDMState();
   renderSessionLog();
   showSaveStatus('saved', `✦ Session ${dmState.currentSession} started`);
+}
+
+function generateSessionPDF(sessionNum, dateStr) {
+  try {
+    const jsPDFLib = window.jspdf;
+    if (!jsPDFLib || !jsPDFLib.jsPDF) { console.warn('jsPDF not loaded'); return; }
+    const doc = new jsPDFLib.jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
+    const W = 210, margin = 18, contentW = W - margin * 2;
+    let y = 20;
+    const GOLD=[201,162,39],WHITE=[245,237,216],DIM=[150,130,90],DARK=[20,15,8],
+          RED=[200,80,80],GREEN=[61,180,120],PURPLE=[160,100,220];
+
+    // Background
+    doc.setFillColor(12,9,4); doc.rect(0,0,W,297,'F');
+
+    // Header
+    doc.setFillColor(...GOLD); doc.rect(0,0,W,28,'F');
+    doc.setTextColor(...DARK);
+    doc.setFontSize(18); doc.setFont('helvetica','bold');
+    doc.text('ORA CAMPAIGN', W/2, 11, {align:'center'});
+    doc.setFontSize(11); doc.setFont('helvetica','normal');
+    doc.text('Session ' + sessionNum + ' Summary  \u00B7  ' + dateStr, W/2, 19, {align:'center'});
+    y = 38;
+
+    function checkPage() {
+      if (y > 275) { doc.addPage(); doc.setFillColor(12,9,4); doc.rect(0,0,W,297,'F'); y = 20; }
+    }
+    function sectionHeader(title) {
+      y += 3; checkPage();
+      doc.setFillColor(...GOLD); doc.rect(margin, y, contentW, 0.5, 'F');
+      y += 5;
+      doc.setTextColor(...GOLD); doc.setFontSize(9); doc.setFont('helvetica','bold');
+      doc.text(title.toUpperCase(), margin, y);
+      y += 6;
+    }
+    function bodyLine(text, color, indent) {
+      checkPage();
+      doc.setTextColor(...(color||WHITE));
+      doc.setFontSize(9); doc.setFont('helvetica','normal');
+      const x = margin + (indent||0);
+      doc.splitTextToSize(text, contentW-(indent||0)).forEach(line => { checkPage(); doc.text(line, x, y); y += 5; });
+    }
+
+    // Party Status
+    sectionHeader('Party Status \u2014 End of Session');
+    characters.filter(c => !c.placeholder).forEach(c => {
+      const hpPct = c.hp.max > 0 ? c.hp.current/c.hp.max : 1;
+      const hpColor = c.hp.current<=0 ? RED : hpPct<0.4 ? [220,140,40] : GREEN;
+      checkPage();
+      doc.setTextColor(...WHITE); doc.setFontSize(9); doc.setFont('helvetica','bold');
+      doc.text(c.name, margin, y);
+      doc.setFont('helvetica','normal'); doc.setTextColor(...DIM);
+      doc.text(c.class + ' ' + c.level, margin+44, y);
+      doc.setTextColor(...hpColor);
+      doc.text('HP ' + c.hp.current + '/' + c.hp.max, margin+72, y);
+      const gp = c.currency?.gp||0;
+      if (gp > 0) { doc.setTextColor(...GOLD); doc.text(gp + ' gp', margin+100, y); }
+      y += 6;
+    });
+    y += 2;
+
+    // Session notes
+    const allEntries = dmState.sessionLog.filter(e => e.session===sessionNum && !e.isSessionStart);
+    const manual = allEntries.filter(e => !e.auto);
+    const auto   = allEntries.filter(e => e.auto);
+
+    if (manual.length) {
+      sectionHeader('Session Notes (' + manual.length + ')');
+      manual.forEach(e => {
+        checkPage();
+        doc.setTextColor(...GOLD); doc.setFontSize(7.5);
+        doc.text(e.time, margin, y);
+        doc.setTextColor(...WHITE); doc.setFontSize(9);
+        doc.splitTextToSize(e.text, contentW-28).forEach(line => { checkPage(); doc.text(line, margin+28, y); y+=5; });
+        y += 1;
+      });
+    }
+    if (auto.length) {
+      sectionHeader('Automatic Events (' + auto.length + ')');
+      auto.forEach(e => bodyLine('\u00B7 ' + e.text, DIM, 3));
+    }
+
+    // NPCs
+    const npcs = chronicleState.npcs||[];
+    if (npcs.length) {
+      sectionHeader('NPCs');
+      npcs.forEach(n => {
+        bodyLine(n.name + (n.status?' ['+n.status.toUpperCase()+']':'') + (n.publicNotes?' \u2014 '+n.publicNotes:''), WHITE, 3);
+        if (n.privateNotes) bodyLine('DM: ' + n.privateNotes, RED, 6);
+      });
+    }
+
+    // Quests
+    const quests = chronicleState.quests||[];
+    if (quests.length) {
+      sectionHeader('Quest Status');
+      quests.forEach(q => {
+        bodyLine(q.title + ' \u2014 ' + (q.status||'active').toUpperCase(), q.status==='completed'?GREEN:q.status==='failed'?RED:WHITE, 3);
+        if (q.description) bodyLine(q.description, DIM, 6);
+      });
+    }
+
+    // Loot
+    const loot = chronicleState.loot||[];
+    if (loot.length) {
+      sectionHeader('Loot & Rewards');
+      loot.forEach(l => {
+        bodyLine((l.encounter||'Encounter') + (l.totalGold?' \u2014 '+l.totalGold+' gp total':''), GOLD, 3);
+        (l.items||[]).forEach(item => bodyLine((item.magic?'\u2756 ':'\u00B7 ')+item.name+(item.recipient?' \u2192 '+item.recipient:''), item.magic?PURPLE:DIM, 6));
+      });
+    }
+
+    // Calendar
+    if (chronicleState.calendar?.date) {
+      sectionHeader('Calendar');
+      bodyLine('Current Date: ' + chronicleState.calendar.date, WHITE, 3);
+      (chronicleState.calendar.events||[]).filter(e=>e.urgent).forEach(e => bodyLine('\u26A0 ' + e.text, RED, 6));
+    }
+
+    // Active conditions
+    const conds = (chronicleState.conditions||[]).filter(c=>c.active!==false);
+    if (conds.length) {
+      sectionHeader('Active Conditions');
+      conds.forEach(c => bodyLine(c.character + ': ' + c.name + (c.duration?' ('+c.duration+')':''), PURPLE, 3));
+    }
+
+    // Footer
+    const pages = doc.getNumberOfPages();
+    for (let i=1; i<=pages; i++) {
+      doc.setPage(i);
+      doc.setFillColor(...GOLD); doc.rect(0,290,W,7,'F');
+      doc.setTextColor(...DARK); doc.setFontSize(7); doc.setFont('helvetica','normal');
+      doc.text('Ora Campaign  \u00B7  Session ' + sessionNum + '  \u00B7  ' + dateStr, margin, 295);
+      doc.text('Page ' + i + ' of ' + pages, W-margin, 295, {align:'right'});
+    }
+
+    doc.save('Ora-Session-' + sessionNum + '-Summary.pdf');
+  } catch(err) {
+    console.warn('PDF generation error:', err);
+  }
 }
 
 function sessionEntryColor(text) {
