@@ -895,23 +895,17 @@
 const SUPABASE_URL = 'https://kilkrhpwjkxpqwnatted.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_3_XzvnJKMsjPCLWRg7TmDA_UOlKzHhK';
 
-// Fetch with timeout — prevents hanging forever on slow/blocked connections
+// Fetch with timeout — uses Promise.race to avoid AbortSignal cloning issues on iOS/Safari
 async function fetchWithTimeout(url, options, ms=8000) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), ms);
-  try {
-    // Build options without spreading to avoid AbortSignal clone issues
-    const fetchOptions = {
-      method: options.method || 'GET',
-      headers: options.headers || {},
-      signal: controller.signal,
-    };
-    if (options.body) fetchOptions.body = options.body;
-    const res = await fetch(url, fetchOptions);
-    return res;
-  } finally {
-    clearTimeout(timer);
-  }
+  const timeoutPromise = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error('Request timeout after ' + ms + 'ms')), ms)
+  );
+  const fetchPromise = fetch(url, {
+    method: options.method || 'GET',
+    headers: options.headers || {},
+    body: options.body || undefined
+  });
+  return Promise.race([fetchPromise, timeoutPromise]);
 }
 
 async function dbGet(id) {
@@ -1155,6 +1149,10 @@ const characters = [
     ],
     speciesTraits:['Darkvision 60 ft.', 'Fey Ancestry', 'Keen Senses', 'Trance', 'Elven Lineage (High Elf)'],
     feats:['Magic Initiate (Wizard)', 'Sage Ability Score Improvements'],
+    armorTraining:[],
+    weaponTraining:['Simple Weapons'],
+    toolTraining:["Calligrapher's Supplies"],
+    languages:['Common','Draconic','Elvish'],
     proficiencies:['Simple Weapons', "Calligrapher's Supplies", 'Common', 'Draconic', 'Elvish'],
     inventory:['Dagger','Dagger','Quarterstaff','Quarterstaff','Spellbook','Parchment (x8)','Backpack',
                "Calligrapher's Supplies","Robe",'Robe','Book','Book','Oil (x10)','Parchment (x10)',
@@ -1425,7 +1423,7 @@ function renderSheetHTML(c) {
         <div class="stat-card"><div class="card-title">Saving Throws</div>${saveHTML}</div>
         <div class="stat-card"><div class="card-title">Weapons & Damage Cantrips</div><div class="weapon-head"><span>NAME</span><span>ATK</span><span>DAMAGE</span><span>NOTES</span></div>${weaponsHTML}</div>
         <div class="stat-card"><div class="card-title">Proficiencies & Tools</div>
-          <div style="margin-bottom:.45rem"><div style="font-family:'Cinzel',serif;font-size:var(--fs-xs);color:rgba(201,162,39,.5);margin-bottom:.3rem">ARMOR</div>${c.armorTraining.map(a=>`<span class="prof-tag">${a}</span>`).join('')}</div>
+          <div style="margin-bottom:.45rem"><div style="font-family:'Cinzel',serif;font-size:var(--fs-xs);color:rgba(201,162,39,.5);margin-bottom:.3rem">ARMOR</div>${(c.armorTraining||[]).map(a=>`<span class="prof-tag">${a}</span>`).join('')}</div>
           <div><div style="font-family:'Cinzel',serif;font-size:var(--fs-xs);color:rgba(201,162,39,.5);margin-bottom:.3rem">TOOLS & OTHER</div>${profHTML}</div>
         </div>
         <div class="stat-card"><div class="card-title">Inventory</div>${inventoryHTML}</div>
