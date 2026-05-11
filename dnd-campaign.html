@@ -1112,15 +1112,15 @@ const characters = [
     },
     savingThrows:{STR:false, DEX:false, CON:true, INT:true, WIS:false, CHA:false},
     skills:{
-      Acrobatics:{mod:2,prof:false}, 'Animal Handling':{mod:0,prof:false},
-      Arcana:{mod:5,prof:true}, Athletics:{mod:-1,prof:false},
-      Deception:{mod:0,prof:false}, History:{mod:5,prof:true},
-      Insight:{mod:0,prof:false}, Intimidation:{mod:0,prof:false},
-      Investigation:{mod:5,prof:true}, Medicine:{mod:2,prof:true},
-      Nature:{mod:3,prof:false}, Perception:{mod:0,prof:false},
-      Performance:{mod:0,prof:false}, Persuasion:{mod:0,prof:false},
-      Religion:{mod:3,prof:false}, 'Sleight of Hand':{mod:2,prof:false},
-      Stealth:{mod:2,prof:false}, Survival:{mod:2,prof:true}
+      Acrobatics:{mod:2,prof:false,ability:'DEX'}, 'Animal Handling':{mod:0,prof:false,ability:'WIS'},
+      Arcana:{mod:5,prof:true,ability:'INT'}, Athletics:{mod:-1,prof:false,ability:'STR'},
+      Deception:{mod:0,prof:false,ability:'CHA'}, History:{mod:5,prof:true,ability:'INT'},
+      Insight:{mod:0,prof:false,ability:'WIS'}, Intimidation:{mod:0,prof:false,ability:'CHA'},
+      Investigation:{mod:5,prof:true,ability:'INT'}, Medicine:{mod:2,prof:true,ability:'WIS'},
+      Nature:{mod:3,prof:false,ability:'INT'}, Perception:{mod:0,prof:false,ability:'WIS'},
+      Performance:{mod:0,prof:false,ability:'CHA'}, Persuasion:{mod:0,prof:false,ability:'CHA'},
+      Religion:{mod:3,prof:false,ability:'INT'}, 'Sleight of Hand':{mod:2,prof:false,ability:'DEX'},
+      Stealth:{mod:2,prof:false,ability:'DEX'}, Survival:{mod:2,prof:true,ability:'WIS'}
     },
     spellcasting:{
       ability:'INT', dc:13, atkBonus:5,
