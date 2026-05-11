@@ -657,6 +657,34 @@
   .dm-log-entry.auto .dm-log-time { color:rgba(245,237,216,.3); }
   .dm-log-entry.auto .dm-log-text { font-size:var(--fs-xs); font-style:italic; }
 
+
+  /* === PLAYER UPDATE PANEL === */
+  .player-update-panel{background:linear-gradient(135deg,rgba(20,14,6,.98),rgba(12,8,3,.99));border:1px solid rgba(201,162,39,.4);border-radius:8px;padding:1rem 1rem .85rem;margin:.5rem .85rem 0;box-shadow:0 4px 24px rgba(0,0,0,.4);}
+  .player-update-title{font-family:'Cinzel',serif;font-size:var(--fs-sm);letter-spacing:.12em;color:var(--gold-light);margin-bottom:.2rem;}
+  .player-update-sub{font-size:var(--fs-xs);color:rgba(245,237,216,.35);font-style:italic;margin-bottom:.7rem;}
+  .player-update-bar{display:flex;gap:.5rem;margin-bottom:.75rem;}
+  .player-update-input{flex:1;background:rgba(0,0,0,.45);border:1px solid rgba(201,162,39,.4);border-radius:4px;color:var(--parchment);font-family:'Crimson Text',serif;font-size:var(--fs-base);padding:.6rem .75rem;outline:none;resize:none;min-height:44px;max-height:140px;transition:border-color .2s;-webkit-appearance:none;}
+  .player-update-input:focus{border-color:rgba(201,162,39,.7);}
+  .player-update-input::placeholder{color:rgba(245,237,216,.2);font-style:italic;}
+  .player-update-btn{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.1em;padding:.6rem 1rem;border-radius:4px;cursor:pointer;background:linear-gradient(135deg,rgba(201,162,39,.3),rgba(201,162,39,.15));border:1px solid rgba(201,162,39,.6);color:var(--gold-light);white-space:nowrap;touch-action:manipulation;flex-shrink:0;transition:all .2s;font-weight:700;}
+  .player-update-btn:hover{background:linear-gradient(135deg,rgba(201,162,39,.5),rgba(201,162,39,.3));}
+  .player-update-btn:disabled{opacity:.4;cursor:not-allowed;}
+  .player-update-thinking{display:none;align-items:center;gap:.5rem;margin-bottom:.5rem;font-family:'Cinzel',serif;font-size:var(--fs-xs);color:var(--amethyst-glow);}
+  .player-update-thinking.visible{display:flex;}
+  .quick-tap-section{margin-bottom:.6rem;}
+  .quick-tap-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.14em;color:rgba(245,237,216,.3);text-transform:uppercase;margin-bottom:.28rem;}
+  .quick-tap-row{display:flex;flex-wrap:wrap;gap:.3rem;}
+  .qt-btn{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.04em;padding:.3rem .58rem;border-radius:3px;cursor:pointer;touch-action:manipulation;transition:all .15s;user-select:none;border:1px solid;white-space:nowrap;}
+  .qt-btn:active{transform:scale(.93);}
+  .qt-hp-minus{color:var(--ruby-glow);border-color:rgba(220,50,50,.35);background:rgba(220,50,50,.08);}
+  .qt-hp-plus{color:var(--emerald-glow);border-color:rgba(61,220,151,.35);background:rgba(61,220,151,.08);}
+  .qt-neutral{color:var(--gold-light);border-color:rgba(201,162,39,.35);background:rgba(201,162,39,.08);}
+  .qt-spell{color:var(--sapphire-glow);border-color:rgba(106,173,255,.35);background:rgba(106,173,255,.08);}
+  .qt-death{color:var(--ruby-glow);border-color:rgba(220,50,50,.35);background:rgba(220,50,50,.08);}
+  .qt-death-ok{color:var(--emerald-glow);border-color:rgba(61,220,151,.35);background:rgba(61,220,151,.08);}
+  .qt-gold{color:#f0c040;border-color:rgba(240,192,64,.35);background:rgba(240,192,64,.08);}
+  .qt-danger{color:var(--garnet-glow);border-color:rgba(255,106,152,.35);background:rgba(255,106,152,.08);}
+
 </style>
 </head>
 <body>
@@ -679,8 +707,9 @@
     <div class="sheet-topbar">
       <button class="back-btn" onclick="showRoster()">◂ ROSTER</button>
       <div><div class="sheet-char-name" id="sheet-name"></div><div class="sheet-char-sub" id="sheet-sub"></div></div>
-      <button class="update-btn" onclick="openUpdateModal()">✦ UPDATE</button>
+      <button class="update-btn" onclick="toggleUpdatePanel()">✦ UPDATE</button>
     </div>
+    <div id="player-update-panel"></div>
     <div id="sheet-content"></div>
   </div>
 </div>
@@ -1358,6 +1387,357 @@ function toggleSlot(charId,level,index){const c=characters.find(x=>x.id===charId
 function toggleInspiration(charId){const c=characters.find(x=>x.id===charId);if(!c)return;c.inspiration=!c.inspiration;queueSave(charId);const gem=document.getElementById('insp-gem');if(gem){gem.className='inspiration-gem'+(c.inspiration?' active':'');gem.textContent=c.inspiration?'✦':'◇';gem.nextElementSibling.textContent=c.inspiration?'INSPIRED':'NOT INSPIRED';}}
 function openUpdateModal(){document.getElementById('modal-input').value='';document.getElementById('ai-thinking').classList.remove('visible');document.getElementById('modal').classList.add('open');}
 function closeModal(){document.getElementById('modal').classList.remove('open');}
+
+
+// ═══════════════════════════════════════════
+// PLAYER UPDATE PANEL
+// ═══════════════════════════════════════════
+function toggleUpdatePanel() {
+  const panel = document.getElementById('player-update-panel');
+  if (!panel) return;
+  if (panel.innerHTML === '') {
+    renderUpdatePanel();
+    setTimeout(() => panel.scrollIntoView({behavior:'smooth', block:'nearest'}), 50);
+  } else {
+    panel.innerHTML = '';
+  }
+}
+
+function renderUpdatePanel() {
+  const panel = document.getElementById('player-update-panel');
+  const c = characters.find(x => x.id === currentCharId);
+  if (!panel || !c) return;
+
+  const slotUseBtns = (c.spellcasting?.slots || []).filter(s => s.total > 0).map(s => {
+    const avail = s.total - s.used;
+    const sfx = ['','st','nd','rd'][s.level] || 'th';
+    return '<button class="qt-btn qt-spell" onclick="quickTap(\'use_slot\',' + s.level + ')">Use ' + s.level + sfx + ' (' + avail + '/' + s.total + ')</button>';
+  }).join('');
+
+  const slotRestoreBtns = (c.spellcasting?.slots || []).filter(s => s.total > 0 && s.used > 0).map(s => {
+    const sfx = ['','st','nd','rd'][s.level] || 'th';
+    return '<button class="qt-btn qt-spell" onclick="quickTap(\'restore_slot\',' + s.level + ')">+' + s.level + sfx + '</button>';
+  }).join('');
+
+  const cur = c.currency || {cp:0,sp:0,ep:0,gp:0,pp:0};
+
+  const slotsHtml = slotUseBtns ? (
+    '<div class="quick-tap-section"><div class="quick-tap-label">&#x1F52E; Use Spell Slot</div>' +
+    '<div class="quick-tap-row">' + slotUseBtns + '</div></div>' +
+    (slotRestoreBtns ? '<div class="quick-tap-section"><div class="quick-tap-label">&#x1F52E; Restore Slot</div><div class="quick-tap-row">' + slotRestoreBtns + '</div></div>' : '')
+  ) : '';
+
+  panel.innerHTML =
+    '<div class="player-update-panel">' +
+    '<div class="player-update-title">&#x26A1; Update Your Character</div>' +
+    '<div class="player-update-sub">Natural language or quick taps &mdash; everything saves instantly</div>' +
+
+    '<div class="player-update-bar">' +
+    '<textarea class="player-update-input" id="player-update-input" rows="2" ' +
+    'placeholder="e.g. I leveled up to 2 or I learned Fireball or I found a +1 rapier or I cast Charm Person" ' +
+    'oninput="this.style.height=\'auto\';this.style.height=this.scrollHeight+\'px\'"></textarea>' +
+    '<button class="player-update-btn" id="player-update-btn" onclick="submitPlayerUpdate()">&#x26A1; LOG</button>' +
+    '</div>' +
+    '<div class="player-update-thinking" id="player-update-thinking"><div class="ai-spinner"></div><span>Updating...</span></div>' +
+
+    '<div class="quick-tap-section">' +
+    '<div class="quick-tap-label">&#x2665; Hit Points &mdash; ' + c.hp.current + '/' + c.hp.max + (c.hp.temp ? ' + ' + c.hp.temp + ' temp' : '') + '</div>' +
+    '<div class="quick-tap-row">' +
+    '<button class="qt-btn qt-hp-minus" onclick="quickTap(\'hp\',-1)">&#x2212;1</button>' +
+    '<button class="qt-btn qt-hp-minus" onclick="quickTap(\'hp\',-2)">&#x2212;2</button>' +
+    '<button class="qt-btn qt-hp-minus" onclick="quickTap(\'hp\',-5)">&#x2212;5</button>' +
+    '<button class="qt-btn qt-hp-minus" onclick="quickTap(\'hp\',-10)">&#x2212;10</button>' +
+    '<button class="qt-btn qt-hp-plus"  onclick="quickTap(\'hp\',1)">+1</button>' +
+    '<button class="qt-btn qt-hp-plus"  onclick="quickTap(\'hp\',2)">+2</button>' +
+    '<button class="qt-btn qt-hp-plus"  onclick="quickTap(\'hp\',5)">+5</button>' +
+    '<button class="qt-btn qt-hp-plus"  onclick="quickTap(\'hp\',10)">+10</button>' +
+    '<button class="qt-btn qt-hp-plus"  onclick="quickTap(\'hp\',\'full\')">Full</button>' +
+    '</div></div>' +
+
+    '<div class="quick-tap-section">' +
+    '<div class="quick-tap-label">&#x2728; Temp HP &mdash; current: ' + (c.hp.temp||0) + '</div>' +
+    '<div class="quick-tap-row">' +
+    '<button class="qt-btn qt-neutral" onclick="quickTap(\'temp\',3)">+3</button>' +
+    '<button class="qt-btn qt-neutral" onclick="quickTap(\'temp\',5)">+5</button>' +
+    '<button class="qt-btn qt-neutral" onclick="quickTap(\'temp\',10)">+10</button>' +
+    '<button class="qt-btn qt-danger"  onclick="quickTap(\'temp\',0)">Clear</button>' +
+    '</div></div>' +
+
+    slotsHtml +
+
+    '<div class="quick-tap-section">' +
+    '<div class="quick-tap-label">&#x1F319; Rest</div>' +
+    '<div class="quick-tap-row">' +
+    '<button class="qt-btn qt-spell"   onclick="quickTap(\'short_rest\')">Short Rest</button>' +
+    '<button class="qt-btn qt-neutral" onclick="quickTap(\'long_rest\')">Long Rest</button>' +
+    '</div></div>' +
+
+    '<div class="quick-tap-section">' +
+    '<div class="quick-tap-label">&#x1F3B2; Inspiration &mdash; ' + (c.inspiration ? 'ACTIVE' : 'none') + '</div>' +
+    '<div class="quick-tap-row">' +
+    '<button class="qt-btn qt-neutral" onclick="quickTap(\'inspiration\',true)">Gain</button>' +
+    '<button class="qt-btn qt-danger"  onclick="quickTap(\'inspiration\',false)">Use/Lose</button>' +
+    '</div></div>' +
+
+    '<div class="quick-tap-section">' +
+    '<div class="quick-tap-label">&#x1F480; Death Saves &mdash; &#x2713;' + (c.deathSaves?.successes||0) + ' &#x2715;' + (c.deathSaves?.failures||0) + '</div>' +
+    '<div class="quick-tap-row">' +
+    '<button class="qt-btn qt-death-ok" onclick="quickTap(\'death_success\')">Succeed</button>' +
+    '<button class="qt-btn qt-death"    onclick="quickTap(\'death_fail\')">Fail</button>' +
+    '<button class="qt-btn qt-neutral"  onclick="quickTap(\'death_reset\')">Stabilized</button>' +
+    '</div></div>' +
+
+    '<div class="quick-tap-section">' +
+    '<div class="quick-tap-label">&#x1F4B0; Gold &mdash; ' + cur.gp + ' gp &middot; ' + cur.sp + ' sp &middot; ' + cur.cp + ' cp</div>' +
+    '<div class="quick-tap-row">' +
+    '<button class="qt-btn qt-gold"   onclick="quickTap(\'gp\',1)">+1</button>' +
+    '<button class="qt-btn qt-gold"   onclick="quickTap(\'gp\',5)">+5</button>' +
+    '<button class="qt-btn qt-gold"   onclick="quickTap(\'gp\',10)">+10</button>' +
+    '<button class="qt-btn qt-gold"   onclick="quickTap(\'gp\',50)">+50</button>' +
+    '<button class="qt-btn qt-gold"   onclick="quickTap(\'gp\',100)">+100</button>' +
+    '<button class="qt-btn qt-danger" onclick="quickTap(\'gp\',-1)">&#x2212;1</button>' +
+    '<button class="qt-btn qt-danger" onclick="quickTap(\'gp\',-5)">&#x2212;5</button>' +
+    '<button class="qt-btn qt-danger" onclick="quickTap(\'gp\',-10)">&#x2212;10</button>' +
+    '</div></div>' +
+    '</div>';
+}
+
+// Quick tap — direct stat updates, no AI needed
+async function quickTap(action, value) {
+  const c = characters.find(x => x.id === currentCharId);
+  if (!c) return;
+  const now = new Date();
+  const timeStr = now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+
+                  now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  let summary = '';
+
+  switch(action) {
+    case 'hp':
+      if (value === 'full') {
+        c.hp.current = c.hp.max;
+        summary = 'Restored to full HP (' + c.hp.max + '/' + c.hp.max + ')';
+      } else {
+        const prev = c.hp.current;
+        c.hp.current = Math.max(0, Math.min(c.hp.max, c.hp.current + parseInt(value)));
+        summary = parseInt(value) > 0
+          ? 'Healed ' + value + ' HP (' + prev + ' \u2192 ' + c.hp.current + '/' + c.hp.max + ')'
+          : 'Took ' + Math.abs(value) + ' damage (' + prev + ' \u2192 ' + c.hp.current + '/' + c.hp.max + ')';
+      }
+      break;
+
+    case 'temp':
+      c.hp.temp = value;
+      summary = value > 0 ? 'Gained ' + value + ' temp HP' : 'Temp HP cleared';
+      break;
+
+    case 'use_slot': {
+      if (!c.spellcasting) break;
+      const slot = c.spellcasting.slots.find(s => s.level === value);
+      const sfx = ['','st','nd','rd'][value] || 'th';
+      if (slot && slot.used < slot.total) {
+        slot.used++;
+        summary = 'Used a ' + value + sfx + ' level slot (' + (slot.total - slot.used) + '/' + slot.total + ' left)';
+      } else {
+        summary = 'No ' + value + sfx + ' level slots remaining';
+      }
+      break;
+    }
+
+    case 'restore_slot': {
+      if (!c.spellcasting) break;
+      const slot = c.spellcasting.slots.find(s => s.level === value);
+      const sfx = ['','st','nd','rd'][value] || 'th';
+      if (slot && slot.used > 0) {
+        slot.used--;
+        summary = 'Restored a ' + value + sfx + ' level slot';
+      }
+      break;
+    }
+
+    case 'short_rest':
+      summary = 'Short rest taken';
+      break;
+
+    case 'long_rest':
+      c.hp.current = c.hp.max;
+      c.hp.temp = 0;
+      if (c.spellcasting) c.spellcasting.slots.forEach(s => s.used = 0);
+      c.inspiration = false;
+      c.deathSaves = {successes:0, failures:0};
+      summary = 'Long rest \u2014 HP and all spell slots fully restored';
+      break;
+
+    case 'inspiration':
+      c.inspiration = value;
+      summary = value ? 'Gained Heroic Inspiration' : 'Used Heroic Inspiration';
+      break;
+
+    case 'death_success':
+      c.deathSaves = c.deathSaves || {successes:0, failures:0};
+      c.deathSaves.successes = Math.min(3, c.deathSaves.successes + 1);
+      summary = 'Death save success (' + c.deathSaves.successes + '/3)';
+      if (c.deathSaves.successes >= 3) {
+        c.deathSaves = {successes:0, failures:0};
+        c.hp.current = 1;
+        summary = 'Stabilized! 3 successes \u2014 restored to 1 HP';
+      }
+      break;
+
+    case 'death_fail':
+      c.deathSaves = c.deathSaves || {successes:0, failures:0};
+      c.deathSaves.failures = Math.min(3, c.deathSaves.failures + 1);
+      summary = 'Death save failure (' + c.deathSaves.failures + '/3)';
+      if (c.deathSaves.failures >= 3) summary = '3 failures \u2014 character has died';
+      break;
+
+    case 'death_reset':
+      c.deathSaves = {successes:0, failures:0};
+      summary = 'Death saves reset \u2014 stabilized';
+      break;
+
+    case 'gp': {
+      c.currency = c.currency || {cp:0,sp:0,ep:0,gp:0,pp:0};
+      const prev = c.currency.gp;
+      c.currency.gp = Math.max(0, c.currency.gp + parseInt(value));
+      summary = parseInt(value) > 0
+        ? 'Gained ' + value + ' gp (' + prev + ' \u2192 ' + c.currency.gp + ' gp)'
+        : 'Spent ' + Math.abs(value) + ' gp (' + prev + ' \u2192 ' + c.currency.gp + ' gp)';
+      break;
+    }
+  }
+
+  if (!summary) return;
+  c.history.push({time:timeStr, input:'[Quick tap]', result:summary});
+  await dbSave(c.id, c);
+  showSaveStatus('saved', '\u2713 Saved');
+  openSheet(currentCharId);
+}
+
+// Natural language player update via AI
+async function submitPlayerUpdate() {
+  const inputEl = document.getElementById('player-update-input');
+  const input = inputEl ? inputEl.value.trim() : '';
+  if (!input) return;
+  const c = characters.find(x => x.id === currentCharId);
+  if (!c) return;
+
+  const btn      = document.getElementById('player-update-btn');
+  const thinking = document.getElementById('player-update-thinking');
+  if (btn) btn.disabled = true;
+  if (thinking) thinking.classList.add('visible');
+
+  try {
+    const charState = JSON.stringify({
+      name:c.name, class:c.class, level:c.level, profBonus:c.profBonus,
+      hp:c.hp, ac:c.ac, speed:c.speed, initiative:c.initiative,
+      inspiration:c.inspiration, deathSaves:c.deathSaves||{successes:0,failures:0},
+      abilities:c.abilities, currency:c.currency||{cp:0,sp:0,ep:0,gp:0,pp:0},
+      spellcasting:c.spellcasting?.slots?.map(s=>({level:s.level,used:s.used,total:s.total})),
+      spells:c.spells.map(s=>s.name), features:c.features.map(f=>f.name),
+      inventory:c.inventory,
+      skills:Object.entries(c.skills||{}).filter(([k,v])=>v.prof).map(([k])=>k)
+    });
+
+    const sysPrompt = 'You are a D&D 5e (2024 PHB) character sheet assistant. A player is updating their own character. Return ONLY valid JSON (no markdown): {"summary":"one sentence","changes":{"hp_current":0,"hp_max":0,"hp_temp":0,"level":0,"profBonus":0,"ac":0,"speed":0,"initiative":0,"inspiration":false,"death_saves":{"successes":0,"failures":0},"reset_death_saves":false,"abilities":{"STR":{"score":0,"mod":0}},"currency":{"cp":0,"sp":0,"ep":0,"gp":0,"pp":0},"use_spell_slot":0,"restore_spell_slot":0,"reset_spell_slots":false,"skill_proficiency":{"SkillName":true},"saving_throw_proficiency":{"STR":true},"faction":"","new_weapons":[{"name":"","atkBonus":"","damage":"","notes":""}],"remove_weapons":[""],"new_spells":[{"level":0,"name":"","castTime":"","concentration":false,"ritual":false,"material":false}],"remove_spells":[""],"new_features":[{"name":"","desc":""}],"remove_features":[""],"new_species_traits":[""],"new_inventory":[""],"remove_inventory":[""],"new_proficiencies":[""],"remove_proficiencies":[""]}}. Only include changed fields. For damage: hp_current=current minus damage capped at 0. For healing: hp_current=current plus healing capped at hp_max. For currency provide NEW total. For level up set level AND profBonus=ceil(level/4)+1. use_spell_slot=N marks one level N slot used. Auto-calc mod: floor((score-10)/2). Current character: ' + charState;
+
+    const res = await fetchWithTimeout('https://ora-proxy.cdpractical.workers.dev', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'gemini-2.0-flash', max_tokens:1000,
+        system: sysPrompt,
+        messages: [{role:'user', content:input}]
+      })
+    }, 12000);
+
+    const data = await res.json();
+    const text = data.content?.map(i => i.text||'').join('') || '';
+    let clean = text.replace(/^```json\s*/i,'').replace(/^```\s*/i,'').replace(/```\s*$/i,'').trim();
+    const fb = clean.indexOf('{'); const lb = clean.lastIndexOf('}');
+    if (fb !== -1) clean = clean.slice(fb, lb+1);
+    const parsed = JSON.parse(clean);
+    const ch = parsed.changes || {};
+
+    // Apply all changes
+    if (ch.hp_current !== undefined) c.hp.current = Math.max(0, Math.min(ch.hp_current, c.hp.max));
+    if (ch.hp_temp    !== undefined) c.hp.temp = Math.max(0, ch.hp_temp);
+    if (ch.hp_max     !== undefined) c.hp.max = ch.hp_max;
+    if (ch.reset_death_saves) { c.deathSaves = {successes:0, failures:0}; if (!ch.hp_current) c.hp.current = 1; }
+    if (ch.death_saves) {
+      c.deathSaves = c.deathSaves || {successes:0, failures:0};
+      if (ch.death_saves.successes !== undefined) c.deathSaves.successes = Math.min(3, ch.death_saves.successes);
+      if (ch.death_saves.failures  !== undefined) c.deathSaves.failures  = Math.min(3, ch.death_saves.failures);
+    }
+    if (ch.level      !== undefined) c.level = ch.level;
+    if (ch.profBonus  !== undefined) c.profBonus = ch.profBonus;
+    else if (ch.level !== undefined) c.profBonus = Math.ceil(ch.level / 4) + 1;
+    if (ch.ac         !== undefined) c.ac = ch.ac;
+    if (ch.speed      !== undefined) c.speed = ch.speed;
+    if (ch.initiative !== undefined) c.initiative = ch.initiative;
+    if (ch.inspiration!== undefined) c.inspiration = ch.inspiration;
+    if (ch.abilities) Object.entries(ch.abilities).forEach(([k,v]) => {
+      if (c.abilities[k]) {
+        if (v.score !== undefined) { c.abilities[k].score = v.score; c.abilities[k].mod = Math.floor((v.score-10)/2); }
+        if (v.mod   !== undefined) c.abilities[k].mod = v.mod;
+      }
+    });
+    if (ch.currency) { c.currency = c.currency||{cp:0,sp:0,ep:0,gp:0,pp:0}; Object.assign(c.currency, ch.currency); }
+    if (ch.reset_spell_slots && c.spellcasting) c.spellcasting.slots.forEach(s => s.used = 0);
+    if (ch.use_spell_slot !== undefined && c.spellcasting) {
+      const s = c.spellcasting.slots.find(s => s.level === ch.use_spell_slot);
+      if (s && s.used < s.total) s.used++;
+    }
+    if (ch.restore_spell_slot !== undefined && c.spellcasting) {
+      const s = c.spellcasting.slots.find(s => s.level === ch.restore_spell_slot);
+      if (s && s.used > 0) s.used--;
+    }
+    if (ch.skill_proficiency) Object.entries(ch.skill_proficiency).forEach(([sk,p]) => { if (c.skills?.[sk]) c.skills[sk].prof = p; });
+    if (ch.saving_throw_proficiency) Object.entries(ch.saving_throw_proficiency).forEach(([st,p]) => { if (c.savingThrows?.[st] !== undefined) c.savingThrows[st] = p; });
+    if (ch.faction !== undefined) c.faction = ch.faction;
+    if (ch.new_weapons?.length)     c.weapons.push(...ch.new_weapons);
+    if (ch.remove_weapons?.length)  c.weapons  = c.weapons.filter(w  => !ch.remove_weapons.some(r  => w.name.toLowerCase().includes(r.toLowerCase())));
+    if (ch.new_spells?.length)      c.spells.push(...ch.new_spells);
+    if (ch.remove_spells?.length)   c.spells   = c.spells.filter(s   => !ch.remove_spells.some(r   => s.name.toLowerCase().includes(r.toLowerCase())));
+    if (ch.new_features?.length)    c.features.push(...ch.new_features);
+    if (ch.remove_features?.length) c.features = c.features.filter(f  => !ch.remove_features.some(r => f.name.toLowerCase().includes(r.toLowerCase())));
+    if (ch.new_species_traits?.length) { c.speciesTraits = c.speciesTraits || []; c.speciesTraits.push(...ch.new_species_traits); }
+    if (ch.new_inventory?.length)     c.inventory.push(...ch.new_inventory);
+    if (ch.remove_inventory?.length)  c.inventory    = c.inventory.filter(i    => !ch.remove_inventory.some(r    => i.toLowerCase().includes(r.toLowerCase())));
+    if (ch.new_proficiencies?.length)    c.proficiencies.push(...ch.new_proficiencies);
+    if (ch.remove_proficiencies?.length) c.proficiencies = c.proficiencies.filter(p => !ch.remove_proficiencies.some(r => p.toLowerCase().includes(r.toLowerCase())));
+    if (ch.abilities?.WIS || ch.skill_proficiency?.Perception) {
+      c.passivePerception = 10 + (c.abilities.WIS?.mod||0) + (c.skills?.Perception?.prof ? (c.profBonus||2) : 0);
+    }
+
+    const now = new Date();
+    const timeStr = now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+
+                    now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    c.history.push({time:timeStr, input, result:parsed.summary||'Changes applied.'});
+    if (inputEl) { inputEl.value = ''; inputEl.style.height = 'auto'; }
+    await dbSave(c.id, c);
+    showSaveStatus('saved', '\u2713 Saved to Chronicle');
+    openSheet(currentCharId);
+    setTimeout(() => {
+      const b = document.getElementById('hist-body');
+      const chev = document.getElementById('hist-chevron');
+      if (b && !b.classList.contains('open')) { b.classList.add('open'); if (chev) chev.classList.add('open'); }
+    }, 400);
+
+  } catch(err) {
+    console.warn('Player update AI error:', err.message);
+    const now = new Date();
+    const timeStr = now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+
+                    now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    c.history.push({time:timeStr, input, result:'(logged \u2014 AI unavailable)'});
+    if (inputEl) { inputEl.value = ''; inputEl.style.height = 'auto'; }
+    await dbSave(c.id, c);
+    showSaveStatus('saved', '\u2713 Logged');
+    openSheet(currentCharId);
+  } finally {
+    if (btn) btn.disabled = false;
+    if (thinking) thinking.classList.remove('visible');
+  }
+}
+
 
 async function submitUpdate(){
   const input=document.getElementById('modal-input').value.trim();if(!input)return;
