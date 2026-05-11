@@ -976,6 +976,10 @@ const CHAR_IMAGES = {
     'bard-noble': {
       tile:   'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Lucian%20Vale.PNG',
       banner: 'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Lucian%20Vale.PNG'
+    },
+    'rovan-eryth': {
+      tile:   'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Rovan%20Eryth.png',
+      banner: 'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Rovan%20Eryth%202.PNG'
     }
   };
 
@@ -1084,6 +1088,81 @@ const characters = [
   {id:'p5',name:'Hero Five', class:'???',icon:'🌙', tileColor:'var(--jade-light)',    tileColorLight:'var(--jade-glow)',    tileGlow:'rgba(80,232,160,.22)', tileBg:'var(--jade)',    placeholder:true},
   {id:'p6',name:'Hero Six',  class:'???',icon:'🗡️', tileColor:'var(--topaz-light)',   tileColorLight:'var(--topaz-glow)',   tileGlow:'rgba(255,196,106,.22)',tileBg:'var(--topaz)',   placeholder:true},
   {id:'p7',name:'Hero Seven',class:'???',icon:'🛡️', tileColor:'var(--garnet-light)',  tileColorLight:'var(--garnet-glow)',  tileGlow:'rgba(255,106,152,.22)',tileBg:'var(--garnet)',  placeholder:true},
+,
+  {
+    id:'rovan-eryth', name:'Rovan Eryth', class:'Wizard', subclass:'',
+    species:'Elf', background:'Sage', level:1,
+    icon:'📖',
+    tileColor:'var(--sapphire-light)', tileColorLight:'var(--sapphire-glow)',
+    tileGlow:'rgba(106,173,255,.28)', tileBg:'var(--sapphire)',
+    hp:{current:9, max:9, temp:0}, hitDice:'1d6',
+    ac:12, initiative:2, speed:30, size:'M', profBonus:2,
+    passivePerception:10, passiveInsight:10, passiveInvestigation:15,
+    senses:['Darkvision 60 ft.'],
+    inspiration:false,
+    deathSaves:{successes:0, failures:0},
+    alignment:'Chaotic Neutral',
+    abilities:{
+      STR:{score:8,  mod:-1},
+      DEX:{score:14, mod:2},
+      CON:{score:16, mod:3},
+      INT:{score:16, mod:3},
+      WIS:{score:10, mod:0},
+      CHA:{score:10, mod:0}
+    },
+    savingThrows:{STR:false, DEX:false, CON:true, INT:true, WIS:false, CHA:false},
+    skills:{
+      Acrobatics:{mod:2,prof:false}, 'Animal Handling':{mod:0,prof:false},
+      Arcana:{mod:5,prof:true}, Athletics:{mod:-1,prof:false},
+      Deception:{mod:0,prof:false}, History:{mod:5,prof:true},
+      Insight:{mod:0,prof:false}, Intimidation:{mod:0,prof:false},
+      Investigation:{mod:5,prof:true}, Medicine:{mod:2,prof:true},
+      Nature:{mod:3,prof:false}, Perception:{mod:0,prof:false},
+      Performance:{mod:0,prof:false}, Persuasion:{mod:0,prof:false},
+      Religion:{mod:3,prof:false}, 'Sleight of Hand':{mod:2,prof:false},
+      Stealth:{mod:2,prof:false}, Survival:{mod:2,prof:true}
+    },
+    spellcasting:{
+      ability:'INT', dc:13, atkBonus:5,
+      slots:[{level:1, total:2, used:0}]
+    },
+    spells:[
+      {level:0, name:'Mold Earth',       castTime:'1A', range:'30 ft', concentration:false, ritual:false, material:false},
+      {level:0, name:'Light',            castTime:'1A', range:'Touch', concentration:false, ritual:false, material:true},
+      {level:0, name:'Mage Hand',        castTime:'1A', range:'30 ft', concentration:false, ritual:false, material:false},
+      {level:0, name:'Fire Bolt',        castTime:'1A', range:'120 ft', concentration:false, ritual:false, material:false},
+      {level:0, name:'Blade Ward',       castTime:'1A', range:'Self', concentration:true,  ritual:false, material:false},
+      {level:0, name:'Mending',          castTime:'1m', range:'Touch', concentration:false, ritual:false, material:true},
+      {level:1, name:'Magic Missile',    castTime:'1A', range:'120 ft', concentration:false, ritual:false, material:false},
+      {level:1, name:'Sleep',            castTime:'1A', range:'60 ft', concentration:true,  ritual:false, material:true},
+      {level:1, name:'Detect Magic',     castTime:'1A', range:'Self',  concentration:true,  ritual:true,  material:false},
+      {level:1, name:'Grease',           castTime:'1A', range:'60 ft', concentration:false, ritual:false, material:true},
+      {level:1, name:'Shield',           castTime:'1R', range:'Self',  concentration:false, ritual:false, material:false},
+      {level:1, name:'Find Familiar',    castTime:'1h', range:'10 ft', concentration:false, ritual:true,  material:true},
+      {level:1, name:'Mage Armor',       castTime:'1A', range:'Touch', concentration:false, ritual:false, material:true}
+    ],
+    weapons:[
+      {name:'Fire Bolt', atkBonus:'+5', damage:'1d10 Fire',       notes:'Cantrip, V/S'},
+      {name:'Unarmed Strike', atkBonus:'+1', damage:'0 Bludgeoning', notes:''}
+    ],
+    features:[
+      {name:'Arcane Recovery',   desc:'Once per Long Rest after a Short Rest, recover spell slots with combined level up to 1. Slots cannot be 6th level or higher.'},
+      {name:'Ritual Adept',      desc:'You can cast any spell as a ritual if it has the ritual tag, without preparing it.'},
+      {name:'Fey Ancestry',      desc:'Advantage on saving throws to avoid or end the Charmed condition.'},
+      {name:'Keen Senses',       desc:'Proficiency in Insight, Perception, or Survival.'},
+      {name:'Trance',            desc:'You do not need to sleep. You can finish a Long Rest in 4 hours of trancelike meditation.'},
+      {name:'Darkvision',        desc:'Darkvision 60 ft.'},
+      {name:'Magic Initiate (Wizard)', desc:'Two extra cantrips and one free 1st-level spell per Long Rest.'}
+    ],
+    speciesTraits:['Darkvision 60 ft.', 'Fey Ancestry', 'Keen Senses', 'Trance', 'Elven Lineage (High Elf)'],
+    proficiencies:['Simple Weapons', "Calligrapher's Supplies", 'Common', 'Draconic', 'Elvish'],
+    inventory:['Dagger','Dagger','Quarterstaff','Quarterstaff','Spellbook','Parchment (x8)','Backpack',
+               "Calligrapher's Supplies","Robe",'Robe','Book','Book','Oil (x10)','Parchment (x10)',
+               'Tinderbox','Lamp','Ink Pen','Ink'],
+    currency:{cp:0, sp:0, ep:0, gp:0, pp:0},
+    faction:'keepers',
+    history:[]
+  }
 ];
 
 let currentCharId = null;
