@@ -660,21 +660,21 @@
 
   /* === PLAYER UPDATE PANEL === */
   .player-update-panel{background:linear-gradient(135deg,rgba(20,14,6,.98),rgba(12,8,3,.99));border:1px solid rgba(201,162,39,.4);border-radius:8px;padding:1rem 1rem .85rem;margin:.5rem .85rem 0;box-shadow:0 4px 24px rgba(0,0,0,.4);}
-  .player-update-title{font-family:'Cinzel',serif;font-size:var(--fs-sm);letter-spacing:.12em;color:var(--gold-light);margin-bottom:.2rem;}
-  .player-update-sub{font-size:var(--fs-xs);color:rgba(245,237,216,.35);font-style:italic;margin-bottom:.7rem;}
+  .player-update-title{font-family:'Cinzel',serif;font-size:var(--fs-base);letter-spacing:.12em;color:var(--gold-light);margin-bottom:.3rem;}
+  .player-update-sub{font-size:var(--fs-sm);color:rgba(245,237,216,.35);font-style:italic;margin-bottom:.75rem;}
   .player-update-bar{display:flex;gap:.5rem;margin-bottom:.75rem;}
-  .player-update-input{flex:1;background:rgba(0,0,0,.45);border:1px solid rgba(201,162,39,.4);border-radius:4px;color:var(--parchment);font-family:'Crimson Text',serif;font-size:var(--fs-base);padding:.6rem .75rem;outline:none;resize:none;min-height:44px;max-height:140px;transition:border-color .2s;-webkit-appearance:none;}
+  .player-update-input{flex:1;background:rgba(0,0,0,.45);border:1px solid rgba(201,162,39,.4);border-radius:4px;color:var(--parchment);font-family:'Crimson Text',serif;font-size:1rem;padding:.7rem .85rem;outline:none;resize:none;min-height:44px;max-height:140px;transition:border-color .2s;-webkit-appearance:none;}
   .player-update-input:focus{border-color:rgba(201,162,39,.7);}
   .player-update-input::placeholder{color:rgba(245,237,216,.2);font-style:italic;}
-  .player-update-btn{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.1em;padding:.6rem 1rem;border-radius:4px;cursor:pointer;background:linear-gradient(135deg,rgba(201,162,39,.3),rgba(201,162,39,.15));border:1px solid rgba(201,162,39,.6);color:var(--gold-light);white-space:nowrap;touch-action:manipulation;flex-shrink:0;transition:all .2s;font-weight:700;}
+  .player-update-btn{font-family:'Cinzel',serif;font-size:.82rem;letter-spacing:.1em;padding:.7rem 1.1rem;border-radius:4px;cursor:pointer;background:linear-gradient(135deg,rgba(201,162,39,.3),rgba(201,162,39,.15));border:1px solid rgba(201,162,39,.6);color:var(--gold-light);white-space:nowrap;touch-action:manipulation;flex-shrink:0;transition:all .2s;font-weight:700;}
   .player-update-btn:hover{background:linear-gradient(135deg,rgba(201,162,39,.5),rgba(201,162,39,.3));}
   .player-update-btn:disabled{opacity:.4;cursor:not-allowed;}
   .player-update-thinking{display:none;align-items:center;gap:.5rem;margin-bottom:.5rem;font-family:'Cinzel',serif;font-size:var(--fs-xs);color:var(--amethyst-glow);}
   .player-update-thinking.visible{display:flex;}
   .quick-tap-section{margin-bottom:.6rem;}
-  .quick-tap-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.14em;color:rgba(245,237,216,.3);text-transform:uppercase;margin-bottom:.28rem;}
+  .quick-tap-label{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.1em;color:rgba(245,237,216,.45);text-transform:uppercase;margin-bottom:.35rem;}
   .quick-tap-row{display:flex;flex-wrap:wrap;gap:.3rem;}
-  .qt-btn{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.04em;padding:.3rem .58rem;border-radius:3px;cursor:pointer;touch-action:manipulation;transition:all .15s;user-select:none;border:1px solid;white-space:nowrap;}
+  .qt-btn{font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.04em;padding:.42rem .72rem;border-radius:3px;cursor:pointer;touch-action:manipulation;transition:all .15s;user-select:none;border:1px solid;white-space:nowrap;}
   .qt-btn:active{transform:scale(.93);}
   .qt-hp-minus{color:var(--ruby-glow);border-color:rgba(220,50,50,.35);background:rgba(220,50,50,.08);}
   .qt-hp-plus{color:var(--emerald-glow);border-color:rgba(61,220,151,.35);background:rgba(61,220,151,.08);}
@@ -1254,6 +1254,8 @@ function renderRoster() {
       tile.innerHTML=`<div class="char-tile-border"></div><div class="char-tile-hp">♥ ${c.hp.current}/${c.hp.max}</div><div class="char-tile-icon">${c.icon}</div><div class="char-tile-name">${c.name}</div><div class="char-tile-class">${c.class}${c.subclass?' · '+c.subclass:''}</div><div class="char-tile-level">LVL ${c.level} · ${c.species}</div>`;
       tile.onclick=()=>openSheet(c.id);
     }
+    // Always tappable for non-placeholder chars — even if image hasn't loaded yet
+    if (!c.placeholder) tile.onclick=()=>openSheet(c.id);
     grid.appendChild(tile);
   });
 
