@@ -1154,6 +1154,7 @@ const characters = [
       {name:'Magic Initiate (Wizard)', desc:'Two extra cantrips and one free 1st-level spell per Long Rest.'}
     ],
     speciesTraits:['Darkvision 60 ft.', 'Fey Ancestry', 'Keen Senses', 'Trance', 'Elven Lineage (High Elf)'],
+    feats:['Magic Initiate (Wizard)', 'Sage Ability Score Improvements'],
     proficiencies:['Simple Weapons', "Calligrapher's Supplies", 'Common', 'Draconic', 'Elvish'],
     inventory:['Dagger','Dagger','Quarterstaff','Quarterstaff','Spellbook','Parchment (x8)','Backpack',
                "Calligrapher's Supplies","Robe",'Robe','Book','Book','Oil (x10)','Parchment (x10)',
@@ -1339,12 +1340,12 @@ function renderSheetHTML(c) {
   const skillsHTML=Object.entries(c.skills).map(([name,d])=>{const m=abs[d.ability].mod+(d.prof?pb:0),hasRef=!!REFERENCE.skills[name];return `<div class="skill-row"><div class="skill-dot ${d.prof?'proficient':''}"></div><div class="skill-name ${hasRef?'tappable':''}" ${hasRef?`onclick="tapSkill('${name}',${m})"`:''} >${name} <span style="opacity:.35;font-size:.8rem">(${d.ability})</span></div><div class="skill-val">${fmt(m)}</div></div>`;}).join('');
   const weaponsHTML=c.weapons.map(w=>{const base=w.name.replace(/\s*\(\d+\)/,'').trim(),hasRef=!!REFERENCE.weapons[base];return `<div class="weapon-row"><span class="${hasRef?'tappable':''}" ${hasRef?`onclick="tapWeapon('${base}')"`:''}>${w.name}</span><span class="ruby-accent" style="font-family:'Cinzel',serif;font-weight:700">${w.atkBonus}</span><span class="emerald-accent" style="font-family:'Cinzel',serif">${w.damage}</span><span style="color:rgba(245,237,216,.45);font-style:italic">${w.notes}</span></div>`;}).join('');
   const slotsHTML=c.spellcasting?c.spellcasting.slots.map(sl=>{const pips=Array.from({length:sl.total},(_,i)=>`<div class="slot-pip ${i<sl.used?'used':'available'}" onclick="toggleSlot('${c.id}',${sl.level},${i})"></div>`).join('');return `<div class="slot-row"><div class="slot-label">LVL ${sl.level}</div>${pips}</div>`;}).join(''):'';
-  const spellsHTML=c.spells.length===0?`<div class="spell-empty">No spells yet — tap ✦ Update to add spells</div>`:c.spells.map(sp=>`<div class="spell-row" onclick="tapSpell('${sp.name.replace(/'/g,"\'")}')"><div class="spell-level-badge">${sp.level===0?'C':sp.level}</div><div class="spell-name tappable">${sp.name}</div><div class="spell-cast">${sp.castTime||''}</div><div class="spell-tags">${sp.concentration?'<span class="spell-tag tag-c">C</span>':''}${sp.ritual?'<span class="spell-tag tag-r">R</span>':''}${sp.material?'<span class="spell-tag tag-m">M</span>':''}</div></div>`).join('');
-  const featuresHTML=c.features.map(f=>{const hasRef=!!REFERENCE.features[f.name];return `<div class="feature-item ${hasRef?'tappable':''}" ${hasRef?`onclick="tapFeature('${f.name.replace(/'/g,"\'")}')"`:''}><div class="feature-name">${f.name}${hasRef?' <span style="font-size:.7rem;opacity:.5">ⓘ</span>':''}</div><div class="feature-desc">${f.desc}</div></div>`;}).join('');
-  const traitsHTML=c.speciesTraits.map(t=>{const hasRef=!!REFERENCE.traits[t];return `<span class="prof-tag ${hasRef?'tappable':''}" ${hasRef?`onclick="tapFeature('${t}')"`:''}>${t}${hasRef?' ⓘ':''}</span>`;}).join('');
-  const featsHTML=c.feats.map(f=>{const hasRef=!!REFERENCE.traits[f];return `<div class="feature-item ${hasRef?'tappable':''}" ${hasRef?`onclick="tapFeature('${f.replace(/'/g,"\'")}')"`:''}><div class="feature-name">${f}${hasRef?' <span style="font-size:.7rem;opacity:.5">ⓘ</span>':''}</div></div>`;}).join('');
-  const profHTML=c.proficiencies.map(p=>`<span class="prof-tag">${p}</span>`).join('');
-  const inventoryHTML=c.inventory.map(p=>`<span class="prof-tag">${p}</span>`).join('');
+  const spellsHTML=(c.spells||[]).length===0?`<div class="spell-empty">No spells yet — tap ✦ Update to add spells</div>`:(c.spells||[]).map(sp=>`<div class="spell-row" onclick="tapSpell('${sp.name.replace(/'/g,"\'")}')"><div class="spell-level-badge">${sp.level===0?'C':sp.level}</div><div class="spell-name tappable">${sp.name}</div><div class="spell-cast">${sp.castTime||''}</div><div class="spell-tags">${sp.concentration?'<span class="spell-tag tag-c">C</span>':''}${sp.ritual?'<span class="spell-tag tag-r">R</span>':''}${sp.material?'<span class="spell-tag tag-m">M</span>':''}</div></div>`).join('');
+  const featuresHTML=(c.features||[]).map(f=>{const hasRef=!!REFERENCE.features[f.name];return `<div class="feature-item ${hasRef?'tappable':''}" ${hasRef?`onclick="tapFeature('${f.name.replace(/'/g,"\'")}')"`:''}><div class="feature-name">${f.name}${hasRef?' <span style="font-size:.7rem;opacity:.5">ⓘ</span>':''}</div><div class="feature-desc">${f.desc}</div></div>`;}).join('');
+  const traitsHTML=(c.speciesTraits||[]).map(t=>{const hasRef=!!REFERENCE.traits[t];return `<span class="prof-tag ${hasRef?'tappable':''}" ${hasRef?`onclick="tapFeature('${t}')"`:''}>${t}${hasRef?' ⓘ':''}</span>`;}).join('');
+  const featsHTML=(c.feats||[]).map(f=>{const hasRef=!!REFERENCE.traits[f];return `<div class="feature-item ${hasRef?'tappable':''}" ${hasRef?`onclick="tapFeature('${f.replace(/'/g,"\'")}')"`:''}><div class="feature-name">${f}${hasRef?' <span style="font-size:.7rem;opacity:.5">ⓘ</span>':''}</div></div>`;}).join('');
+  const profHTML=(c.proficiencies||[]).map(p=>`<span class="prof-tag">${p}</span>`).join('');
+  const inventoryHTML=(c.inventory||[]).map(p=>`<span class="prof-tag">${p}</span>`).join('');
 
   // Currency
   const cur = c.currency || {cp:0,sp:0,ep:0,gp:0,pp:0};
@@ -1725,7 +1726,7 @@ async function submitPlayerUpdate() {
       inspiration:c.inspiration, deathSaves:c.deathSaves||{successes:0,failures:0},
       abilities:c.abilities, currency:c.currency||{cp:0,sp:0,ep:0,gp:0,pp:0},
       spellcasting:c.spellcasting?.slots?.map(s=>({level:s.level,used:s.used,total:s.total})),
-      spells:c.spells.map(s=>s.name), features:c.features.map(f=>f.name),
+      spells:(c.spells||[]).map(s=>s.name), features:c.features.map(f=>f.name),
       inventory:c.inventory,
       skills:Object.entries(c.skills||{}).filter(([k,v])=>v.prof).map(([k])=>k)
     });
@@ -1839,7 +1840,7 @@ async function submitUpdate(){
   try{
     const sys=`You are a D&D 5e (2024 PHB) character sheet assistant. Return ONLY valid JSON (no markdown):
 {"summary":"one sentence","changes":{"hp_current":n,"hp_max":n,"level":n,"ac":n,"initiative":n,"speed":n,"inspiration":bool,"abilities":{"STR":{"score":n,"mod":n}},"currency":{"cp":n,"sp":n,"ep":n,"gp":n,"pp":n},"new_weapons":[{"name":"","atkBonus":"","damage":"","notes":""}],"new_spells":[{"level":0,"name":"","castTime":"","concentration":false,"ritual":false,"material":false}],"new_features":[{"name":"","desc":""}],"new_inventory":[""],"new_proficiencies":[""]}}
-Only include changed fields. For currency, provide the NEW total (not the delta). Use 2024 PHB rules. Current: ${JSON.stringify({name:c.name,class:c.class,level:c.level,hp:c.hp,ac:c.ac,abilities:c.abilities,currency:c.currency||{cp:0,sp:0,ep:0,gp:0,pp:0},spells:c.spells.map(s=>s.name),features:c.features.map(f=>f.name),inventory:c.inventory})}`;
+Only include changed fields. For currency, provide the NEW total (not the delta). Use 2024 PHB rules. Current: ${JSON.stringify({name:c.name,class:c.class,level:c.level,hp:c.hp,ac:c.ac,abilities:c.abilities,currency:c.currency||{cp:0,sp:0,ep:0,gp:0,pp:0},spells:(c.spells||[]).map(s=>s.name),features:c.features.map(f=>f.name),inventory:c.inventory})}`;
     const res=await fetch("https://ora-proxy.cdpractical.workers.dev",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"gemini-2.0-flash",max_tokens:1000,system:sys,messages:[{role:"user",content:input}]})});
     const data=await res.json();
     const text=data.content?.map(i=>i.text||'').join('')||'';
