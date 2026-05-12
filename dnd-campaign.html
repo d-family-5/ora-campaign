@@ -952,7 +952,7 @@ function queueSave(charId) {
   clearTimeout(saveQueues[charId]);
   showSaveStatus('saving', '✦ Saving…');
   saveQueues[charId] = setTimeout(async () => {
-    const c = characters.find(x => x && x.id === charId);
+    const c = characters.find(x => x.id === charId);
     if (!c) return;
     try { await dbSave(charId, c); showSaveStatus('saved', '✓ Saved'); }
     catch(e) { showSaveStatus('error', '✕ Save failed'); }
@@ -1038,7 +1038,7 @@ const REFERENCE = {
   }
 };
 
-const characters = [
+const characters = [,
   {id:'p5',name:'Hero Five', class:'???',icon:'🌙', tileColor:'var(--jade-light)',    tileColorLight:'var(--jade-glow)',    tileGlow:'rgba(80,232,160,.22)', tileBg:'var(--jade)',    placeholder:true},
   {id:'p6',name:'Hero Six',  class:'???',icon:'🗡️', tileColor:'var(--topaz-light)',   tileColorLight:'var(--topaz-glow)',   tileGlow:'rgba(255,196,106,.22)',tileBg:'var(--topaz)',   placeholder:true},
   {id:'p7',name:'Hero Seven',class:'???',icon:'🛡️', tileColor:'var(--garnet-light)',  tileColorLight:'var(--garnet-glow)',  tileGlow:'rgba(255,106,152,.22)',tileBg:'var(--garnet)',  placeholder:true},
@@ -1462,7 +1462,7 @@ function renderRoster() {
 function openSheet(charId) {
   try {
     currentCharId=charId;
-    const c=characters.find(x=>x && x.id===charId);if(!c)return;
+    const c=characters.find(x=>x.id===charId);if(!c)return;
     stopParticles();
     const imgs=CHAR_IMAGES[c.id];
     document.getElementById('sheet-name').textContent=imgs?'':c.name;
@@ -1638,8 +1638,8 @@ function showRoster(){
   setTimeout(initParticles, 50);
 }
 function toggleHistory(){document.getElementById('hist-body').classList.toggle('open');document.getElementById('hist-chevron').classList.toggle('open');}
-function toggleSlot(charId,level,index){const c=characters.find(x=>x && x.id===charId);if(!c)return;const slot=c.spellcasting.slots.find(s=>s.level===level);if(!slot)return;slot.used=index<slot.used?index:index+1;queueSave(charId);openSheet(charId);}
-function toggleInspiration(charId){const c=characters.find(x=>x && x.id===charId);if(!c)return;c.inspiration=!c.inspiration;queueSave(charId);const gem=document.getElementById('insp-gem');if(gem){gem.className='inspiration-gem'+(c.inspiration?' active':'');gem.textContent=c.inspiration?'✦':'◇';gem.nextElementSibling.textContent=c.inspiration?'INSPIRED':'NOT INSPIRED';}}
+function toggleSlot(charId,level,index){const c=characters.find(x=>x.id===charId);if(!c)return;const slot=c.spellcasting.slots.find(s=>s.level===level);if(!slot)return;slot.used=index<slot.used?index:index+1;queueSave(charId);openSheet(charId);}
+function toggleInspiration(charId){const c=characters.find(x=>x.id===charId);if(!c)return;c.inspiration=!c.inspiration;queueSave(charId);const gem=document.getElementById('insp-gem');if(gem){gem.className='inspiration-gem'+(c.inspiration?' active':'');gem.textContent=c.inspiration?'✦':'◇';gem.nextElementSibling.textContent=c.inspiration?'INSPIRED':'NOT INSPIRED';}}
 function openUpdateModal(){document.getElementById('modal-input').value='';document.getElementById('ai-thinking').classList.remove('visible');document.getElementById('modal').classList.add('open');}
 function closeModal(){document.getElementById('modal').classList.remove('open');}
 
@@ -1660,7 +1660,7 @@ function toggleUpdatePanel() {
 
 function renderUpdatePanel() {
   const panel = document.getElementById('player-update-panel');
-  const c = characters.find(x => x && x.id === currentCharId);
+  const c = characters.find(x => x.id === currentCharId);
   if (!panel || !c) return;
 
   const slotUseBtns = (c.spellcasting?.slots || []).filter(s => s.total > 0).map(s => {
@@ -1759,7 +1759,7 @@ function renderUpdatePanel() {
 
 // Quick tap — direct stat updates, no AI needed
 async function quickTap(action, value) {
-  const c = characters.find(x => x && x.id === currentCharId);
+  const c = characters.find(x => x.id === currentCharId);
   if (!c) return;
   const now = new Date();
   const timeStr = now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+
@@ -1873,7 +1873,7 @@ async function submitPlayerUpdate() {
   const inputEl = document.getElementById('player-update-input');
   const input = inputEl ? inputEl.value.trim() : '';
   if (!input) return;
-  const c = characters.find(x => x && x.id === currentCharId);
+  const c = characters.find(x => x.id === currentCharId);
   if (!c) return;
 
   const btn      = document.getElementById('player-update-btn');
@@ -1996,7 +1996,7 @@ async function submitPlayerUpdate() {
 
 async function submitUpdate(){
   const input=document.getElementById('modal-input').value.trim();if(!input)return;
-  const c=characters.find(x=>x && x.id===currentCharId);if(!c)return;
+  const c=characters.find(x=>x.id===currentCharId);if(!c)return;
   document.getElementById('ai-thinking').classList.add('visible');
   document.querySelector('.modal-submit').disabled=true;
   try{
