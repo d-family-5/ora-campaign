@@ -969,12 +969,20 @@ function queueSave(charId) {
 
 const CHAR_IMAGES = {
     'bard-noble': {
-      tile:   'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Lucian%20Vale.PNG',
+      tile:   'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Lucian%20Vale%202.PNG',
       banner: 'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Lucian%20Vale.PNG'
     },
     'rovan-eryth': {
       tile:   'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Rovan%20Eryth.png',
       banner: 'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Rovan%20Eryth%202.PNG'
+    },
+    'talon-ashe': {
+      tile:   'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Talon%20Ashe%202.png',
+      banner: 'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Talon%20Ashe.PNG'
+    },
+    'ragnar-blackthorn': {
+      tile:   'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Ragnar%20BlackThorn%202.png',
+      banner: 'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Ragnar%20BlackThorn.PNG'
     }
   };
 
@@ -1039,50 +1047,18 @@ const REFERENCE = {
 };
 
 const characters = [
-  {
-    id:'bard-noble', name:'Lucian Vale', class:'Bard', subclass:'Noble',
-    species:'Human', background:'Noble', level:1,
-    icon:'🎶',
-    tileColor:'var(--amethyst-light)', tileColorLight:'var(--amethyst-glow)',
-    tileGlow:'rgba(196,106,255,.28)', tileBg:'var(--amethyst)',
-    hp:{current:9,max:9,temp:0}, hitDice:'D8',
-    ac:13, initiative:2, speed:30, size:'M', profBonus:2, passivePerception:15,
-    inspiration:false, deathSaves:{successes:0,failures:0},
-    abilities:{STR:{score:10,mod:0},DEX:{score:14,mod:2},CON:{score:12,mod:1},INT:{score:11,mod:0},WIS:{score:12,mod:1},CHA:{score:18,mod:4}},
-    savingThrows:{STR:false,DEX:true,CON:false,INT:false,WIS:false,CHA:true},
-    skills:{
-      Acrobatics:{prof:true,ability:'DEX'},      'Animal Handling':{prof:false,ability:'WIS'},
-      Arcana:{prof:true,ability:'INT'},           Athletics:{prof:false,ability:'STR'},
-      Deception:{prof:false,ability:'CHA'},       History:{prof:true,ability:'INT'},
-      Insight:{prof:true,ability:'WIS'},          Intimidation:{prof:true,ability:'CHA'},
-      Investigation:{prof:false,ability:'INT'},   Medicine:{prof:false,ability:'WIS'},
-      Nature:{prof:false,ability:'INT'},          Perception:{prof:true,ability:'WIS'},
-      Performance:{prof:false,ability:'CHA'},     Persuasion:{prof:true,ability:'CHA'},
-      Religion:{prof:false,ability:'INT'},        'Sleight of Hand':{prof:false,ability:'DEX'},
-      Stealth:{prof:true,ability:'DEX'},          Survival:{prof:false,ability:'WIS'},
-    },
-    weapons:[{name:'Dagger (2)',atkBonus:'+4',damage:'1D4+2',notes:'Nick'}],
-    spellcasting:{ability:'CHA',modifier:4,dc:14,atkBonus:'+6',
-      slots:[{level:1,total:4,used:0},{level:2,total:3,used:0},{level:3,total:3,used:0}]},
-    spells:[],
-    features:[
-      {name:'Bardic Inspiration',desc:'Bonus Action: Inspire a creature within 60 ft. They gain a d6 to add to a failed d20 roll. Lasts 1 hour.'},
-    ],
-    speciesTraits:['Resourceful','Skillful','Versatile'],
-    feats:['Skilled','Magic Initiative'],
-    armorTraining:['Light','Medium','Heavy','Shields'],
-    proficiencies:['Musical Instruments (3)','Gaming Set'],
-    inventory:['Musical Instrument','Gaming Set'],
-    history:[],
-    faction: 'keepers',
-    currency: { cp:0, sp:0, ep:0, gp:0, pp:0 },  // The Keepers of the First Memory — fits a noble scholar bard perfectly
-  },
   {id:'p2',name:'Hero Two',  class:'???',icon:'⚔️', tileColor:'var(--sapphire-light)',tileColorLight:'var(--sapphire-glow)',tileGlow:'rgba(106,173,255,.22)',tileBg:'var(--sapphire)',placeholder:true},
+  ,
   {id:'p3',name:'Hero Three',class:'???',icon:'🌿', tileColor:'var(--emerald-light)', tileColorLight:'var(--emerald-glow)', tileGlow:'rgba(61,220,151,.22)', tileBg:'var(--emerald)', placeholder:true},
+  ,
   {id:'p4',name:'Hero Four', class:'???',icon:'🔥', tileColor:'var(--ruby-light)',    tileColorLight:'var(--ruby-glow)',    tileGlow:'rgba(255,106,106,.22)',tileBg:'var(--ruby)',    placeholder:true},
+  ,
   {id:'p5',name:'Hero Five', class:'???',icon:'🌙', tileColor:'var(--jade-light)',    tileColorLight:'var(--jade-glow)',    tileGlow:'rgba(80,232,160,.22)', tileBg:'var(--jade)',    placeholder:true},
+  ,
   {id:'p6',name:'Hero Six',  class:'???',icon:'🗡️', tileColor:'var(--topaz-light)',   tileColorLight:'var(--topaz-glow)',   tileGlow:'rgba(255,196,106,.22)',tileBg:'var(--topaz)',   placeholder:true},
+  ,
   {id:'p7',name:'Hero Seven',class:'???',icon:'🛡️', tileColor:'var(--garnet-light)',  tileColorLight:'var(--garnet-glow)',  tileGlow:'rgba(255,106,152,.22)',tileBg:'var(--garnet)',  placeholder:true},
+  ,
   {
     id:'rovan-eryth', name:'Rovan Eryth', class:'Wizard', subclass:'',
     species:'Elf', background:'Sage', level:1,
@@ -1162,6 +1138,212 @@ const characters = [
     faction:'keepers',
     history:[]
   }
+  ,
+  ,{
+    id:'talon-ashe', name:'Talon Ashe', class:'Ranger', subclass:'',
+    species:'Human', background:'Guide', level:1,
+    icon:'🏹',
+    tileColor:'var(--emerald-light)', tileColorLight:'var(--emerald-glow)',
+    tileGlow:'rgba(61,220,151,.28)', tileBg:'var(--emerald)',
+    hp:{current:11, max:11, temp:0}, hitDice:'1d10',
+    ac:15, initiative:3, speed:30, size:'M', profBonus:2,
+    passivePerception:12, passiveInsight:12, passiveInvestigation:10,
+    senses:[],
+    inspiration:false,
+    deathSaves:{successes:0, failures:0},
+    alignment:'Neutral Good',
+    abilities:{
+      STR:{score:12, mod:1},
+      DEX:{score:17, mod:3},
+      CON:{score:12, mod:1},
+      INT:{score:11, mod:0},
+      WIS:{score:14, mod:2},
+      CHA:{score:10, mod:0}
+    },
+    savingThrows:{STR:true, DEX:true, CON:false, INT:false, WIS:false, CHA:false},
+    skills:{
+      Acrobatics:{mod:3,prof:false,ability:'DEX'},
+      'Animal Handling':{mod:2,prof:false,ability:'WIS'},
+      Arcana:{mod:0,prof:false,ability:'INT'},
+      Athletics:{mod:1,prof:false,ability:'STR'},
+      Deception:{mod:0,prof:false,ability:'CHA'},
+      History:{mod:0,prof:false,ability:'INT'},
+      Insight:{mod:2,prof:false,ability:'WIS'},
+      Intimidation:{mod:0,prof:false,ability:'CHA'},
+      Investigation:{mod:0,prof:false,ability:'INT'},
+      Medicine:{mod:2,prof:false,ability:'WIS'},
+      Nature:{mod:0,prof:false,ability:'INT'},
+      Perception:{mod:2,prof:false,ability:'WIS'},
+      Performance:{mod:0,prof:false,ability:'CHA'},
+      Persuasion:{mod:0,prof:false,ability:'CHA'},
+      Religion:{mod:0,prof:false,ability:'INT'},
+      'Sleight of Hand':{mod:3,prof:true,ability:'DEX'},
+      Stealth:{mod:5,prof:true,ability:'DEX'},
+      Survival:{mod:4,prof:true,ability:'WIS'}
+    },
+    spellcasting:{
+      ability:'WIS', dc:12, atkBonus:4,
+      slots:[{level:1, total:2, used:0}]
+    },
+    spells:[
+      {level:0, name:'Produce Flame', castTime:'1BA', range:'Self',  concentration:false, ritual:false, material:false},
+      {level:0, name:'Mending',       castTime:'1m',  range:'Touch', concentration:false, ritual:false, material:true},
+      {level:1, name:'Entangle',      castTime:'1A',  range:'90 ft', concentration:true,  ritual:false, material:false},
+      {level:1, name:"Hunter's Mark", castTime:'1BA', range:'90 ft', concentration:true,  ritual:false, material:false}
+    ],
+    weapons:[
+      {name:'Longbow',        atkBonus:'+5', damage:'1d8+3 Piercing',  notes:'Martial, Heavy, Range 150/600, Slow'},
+      {name:'Scimitar',       atkBonus:'+5', damage:'1d6+3 Slashing',  notes:'Martial, Finesse, Light, Nick'},
+      {name:'Shortsword',     atkBonus:'+5', damage:'1d6+3 Piercing',  notes:'Martial, Finesse, Light, Vex'},
+      {name:'Produce Flame',  atkBonus:'+4', damage:'1d8 Fire',        notes:'Cantrip, Range 10m, V/S'},
+      {name:'Unarmed Strike', atkBonus:'+3', damage:'2 Bludgeoning',   notes:''}
+    ],
+    features:[
+      {name:"Hunter's Mark",    desc:"Always prepared. Cast without expending a spell slot 2 times per Long Rest. Bonus Action to cast."},
+      {name:'Weapon Mastery',   desc:'Apply weapon mastery properties to your weapons. Longbow: Slow. Handaxe: Vex.'},
+      {name:'Favored Enemy',    desc:"Hunter's Mark is always prepared and can be cast without a spell slot twice per Long Rest."},
+      {name:'Magic Initiate (Druid)', desc:'Gained Produce Flame and Mending cantrips, plus Entangle 1st level spell (WIS-based).'},
+      {name:'Resourceful',      desc:'Gain Heroic Inspiration whenever you finish a Long Rest.'},
+      {name:'Skillful',         desc:'Gain proficiency in one skill of your choice.'},
+      {name:'Versatile',        desc:'Gain an Origin feat of your choice.'},
+      {name:'Guide ASI',        desc:'Increase two ability scores by +2/+1.'}
+    ],
+    feats:['Magic Initiate (Druid)', 'Guide Ability Score Improvements'],
+    speciesTraits:['Resourceful', 'Skillful', 'Versatile'],
+    armorTraining:['Light Armor', 'Medium Armor', 'Shields'],
+    weaponTraining:['Martial Weapons', 'Simple Weapons'],
+    toolTraining:["Cartographer's Tools"],
+    languages:['Common'],
+    proficiencies:['Light Armor', 'Medium Armor', 'Shields', 'Martial Weapons', 'Simple Weapons', "Cartographer's Tools", 'Common'],
+    inventory:[
+      'Studded Leather', 'Shortbow', 'Scimitar', 'Shortsword', 'Longbow',
+      'Backpack', 'Quiver', "Cartographer's Tools", 'Bedroll', 'Bedroll',
+      'Tent', 'Arrows (x20)', 'Arrows (x20)', 'Sprig of Mistletoe',
+      "Traveler's Clothes", 'Oil (x2)', 'Rations (x10)', 'Rope',
+      'Tinderbox', 'Torch (x10)', 'Waterskin'
+    ],
+    currency:{cp:0, sp:0, ep:0, gp:0, pp:0},
+    faction:null,
+    history:[]
+  }
+  ,
+  ,{
+    id:'ragnar-blackthorn', name:'Ragnar Blackthorn', class:'Sorcerer', subclass:'',
+    species:'Human', background:'Wayfarer', level:1,
+    icon:'🔮',
+    tileColor:'var(--garnet-light)', tileColorLight:'var(--garnet-glow)',
+    tileGlow:'rgba(255,106,152,.28)', tileBg:'var(--garnet)',
+    hp:{current:6, max:6, temp:0}, hitDice:'1d6',
+    ac:9, initiative:-1, speed:30, size:'M', profBonus:2,
+    passivePerception:15, passiveInsight:15, passiveInvestigation:14,
+    senses:[],
+    inspiration:false,
+    deathSaves:{successes:0, failures:0},
+    alignment:'Neutral',
+    abilities:{
+      STR:{score:12, mod:1},
+      DEX:{score:9,  mod:-1},
+      CON:{score:10, mod:0},
+      INT:{score:14, mod:2},
+      WIS:{score:16, mod:3},
+      CHA:{score:14, mod:2}
+    },
+    savingThrows:{STR:false, DEX:false, CON:false, INT:false, WIS:true, CHA:true},
+    skills:{
+      Acrobatics:{mod:-1,prof:false,ability:'DEX'},
+      'Animal Handling':{mod:3,prof:false,ability:'WIS'},
+      Arcana:{mod:4,prof:true,ability:'INT'},
+      Athletics:{mod:1,prof:false,ability:'STR'},
+      Deception:{mod:2,prof:false,ability:'CHA'},
+      History:{mod:2,prof:false,ability:'INT'},
+      Insight:{mod:5,prof:true,ability:'WIS'},
+      Intimidation:{mod:2,prof:false,ability:'CHA'},
+      Investigation:{mod:4,prof:true,ability:'INT'},
+      Medicine:{mod:3,prof:false,ability:'WIS'},
+      Nature:{mod:2,prof:false,ability:'INT'},
+      Perception:{mod:5,prof:true,ability:'WIS'},
+      Performance:{mod:2,prof:false,ability:'CHA'},
+      Persuasion:{mod:2,prof:false,ability:'CHA'},
+      Religion:{mod:2,prof:false,ability:'INT'},
+      'Sleight of Hand':{mod:-1,prof:false,ability:'DEX'},
+      Stealth:{mod:1,prof:false,ability:'DEX'},
+      Survival:{mod:3,prof:false,ability:'WIS'}
+    },
+    spellcasting:{
+      ability:'CHA', dc:12, atkBonus:4,
+      slots:[{level:1, total:2, used:0}]
+    },
+    spells:[],
+    weapons:[
+      {name:'Unarmed Strike',          atkBonus:'+3', damage:'2 Bludgeoning',     notes:''},
+      {name:'Enhanced Unarmed Strike', atkBonus:'+3', damage:'1d4+1 Bludgeoning', notes:'Tavern Brawler'}
+    ],
+    features:[
+      {name:'Innate Sorcery',   desc:'Twice per Long Rest, take a Bonus Action to unleash simmering magic for 1 minute.'},
+      {name:'Tavern Brawler',   desc:'Unarmed strikes deal 1d4+1. Damage Rerolls: reroll 1s on unarmed damage. Push: hit with unarmed, push 5 ft. Improvised weapon proficiency.'},
+      {name:'Lucky',            desc:'2 Luck Points per Long Rest. Spend to gain Advantage on a d20 test, or impose Disadvantage on an attack roll against you.'},
+      {name:'Resourceful',      desc:'Gain Heroic Inspiration whenever you finish a Long Rest.'},
+      {name:'Skillful',         desc:'Gain proficiency in one skill of your choice.'},
+      {name:'Versatile',        desc:'Gain an Origin feat of your choice.'},
+      {name:'Wayfarer ASI',     desc:'Increase three ability scores by +1/+1/+1.'}
+    ],
+    feats:['Tavern Brawler', 'Lucky', 'Wayfarer Ability Score Improvements'],
+    speciesTraits:['Resourceful', 'Skillful', 'Versatile'],
+    armorTraining:[],
+    weaponTraining:['Simple Weapons'],
+    toolTraining:["Thieves' Tools"],
+    languages:['Common', 'Dwarvish', 'Elvish'],
+    proficiencies:['Simple Weapons', "Thieves' Tools", 'Common', 'Dwarvish', 'Elvish'],
+    inventory:[
+      'Dagger', 'Dagger', 'Dagger', 'Dagger', 'Spear',
+      'Backpack', 'Pouch', 'Pouch', 'Bedroll', "Thieves' Tools",
+      'Crystal', "Traveler's Clothes", 'Oil (x2)', 'Rations (x10)',
+      'Rope', 'Tinderbox', 'Torch (x10)', 'Waterskin',
+      'Caltrops (x20)', 'Crowbar'
+    ],
+    currency:{cp:0, sp:0, ep:0, gp:44, pp:0},
+    faction:null,
+    history:[]
+  }
+  ,
+  {
+    id:'bard-noble', name:'Lucian Vale', class:'Bard', subclass:'Noble',
+    species:'Human', background:'Noble', level:1,
+    icon:'🎶',
+    tileColor:'var(--amethyst-light)', tileColorLight:'var(--amethyst-glow)',
+    tileGlow:'rgba(196,106,255,.28)', tileBg:'var(--amethyst)',
+    hp:{current:9,max:9,temp:0}, hitDice:'D8',
+    ac:13, initiative:2, speed:30, size:'M', profBonus:2, passivePerception:15,
+    inspiration:false, deathSaves:{successes:0,failures:0},
+    abilities:{STR:{score:10,mod:0},DEX:{score:14,mod:2},CON:{score:12,mod:1},INT:{score:11,mod:0},WIS:{score:12,mod:1},CHA:{score:18,mod:4}},
+    savingThrows:{STR:false,DEX:true,CON:false,INT:false,WIS:false,CHA:true},
+    skills:{
+      Acrobatics:{prof:true,ability:'DEX'},      'Animal Handling':{prof:false,ability:'WIS'},
+      Arcana:{prof:true,ability:'INT'},           Athletics:{prof:false,ability:'STR'},
+      Deception:{prof:false,ability:'CHA'},       History:{prof:true,ability:'INT'},
+      Insight:{prof:true,ability:'WIS'},          Intimidation:{prof:true,ability:'CHA'},
+      Investigation:{prof:false,ability:'INT'},   Medicine:{prof:false,ability:'WIS'},
+      Nature:{prof:false,ability:'INT'},          Perception:{prof:true,ability:'WIS'},
+      Performance:{prof:false,ability:'CHA'},     Persuasion:{prof:true,ability:'CHA'},
+      Religion:{prof:false,ability:'INT'},        'Sleight of Hand':{prof:false,ability:'DEX'},
+      Stealth:{prof:true,ability:'DEX'},          Survival:{prof:false,ability:'WIS'},
+    },
+    weapons:[{name:'Dagger (2)',atkBonus:'+4',damage:'1D4+2',notes:'Nick'}],
+    spellcasting:{ability:'CHA',modifier:4,dc:14,atkBonus:'+6',
+      slots:[{level:1,total:4,used:0},{level:2,total:3,used:0},{level:3,total:3,used:0}]},
+    spells:[],
+    features:[
+      {name:'Bardic Inspiration',desc:'Bonus Action: Inspire a creature within 60 ft. They gain a d6 to add to a failed d20 roll. Lasts 1 hour.'},
+    ],
+    speciesTraits:['Resourceful','Skillful','Versatile'],
+    feats:['Skilled','Magic Initiative'],
+    armorTraining:['Light','Medium','Heavy','Shields'],
+    proficiencies:['Musical Instruments (3)','Gaming Set'],
+    inventory:['Musical Instrument','Gaming Set'],
+    history:[],
+    faction: 'keepers',
+    currency: { cp:0, sp:0, ep:0, gp:0, pp:0 },  // The Keepers of the First Memory — fits a noble scholar bard perfectly
+  },
 ];
 
 let currentCharId = null;
