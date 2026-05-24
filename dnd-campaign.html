@@ -80,9 +80,8 @@
   .loading-orb{width:48px;height:48px;border-radius:50%;border:2px solid rgba(201,162,39,.15);border-top-color:var(--gold);animation:spin .9s linear infinite;}
   .loading-screen.hidden{display:none;}
   @keyframes spin{to{transform:rotate(360deg);}}
-  .roster-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem;padding:.85rem;max-width:860px;margin:0 auto;}
-  @media(min-width:480px){.roster-grid{grid-template-columns:repeat(3,1fr);gap:.8rem;}}
-  @media(min-width:680px){.roster-grid{grid-template-columns:repeat(4,1fr);gap:1rem;padding:1.1rem;}}
+  
+  @media(min-width:480px){}
   .char-tile{position:relative;cursor:pointer;border-radius:6px;overflow:hidden;transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:.85rem .6rem .8rem;aspect-ratio:3/4;}
   .char-tile::before{content:'';position:absolute;inset:0;background:var(--tile-bg);opacity:.15;}
   .char-tile-border{position:absolute;inset:0;border:1px solid var(--tile-color);border-radius:6px;opacity:.45;transition:opacity .25s;}
@@ -242,8 +241,8 @@
     border-color: var(--gold-light);
   }
   
-  .dm-tile-name { font-family:'Cinzel',serif; font-weight:700; font-size:clamp(.78rem,2.5vw,1.05rem); color:var(--gold-light); letter-spacing:.05em; line-height:1.2; }
-  .dm-tile-sub  { font-family:'Crimson Text',serif; font-style:italic; font-size:clamp(.72rem,2.1vw,.9rem); color:rgba(245,237,216,.5); margin-top:.2rem; }
+  
+  
   /* Animated shimmer border on DM tile */
   
    }
@@ -259,7 +258,7 @@
     pointer-events:none;
   }
   
-  .dm-header-text .dm-title { font-family:'Cinzel Decorative',cursive; font-size:clamp(1.1rem,4vw,1.6rem); background:linear-gradient(135deg,var(--gold),var(--gold-light)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .dm-header-text 
   .dm-header-text 
 
   /* DM section cards */
@@ -350,9 +349,9 @@
     box-shadow:0 10px 32px rgba(0,0,0,.6), 0 0 20px rgba(196,106,255,.3);
     border-color: var(--amethyst-glow);
   }
-  .world-tile-icon { font-size:clamp(2rem,8vw,3rem); margin-bottom:.5rem; filter:drop-shadow(0 0 12px rgba(196,106,255,.6)); line-height:1; }
-  .world-tile-name { font-family:'Cinzel',serif; font-weight:700; font-size:clamp(.78rem,2.5vw,1.05rem); color:var(--amethyst-glow); letter-spacing:.05em; }
-  .world-tile-sub  { font-family:'Crimson Text',serif; font-style:italic; font-size:clamp(.72rem,2.1vw,.9rem); color:rgba(245,237,216,.5); margin-top:.2rem; }
+  
+  
+  
 
   /* ═══ WORLD PAGE ═══ */
   .world-container { max-width:960px; margin:0 auto; padding:.7rem .85rem 4rem; }
@@ -677,6 +676,10 @@
   .qt-gold{color:#f0c040;border-color:rgba(240,192,64,.35);background:rgba(240,192,64,.08);}
   .qt-danger{color:var(--garnet-glow);border-color:rgba(255,106,152,.35);background:rgba(255,106,152,.08);}
 
+
+  .roster-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem;padding:.85rem;max-width:860px;margin:0 auto;}
+  @media(min-width:480px){ .roster-grid{grid-template-columns:repeat(3,1fr);gap:.8rem;} }
+  @media(min-width:700px){ .roster-grid{grid-template-columns:repeat(4,1fr);gap:1rem;padding:1.1rem;} }
 </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
@@ -871,18 +874,6 @@
   <button class="detail-close" onclick="closeDetail()">✕</button>
   <div id="detail-content"></div>
 </div>
-<div class="modal-overlay" id="modal">
-  <div class="modal">
-    <div class="modal-title">✦ Chronicle Update</div>
-    <div class="modal-sub">Describe changes in plain language — the scribe handles the rest.</div>
-    <textarea class="modal-textarea" id="modal-input" placeholder="e.g. 'Leveled up to 2, gained Bardic Inspiration d6, learned Healing Word and Thunderwave'"></textarea>
-    <div class="ai-thinking" id="ai-thinking"><div class="ai-spinner"></div><span>The scribe is interpreting your changes…</span></div>
-    <div class="modal-buttons">
-      <button class="modal-cancel" onclick="closeModal()">CANCEL</button>
-      <button class="modal-submit" onclick="submitUpdate()">COMMIT TO CHRONICLE</button>
-    </div>
-  </div>
-</div>
 <script>
 
 const SUPABASE_URL = 'https://kilkrhpwjkxpqwnatted.supabase.co';
@@ -975,6 +966,10 @@ const CHAR_IMAGES = {
     'ragnar-blackthorn': {
       tile:   'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Ragnar%20BlackThorn%202.png',
       banner: 'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Ragnar%20BlackThorn.PNG'
+    },
+    'thea-rochiel': {
+      tile:   'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Thea%20Loparwen%20Rochiel%202.jpeg',
+      banner: 'https://raw.githubusercontent.com/d-family-5/ora-campaign/main/images/Thea%20Loparwen%20Rochiel.PNG'
     }
   };
 
@@ -1292,37 +1287,148 @@ const characters = [
     icon:'🎶',
     tileColor:'var(--amethyst-light)', tileColorLight:'var(--amethyst-glow)',
     tileGlow:'rgba(196,106,255,.28)', tileBg:'var(--amethyst)',
-    hp:{current:9,max:9,temp:0}, hitDice:'D8',
-    ac:13, initiative:2, speed:30, size:'M', profBonus:2, passivePerception:15,
-    inspiration:false, deathSaves:{successes:0,failures:0},
-    abilities:{STR:{score:10,mod:0},DEX:{score:14,mod:2},CON:{score:12,mod:1},INT:{score:11,mod:0},WIS:{score:12,mod:1},CHA:{score:18,mod:4}},
-    savingThrows:{STR:false,DEX:true,CON:false,INT:false,WIS:false,CHA:true},
-    skills:{
-      Acrobatics:{prof:true,ability:'DEX'},      'Animal Handling':{prof:false,ability:'WIS'},
-      Arcana:{prof:true,ability:'INT'},           Athletics:{prof:false,ability:'STR'},
-      Deception:{prof:false,ability:'CHA'},       History:{prof:true,ability:'INT'},
-      Insight:{prof:true,ability:'WIS'},          Intimidation:{prof:true,ability:'CHA'},
-      Investigation:{prof:false,ability:'INT'},   Medicine:{prof:false,ability:'WIS'},
-      Nature:{prof:false,ability:'INT'},          Perception:{prof:true,ability:'WIS'},
-      Performance:{prof:false,ability:'CHA'},     Persuasion:{prof:true,ability:'CHA'},
-      Religion:{prof:false,ability:'INT'},        'Sleight of Hand':{prof:false,ability:'DEX'},
-      Stealth:{prof:true,ability:'DEX'},          Survival:{prof:false,ability:'WIS'},
+    hp:{current:9, max:9, temp:0}, hitDice:'1d8',
+    ac:13, initiative:2, speed:30, size:'M', profBonus:2,
+    passivePerception:15, passiveInsight:13, passiveInvestigation:10,
+    senses:[],
+    inspiration:false,
+    deathSaves:{successes:0, failures:0},
+    alignment:'Neutral',
+    abilities:{
+      STR:{score:10, mod:0},
+      DEX:{score:14, mod:2},
+      CON:{score:12, mod:1},
+      INT:{score:11, mod:0},
+      WIS:{score:12, mod:1},
+      CHA:{score:18, mod:4}
     },
-    weapons:[{name:'Dagger (2)',atkBonus:'+4',damage:'1D4+2',notes:'Nick'}],
-    spellcasting:{ability:'CHA',modifier:4,dc:14,atkBonus:'+6',
-      slots:[{level:1,total:4,used:0},{level:2,total:3,used:0},{level:3,total:3,used:0}]},
-    spells:[],
-    features:[
-      {name:'Bardic Inspiration',desc:'Bonus Action: Inspire a creature within 60 ft. They gain a d6 to add to a failed d20 roll. Lasts 1 hour.'},
+    savingThrows:{STR:false, DEX:true, CON:false, INT:false, WIS:false, CHA:true},
+    skills:{
+      Acrobatics:{mod:4, prof:true,  ability:'DEX'},
+      'Animal Handling':{mod:1, prof:false, ability:'WIS'},
+      Arcana:{mod:2, prof:false, ability:'INT'},
+      Athletics:{mod:0, prof:false, ability:'STR'},
+      Deception:{mod:4, prof:false, ability:'CHA'},
+      History:{mod:2, prof:false, ability:'INT'},
+      Insight:{mod:3, prof:true,  ability:'WIS'},
+      Intimidation:{mod:6, prof:true,  ability:'CHA'},
+      Investigation:{mod:0, prof:false, ability:'INT'},
+      Medicine:{mod:1, prof:false, ability:'WIS'},
+      Nature:{mod:0, prof:false, ability:'INT'},
+      Perception:{mod:3, prof:true,  ability:'WIS'},
+      Performance:{mod:6, prof:true,  ability:'CHA'},
+      Persuasion:{mod:6, prof:true,  ability:'CHA'},
+      Religion:{mod:0, prof:false, ability:'INT'},
+      'Sleight of Hand':{mod:2, prof:false, ability:'DEX'},
+      Stealth:{mod:4, prof:true,  ability:'DEX'},
+      Survival:{mod:1, prof:false, ability:'WIS'}
+    },
+    spellcasting:{
+      ability:'CHA', dc:14, atkBonus:6,
+      slots:[{level:1, total:2, used:0}]
+    },
+    spells:[
+      {level:0, name:'Minor Illusion',   castTime:'1A', range:'30 ft',  concentration:false, ritual:false, material:true},
+      {level:0, name:'Prestidigitation', castTime:'1A', range:'10 ft',  concentration:false, ritual:false, material:false},
+      {level:0, name:'Vicious Mockery',  castTime:'1A', range:'60 ft',  concentration:false, ritual:false, material:false},
+      {level:0, name:'Mending',          castTime:'1m',  range:'Touch', concentration:false, ritual:false, material:true},
+      {level:1, name:'Shield',           castTime:'1R', range:'Self',   concentration:false, ritual:false, material:false},
+      {level:1, name:'Healing Word',     castTime:'1BA', range:'60 ft', concentration:false, ritual:false, material:false},
+      {level:1, name:'Faerie Fire',      castTime:'1A', range:'60 ft',  concentration:true,  ritual:false, material:false},
+      {level:1, name:'Silent Image',     castTime:'1A', range:'60 ft',  concentration:true,  ritual:false, material:false}
     ],
-    speciesTraits:['Resourceful','Skillful','Versatile'],
-    feats:['Skilled','Magic Initiative'],
-    armorTraining:['Light','Medium','Heavy','Shields'],
-    proficiencies:['Musical Instruments (3)','Gaming Set'],
-    inventory:['Musical Instrument','Gaming Set'],
-    history:[],
-    faction: 'keepers',
-    currency: { cp:0, sp:0, ep:0, gp:0, pp:0 },  // The Keepers of the First Memory — fits a noble scholar bard perfectly
+    weapons:[
+      {name:'Dagger (2)',        atkBonus:'+4', damage:'1d4+2 Piercing', notes:'Nick'},
+      {name:'Rapier (Finesse)',  atkBonus:'+4', damage:'1d8+2 Piercing', notes:'Vex'}
+    ],
+    features:[
+      {name:'Bardic Inspiration', desc:'Give a creature within 60 ft a Bardic Inspiration die (d6). They can add it to an ability check, attack roll, or saving throw within 10 minutes. You have CHA modifier uses (4) per Long Rest.'},
+      {name:'Spellcasting (Bard)', desc:'CHA-based spellcasting. Spell save DC 14, spell attack +6. 4 casts per rest.'},
+      {name:'Resourceful', desc:'Gain Heroic Inspiration whenever you finish a Long Rest.'},
+      {name:'Skillful', desc:'Gain proficiency in one skill of your choice.'},
+      {name:'Versatile', desc:'Gain an Origin feat of your choice.'},
+      {name:'Noble Background', desc:'Position of Privilege: people assume you have the right to be wherever you are.'}
+    ],
+    feats:['Skilled', 'Magic Initiate'],
+    speciesTraits:['Resourceful', 'Skillful', 'Versatile'],
+    armorTraining:['Light Armor', 'Medium Armor', 'Shields'],
+    weaponTraining:['Simple Weapons', 'Martial Weapons'],
+    toolTraining:['Musical Instruments (3)', 'Gaming Set'],
+    languages:['Common'],
+    proficiencies:['Light Armor', 'Medium Armor', 'Shields', 'Simple Weapons', 'Martial Weapons', 'Musical Instruments (3)', 'Gaming Set', 'Common'],
+    inventory:['Musical Instrument', 'Gaming Set'],
+    currency:{cp:0, sp:0, ep:0, gp:0, pp:0},
+    faction:'keepers',
+    history:[]
+  },
+  {
+    id:'thea-rochiel', name:'Thea Rochiel', class:'Rogue', subclass:'',
+    species:'Halfling', background:'Sailor', level:1,
+    icon:'🗡️',
+    tileColor:'var(--topaz-light,#c8a84b)', tileColorLight:'var(--topaz,#ffd27a)',
+    tileGlow:'rgba(255,210,122,.28)', tileBg:'rgba(180,130,30,.8)',
+    hp:{current:9, max:9, temp:0}, hitDice:'1d8',
+    ac:15, initiative:4, speed:30, size:'S', profBonus:2,
+    passivePerception:14, passiveInsight:14, passiveInvestigation:12,
+    senses:[],
+    inspiration:false,
+    deathSaves:{successes:0, failures:0},
+    alignment:'Neutral',
+    abilities:{
+      STR:{score:10, mod:0},
+      DEX:{score:18, mod:4},
+      CON:{score:12, mod:1},
+      INT:{score:11, mod:0},
+      WIS:{score:14, mod:2},
+      CHA:{score:12, mod:1}
+    },
+    savingThrows:{STR:false, DEX:true, CON:false, INT:true, WIS:false, CHA:false},
+    skills:{
+      Acrobatics:{mod:8,  prof:true,  ability:'DEX', expertise:true},
+      'Animal Handling':{mod:2, prof:false, ability:'WIS'},
+      Arcana:{mod:0,  prof:false, ability:'INT'},
+      Athletics:{mod:0,  prof:false, ability:'STR'},
+      Deception:{mod:1,  prof:false, ability:'CHA'},
+      History:{mod:0,  prof:false, ability:'INT'},
+      Insight:{mod:4,  prof:true,  ability:'WIS'},
+      Intimidation:{mod:1,  prof:false, ability:'CHA'},
+      Investigation:{mod:2,  prof:true,  ability:'INT'},
+      Medicine:{mod:2,  prof:false, ability:'WIS'},
+      Nature:{mod:0,  prof:false, ability:'INT'},
+      Perception:{mod:4,  prof:true,  ability:'WIS'},
+      Performance:{mod:1,  prof:false, ability:'CHA'},
+      Persuasion:{mod:1,  prof:false, ability:'CHA'},
+      Religion:{mod:0,  prof:false, ability:'INT'},
+      'Sleight of Hand':{mod:6,  prof:true,  ability:'DEX'},
+      Stealth:{mod:8,  prof:true,  ability:'DEX', expertise:true},
+      Survival:{mod:2,  prof:false, ability:'WIS'}
+    },
+    spellcasting:null,
+    spells:[],
+    weapons:[
+      {name:'Rapier',       atkBonus:'+6', damage:'1d8+4 Piercing', notes:'Mastery'},
+      {name:'Dagger (x2)',  atkBonus:'+6', damage:'1d4+4 Piercing', notes:'Light, Thrown'},
+      {name:'Short Sword',  atkBonus:'+6', damage:'1d6+4 Piercing', notes:'Finesse, Light'},
+      {name:'Short Bow',    atkBonus:'+6', damage:'1d6+4 Piercing', notes:'Range 80/320, Mastery'}
+    ],
+    features:[
+      {name:"Sneak Attack",desc:"Once per turn deal extra 1d6 damage with finesse or ranged weapon if you have Advantage or an ally is within 5ft of target."},
+      {name:"Weapon Mastery",desc:"Rapier: Vex. Short Bow: Slow."},
+      {name:"Thieves Cant",desc:"Secret language used by rogues to hide messages."},
+      {name:"Tavern Brawler",desc:"Unarmed strikes deal 1d4. Push 5ft on hit."},
+      {name:"Sailors Background",desc:"Ship Passage: free passage on sailing vessels."}
+    ],
+    feats:['Tavern Brawler'],
+    speciesTraits:['Brave', 'Halfling Nimbleness', 'Luck', 'Naturally Stealthy'],
+    armorTraining:['Light Armor'],
+    weaponTraining:['Simple Weapons', 'Martial Weapons'],
+    toolTraining:["Navigator's Tools", "Thieves' Tools"],
+    languages:['Common', 'Halfling'],
+    proficiencies:['Light Armor', 'Simple Weapons', 'Martial Weapons', "Navigator's Tools", "Thieves' Tools", 'Common', 'Halfling'],
+    inventory:["Burglar's Pack", "Thieves' Tools", "Navigator's Tools", 'Rapier', 'Dagger', 'Dagger', 'Short Sword', 'Short Bow', 'Quiver'],
+    currency:{cp:0, sp:0, ep:0, gp:0, pp:0},
+    faction:null,
+    history:[]
   }
 ];
 
@@ -1639,10 +1745,6 @@ function showRoster(){
 function toggleHistory(){document.getElementById('hist-body').classList.toggle('open');document.getElementById('hist-chevron').classList.toggle('open');}
 function toggleSlot(charId,level,index){const c=characters.find(x=>x.id===charId);if(!c)return;const slot=c.spellcasting.slots.find(s=>s.level===level);if(!slot)return;slot.used=index<slot.used?index:index+1;queueSave(charId);openSheet(charId);}
 function toggleInspiration(charId){const c=characters.find(x=>x.id===charId);if(!c)return;c.inspiration=!c.inspiration;queueSave(charId);const gem=document.getElementById('insp-gem');if(gem){gem.className='inspiration-gem'+(c.inspiration?' active':'');gem.textContent=c.inspiration?'✦':'◇';gem.nextElementSibling.textContent=c.inspiration?'INSPIRED':'NOT INSPIRED';}}
-function openUpdateModal(){document.getElementById('modal-input').value='';document.getElementById('ai-thinking').classList.remove('visible');document.getElementById('modal').classList.add('open');}
-function closeModal(){document.getElementById('modal').classList.remove('open');}
-
-
 // ═══════════════════════════════════════════
 // PLAYER UPDATE PANEL
 // ═══════════════════════════════════════════
@@ -1992,50 +2094,6 @@ async function submitPlayerUpdate() {
   }
 }
 
-
-async function submitUpdate(){
-  const input=document.getElementById('modal-input').value.trim();if(!input)return;
-  const c=characters.find(x=>x.id===currentCharId);if(!c)return;
-  document.getElementById('ai-thinking').classList.add('visible');
-  document.querySelector('.modal-submit').disabled=true;
-  try{
-    const sys=`You are a D&D 5e (2024 PHB) character sheet assistant. Return ONLY valid JSON (no markdown):
-{"summary":"one sentence","changes":{"hp_current":n,"hp_max":n,"level":n,"ac":n,"initiative":n,"speed":n,"inspiration":bool,"abilities":{"STR":{"score":n,"mod":n}},"currency":{"cp":n,"sp":n,"ep":n,"gp":n,"pp":n},"new_weapons":[{"name":"","atkBonus":"","damage":"","notes":""}],"new_spells":[{"level":0,"name":"","castTime":"","concentration":false,"ritual":false,"material":false}],"new_features":[{"name":"","desc":""}],"new_inventory":[""],"new_proficiencies":[""]}}
-Only include changed fields. For currency, provide the NEW total (not the delta). Use 2024 PHB rules. Current: ${JSON.stringify({name:c.name,class:c.class,level:c.level,hp:c.hp,ac:c.ac,abilities:c.abilities,currency:c.currency||{cp:0,sp:0,ep:0,gp:0,pp:0},spells:(c.spells||[]).map(s=>s.name),features:c.features.map(f=>f.name),inventory:c.inventory})}`;
-    const res=await fetch("https://ora-proxy.cdpractical.workers.dev",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"gemini-2.0-flash",max_tokens:1000,system:sys,messages:[{role:"user",content:input}]})});
-    const data=await res.json();
-    const text=data.content?.map(i=>i.text||'').join('')||'';
-    const parsed=JSON.parse(text.replace(/```json|```/g,'').trim());
-    const ch=parsed.changes||{};
-    if(ch.hp_current!==undefined)c.hp.current=ch.hp_current;if(ch.hp_max!==undefined)c.hp.max=ch.hp_max;if(ch.level!==undefined)c.level=ch.level;if(ch.ac!==undefined)c.ac=ch.ac;if(ch.initiative!==undefined)c.initiative=ch.initiative;if(ch.speed!==undefined)c.speed=ch.speed;if(ch.inspiration!==undefined)c.inspiration=ch.inspiration;if(ch.currency){c.currency=c.currency||{cp:0,sp:0,ep:0,gp:0,pp:0};Object.assign(c.currency,ch.currency);}
-    if(ch.currency) {
-      c.currency = c.currency || {cp:0,sp:0,ep:0,gp:0,pp:0};
-      Object.assign(c.currency, ch.currency);
-    }
-    if(ch.abilities)Object.entries(ch.abilities).forEach(([k,v])=>{if(c.abilities[k])c.abilities[k]={...c.abilities[k],...v};});
-    if(ch.new_weapons)c.weapons.push(...ch.new_weapons);
-    if(ch.new_spells)c.spells.push(...ch.new_spells);
-    if(ch.new_features)c.features.push(...ch.new_features);
-    if(ch.new_inventory)c.inventory.push(...ch.new_inventory);
-    if(ch.new_proficiencies)c.proficiencies.push(...ch.new_proficiencies);
-    if(ch.remove_inventory)c.inventory=c.inventory.filter(i=>!ch.remove_inventory.includes(i));
-    if(ch.hitDice)c.hitDice=ch.hitDice;
-    if(ch.passivePerception!==undefined)c.passivePerception=ch.passivePerception;
-    if(ch.profBonus!==undefined)c.profBonus=ch.profBonus;
-    if(ch.deathSaves)Object.assign(c.deathSaves,ch.deathSaves);
-    if(ch.reset_spell_slots&&c.spellcasting)c.spellcasting.slots.forEach(s=>s.used=0);
-    // Auto-recalc passivePerception if WIS changed
-    if(ch.abilities?.WIS)c.passivePerception=10+c.abilities.WIS.mod+(c.skills?.Perception?.prof?c.profBonus:0);
-    const now=new Date();
-    c.history.push({time:now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),input,result:parsed.summary||'Changes applied.'});
-    closeModal();
-    await dbSave(c.id,c);
-    showSaveStatus('saved','✓ Saved to Chronicle');
-    openSheet(currentCharId);
-    setTimeout(()=>{const b=document.getElementById('hist-body'),chev=document.getElementById('hist-chevron');if(!b.classList.contains('open')){b.classList.add('open');chev.classList.add('open');}},300);
-  }catch(err){alert('The scribe encountered an error: '+err.message);}
-  finally{document.querySelector('.modal-submit').disabled=false;document.getElementById('ai-thinking').classList.remove('visible');}
-}
 
 // ═══════════════════════════════════════════
 // DM STATE
