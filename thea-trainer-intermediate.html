@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thea Rochiel — Intermediate Tactics</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:#c9a227; --gold-light:#e8c96a;
+  --topaz:#ffd27a; --topaz-glow:#ffe4a0;
+  --emerald-glow:#3ddc97; --ruby-glow:#ff4444;
+  --sapphire-glow:#6aaeff; --amethyst-glow:#c46aff;
+  --garnet:#ff6a98;
+  --parchment:#f5edd8; --pdim:rgba(245,237,216,.68);
+  --bg:#08060a; --bg2:#120e16;
+  --border:rgba(255,210,122,.2);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--parchment);font-family:'Crimson Text',serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 15% 15%,rgba(255,210,122,.04) 0%,transparent 55%),
+             radial-gradient(ellipse at 85% 85%,rgba(196,106,255,.04) 0%,transparent 55%);}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:.5;}
+.wrap{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:1.2rem 1rem 5rem;}
+
+/* HEADER */
+.hdr{text-align:center;padding:2.2rem 1rem 1.4rem;border-bottom:1px solid var(--border);margin-bottom:1.8rem;}
+.hdr-eye{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.28em;color:var(--topaz);opacity:.6;margin-bottom:.5rem;text-transform:uppercase;}
+.hdr-title{font-family:'Cinzel Decorative',cursive;font-size:clamp(1.5rem,5vw,2.3rem);
+  background:linear-gradient(135deg,var(--topaz),var(--topaz-glow),var(--garnet));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1.2;margin-bottom:.5rem;}
+.hdr-sub{font-size:1rem;color:rgba(245,237,216,.42);font-style:italic;}
+
+/* NAV */
+.cnav{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.8rem;}
+.cn{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.07em;
+  padding:.32rem .65rem;border-radius:3px;cursor:pointer;
+  border:1px solid rgba(255,210,122,.18);color:rgba(245,237,216,.28);
+  background:rgba(0,0,0,.3);transition:all .2s;touch-action:manipulation;}
+.cn.active{border-color:var(--topaz);color:var(--topaz-glow);background:rgba(255,210,122,.1);}
+.cn.done{border-color:var(--emerald-glow);color:var(--emerald-glow);background:rgba(61,220,151,.07);}
+
+/* LESSONS */
+.lesson{display:none;animation:fadeUp .3s ease;}
+.lesson.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+/* CARDS */
+.card{background:linear-gradient(145deg,rgba(18,14,24,.97),rgba(10,8,16,.99));
+  border:1px solid var(--border);border-radius:10px;padding:1.4rem;margin-bottom:1.1rem;
+  box-shadow:0 6px 40px rgba(0,0,0,.55);}
+.card-tag{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.22em;color:var(--topaz);opacity:.65;margin-bottom:.4rem;text-transform:uppercase;}
+.card-title{font-family:'Cinzel',serif;font-size:1.15rem;color:var(--topaz-glow);margin-bottom:.75rem;line-height:1.3;}
+.body{font-size:1.05rem;line-height:1.68;color:var(--pdim);}
+.body p{margin-bottom:.7rem;}.body p:last-child{margin-bottom:0;}
+.hl{color:var(--topaz-glow);font-weight:600;}
+.sa{color:var(--amethyst-glow);font-weight:600;}
+
+/* CALLOUTS */
+.box{border-radius:6px;padding:.8rem 1rem;margin:.75rem 0;font-size:.97rem;line-height:1.58;}
+.box-t{border-left:3px solid var(--topaz);background:rgba(255,210,122,.07);}
+.box-g{border-left:3px solid var(--emerald-glow);background:rgba(61,220,151,.07);}
+.box-p{border-left:3px solid var(--amethyst-glow);background:rgba(196,106,255,.07);}
+.box-r{border-left:3px solid var(--ruby-glow);background:rgba(255,68,68,.07);}
+.box-b{border-left:3px solid var(--sapphire-glow);background:rgba(106,174,255,.07);}
+.box-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.3rem;opacity:.75;}
+
+/* CONCEPT GRID */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin:.8rem 0;}
+@media(max-width:480px){.cgrid{grid-template-columns:1fr;}}
+.cc{border-radius:6px;padding:.85rem;border:1px solid;}
+.cc-title{font-family:'Cinzel',serif;font-size:.82rem;margin-bottom:.3rem;}
+.cc-body{font-size:.87rem;color:rgba(245,237,216,.56);line-height:1.42;}
+.cc-t{border-color:rgba(255,210,122,.25);background:rgba(255,210,122,.06);}
+.cc-t .cc-title{color:var(--topaz-glow);}
+.cc-g{border-color:rgba(61,220,151,.25);background:rgba(61,220,151,.06);}
+.cc-g .cc-title{color:var(--emerald-glow);}
+.cc-r{border-color:rgba(255,68,68,.25);background:rgba(255,68,68,.06);}
+.cc-r .cc-title{color:var(--ruby-glow);}
+.cc-p{border-color:rgba(196,106,255,.25);background:rgba(196,106,255,.06);}
+.cc-p .cc-title{color:var(--amethyst-glow);}
+
+/* DICE */
+.dz{background:rgba(0,0,0,.4);border:1px solid rgba(255,210,122,.15);border-radius:8px;padding:1.1rem;margin-top:.9rem;}
+.dz-title{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.16em;color:var(--topaz);text-transform:uppercase;margin-bottom:.8rem;}
+.die-row{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.75rem;}
+.die{font-family:'Cinzel',serif;font-weight:700;font-size:.82rem;padding:.45rem .85rem;border-radius:4px;cursor:pointer;transition:all .15s;touch-action:manipulation;user-select:none;border:1px solid;}
+.die:active{transform:scale(.92);}
+.die-t{border-color:rgba(255,210,122,.4);background:rgba(255,210,122,.1);color:var(--topaz-glow);}
+.die-t:hover{background:rgba(255,210,122,.22);}
+.die-p{border-color:rgba(196,106,255,.4);background:rgba(196,106,255,.1);color:var(--amethyst-glow);}
+.die-p:hover{background:rgba(196,106,255,.22);}
+.die-g{border-color:rgba(61,220,151,.4);background:rgba(61,220,151,.1);color:var(--emerald-glow);}
+.die-g:hover{background:rgba(61,220,151,.22);}
+.die-r{border-color:rgba(255,68,68,.4);background:rgba(255,68,68,.1);color:#ff9999;}
+.die-r:hover{background:rgba(255,68,68,.22);}
+.roll-out{min-height:3.8rem;display:flex;align-items:center;gap:.8rem;padding:.6rem .9rem;border-radius:5px;background:rgba(0,0,0,.45);border:1px solid rgba(255,210,122,.1);transition:all .3s;}
+.roll-out.hit{background:rgba(61,220,151,.08);border-color:rgba(61,220,151,.3);}
+.roll-out.miss{background:rgba(255,68,68,.07);border-color:rgba(255,68,68,.25);}
+.roll-out.crit{background:rgba(196,106,255,.1);border-color:rgba(196,106,255,.4);}
+.roll-n{font-family:'Cinzel Decorative',cursive;font-size:2.1rem;min-width:2.6rem;text-align:center;}
+.roll-n.g{color:var(--emerald-glow);}.roll-n.b{color:var(--ruby-glow);}
+.roll-n.c{color:var(--amethyst-glow);text-shadow:0 0 18px var(--amethyst-glow);}
+.roll-n.f{color:var(--ruby-glow);text-shadow:0 0 18px var(--ruby-glow);}
+.roll-txt{font-size:.93rem;color:rgba(245,237,216,.6);line-height:1.45;}
+.roll-txt strong{color:var(--parchment);}
+@keyframes bounce{0%{transform:scale(1.7) rotate(-10deg);opacity:.4;}60%{transform:scale(1.1) rotate(3deg);}100%{transform:scale(1) rotate(0);opacity:1;}}
+.roll-n.spin{animation:bounce .32s ease-out;}
+
+/* BATTLE */
+.battle-hdr{background:linear-gradient(135deg,rgba(100,20,20,.3),rgba(0,0,0,.6));
+  border:1px solid rgba(255,100,100,.28);border-radius:10px 10px 0 0;padding:1.2rem 1.4rem;}
+.b-scene-title{font-family:'Cinzel Decorative',cursive;font-size:1.1rem;color:#ff9999;margin-bottom:.4rem;}
+.b-scene-desc{font-size:.97rem;color:rgba(245,237,216,.68);line-height:1.55;font-style:italic;}
+.b-status{display:flex;gap:.5rem;flex-wrap:wrap;padding:.75rem 1.4rem;background:rgba(0,0,0,.5);
+  border-left:1px solid rgba(255,100,100,.25);border-right:1px solid rgba(255,100,100,.25);}
+.bstat{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.06em;padding:.28rem .6rem;border-radius:3px;border:1px solid;}
+.bstat-hp{border-color:rgba(255,68,68,.35);background:rgba(255,68,68,.1);color:#ff9999;}
+.bstat-hp.low{border-color:rgba(255,68,68,.6);background:rgba(255,68,68,.2);color:var(--ruby-glow);}
+.bstat-sa{border-color:rgba(196,106,255,.35);background:rgba(196,106,255,.1);color:var(--amethyst-glow);}
+.bstat-sa.used{border-color:rgba(196,106,255,.15);background:transparent;color:rgba(196,106,255,.3);text-decoration:line-through;}
+.bstat-hide{border-color:rgba(61,220,151,.35);background:rgba(61,220,151,.1);color:var(--emerald-glow);}
+
+.combat-log{background:rgba(0,0,0,.55);border-left:1px solid rgba(255,100,100,.25);border-right:1px solid rgba(255,100,100,.25);max-height:190px;overflow-y:auto;padding:.6rem .9rem;}
+.log-e{font-size:.87rem;line-height:1.5;padding:.22rem 0;border-bottom:1px solid rgba(245,237,216,.05);color:rgba(245,237,216,.5);}
+.log-e:last-child{border-bottom:none;}
+.log-e.you{color:var(--topaz-glow);}
+.log-e.ally{color:var(--sapphire-glow);}
+.log-e.enemy{color:var(--ruby-glow);}
+.log-e.sys{color:var(--topaz);opacity:.65;}
+.log-e.good{color:var(--emerald-glow);}
+.log-e.bad{color:#ff9999;}
+
+.b-step{border-left:1px solid rgba(255,100,100,.25);border-right:1px solid rgba(255,100,100,.25);padding:1.1rem 1.4rem;background:rgba(8,6,10,.7);}
+.step-who{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem;}
+.step-who.you{color:var(--topaz-glow);}
+.step-who.ally{color:var(--sapphire-glow);}
+.step-who.enemy{color:var(--ruby-glow);}
+.step-narr{font-size:1rem;line-height:1.6;color:rgba(245,237,216,.8);font-style:italic;margin-bottom:.9rem;padding:.7rem .9rem;background:rgba(0,0,0,.3);border-radius:5px;border-left:2px solid rgba(245,237,216,.12);}
+.step-prompt{font-family:'Cinzel',serif;font-size:.88rem;color:var(--topaz-glow);margin-bottom:.75rem;line-height:1.4;}
+.choices{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.8rem;}
+.choice{padding:.7rem .95rem;border-radius:5px;cursor:pointer;text-align:left;border:1px solid rgba(245,237,216,.12);background:rgba(0,0,0,.35);color:rgba(245,237,216,.72);font-size:.93rem;line-height:1.45;transition:all .15s;touch-action:manipulation;}
+.choice:hover{border-color:rgba(255,210,122,.35);background:rgba(255,210,122,.07);color:var(--parchment);}
+.choice.correct{border-color:var(--emerald-glow)!important;background:rgba(61,220,151,.12)!important;color:var(--emerald-glow)!important;cursor:default;}
+.choice.wrong{border-color:var(--ruby-glow)!important;background:rgba(255,68,68,.1)!important;color:#ff9999!important;cursor:default;}
+.choice.neutral{border-color:var(--topaz)!important;background:rgba(255,210,122,.1)!important;color:var(--topaz-glow)!important;cursor:default;}
+.choice.disabled{pointer-events:none;opacity:.42;}
+.step-fb{border-radius:5px;padding:.75rem .95rem;font-size:.93rem;line-height:1.55;display:none;margin-bottom:.7rem;}
+.step-fb.show{display:block;}
+.step-fb.good{background:rgba(61,220,151,.1);border-left:3px solid var(--emerald-glow);color:var(--emerald-glow);}
+.step-fb.ok{background:rgba(255,210,122,.08);border-left:3px solid var(--topaz);color:var(--topaz-glow);}
+.step-fb.bad{background:rgba(255,68,68,.09);border-left:3px solid var(--ruby-glow);color:#ffaaaa;}
+.step-nxt{font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.1em;padding:.6rem 1.2rem;border-radius:4px;cursor:pointer;background:linear-gradient(135deg,rgba(255,210,122,.22),rgba(255,210,122,.08));border:1px solid var(--topaz);color:var(--topaz-glow);display:none;touch-action:manipulation;transition:all .2s;}
+.step-nxt.show{display:inline-block;}
+.step-nxt:hover{background:linear-gradient(135deg,rgba(255,210,122,.38),rgba(255,210,122,.18));}
+
+.b-end{border-radius:0 0 10px 10px;border:1px solid rgba(255,100,100,.28);border-top:none;padding:1.2rem 1.4rem;background:rgba(0,0,0,.6);display:none;}
+.b-end.show{display:block;}
+
+/* NAV */
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;gap:.6rem;}
+.nav-btn{font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.09em;padding:.62rem 1.2rem;border-radius:4px;cursor:pointer;transition:all .2s;touch-action:manipulation;border:1px solid rgba(255,210,122,.35);color:var(--topaz-glow);background:linear-gradient(135deg,rgba(255,210,122,.12),rgba(255,210,122,.04));}
+.nav-btn:hover{background:linear-gradient(135deg,rgba(255,210,122,.25),rgba(255,210,122,.1));}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.nav-btn.primary{border-color:var(--topaz);background:linear-gradient(135deg,rgba(255,210,122,.24),rgba(255,210,122,.08));}
+.prog-label{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.1em;color:rgba(245,237,216,.28);}
+.score-big{font-family:'Cinzel Decorative',cursive;font-size:2.5rem;background:linear-gradient(135deg,var(--topaz),var(--topaz-glow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hdr">
+  <div class="hdr-eye">Ora Campaign · Intermediate Tactics</div>
+  <div class="hdr-title">The Shadow's Handbook</div>
+  <div class="hdr-sub">Advanced play for Thea Rochiel — Rogue, Level 1</div>
+</div>
+
+<div class="cnav" id="cnav">
+  <button class="cn active" onclick="go(0)">1. Sneak Attack Mastery</button>
+  <button class="cn" onclick="go(1)">2. Positioning</button>
+  <button class="cn" onclick="go(2)">3. Skills as Weapons</button>
+  <button class="cn" onclick="go(3)">4. Reading the Fight</button>
+  <button class="cn" onclick="go(4)">5. Battle: The Warehouse</button>
+  <button class="cn" onclick="go(5)">6. After-Action</button>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- LESSON 1: Sneak Attack Mastery -->
+<!-- ═══════════════════════════════════ -->
+<div class="lesson active" id="lesson-0">
+  <div class="card">
+    <div class="card-tag">Chapter 1 · Mechanics</div>
+    <div class="card-title">Sneak Attack — Getting It Every Single Turn</div>
+    <div class="body">
+      <p>Intermediate Rogue play isn't complicated — it's disciplined. Your job is to ensure <span class="sa">Sneak Attack fires on every turn</span>, no exceptions. Average damage without it is about 7. With it, 10.5. That's 50% more damage, every round, for the whole fight.</p>
+      <p>The key insight: the <span class="hl">ally-adjacent condition</span> is easier to maintain than Advantage, and it works as long as you don't have Disadvantage. This means your positioning choices matter more than any other decision you make.</p>
+    </div>
+
+    <div class="cgrid">
+      <div class="cc cc-g">
+        <div class="cc-title">✓ Reliable SA Sources (maintain these)</div>
+        <div class="cc-body">Ragnar or Talon adjacent to target · You're within 5 ft (melee) of target plus an ally · Lucian casts Faerie Fire (Advantage) · You're hidden and attacking from stealth</div>
+      </div>
+      <div class="cc cc-p">
+        <div class="cc-title">✦ Premium SA Sources (high value)</div>
+        <div class="cc-body">Hidden attack = Advantage = SA even with no allies near · Faerie Fire = SA + Advantage on attack roll · Prone enemy in melee = Advantage</div>
+      </div>
+      <div class="cc cc-r">
+        <div class="cc-title">✗ What Breaks the Ally Condition</div>
+        <div class="cc-body">You have Disadvantage from any source (poisoned, in darkness, etc.) · No ally within 5 ft of target · You're using a non-finesse melee weapon (not Thea's style but worth knowing)</div>
+      </div>
+      <div class="cc cc-t">
+        <div class="cc-title">🗡️ The Sneak Attack Math</div>
+        <div class="cc-body">Short Bow no SA: avg 7.5 dmg · Short Bow + SA: avg 11 dmg · Rapier + SA: avg 12.5 dmg · Rapier + SA + Crit: avg 19 dmg. Every SA proc is +3.5 free damage.</div>
+      </div>
+    </div>
+
+    <div class="box box-t">
+      <div class="box-label">💡 The Positioning Rule</div>
+      Before you move, ask: <em>"Where do I stand so that SA fires?"</em> If Ragnar is fighting the Swordsman, you want to be on the <strong>opposite side</strong> of the Swordsman from Ragnar — he's adjacent, you're adjacent, Sneak Attack fires. This is called flanking and it's Thea's home position every fight.
+    </div>
+
+    <div class="dz">
+      <div class="dz-title">🎲 SA Damage Over a Full Fight</div>
+      <div class="die-row">
+        <button class="die die-t" onclick="rollCmp('bow_nosa')">Short Bow (no SA)</button>
+        <button class="die die-p" onclick="rollCmp('bow_sa')">Short Bow + SA</button>
+        <button class="die die-t" onclick="rollCmp('rapier_sa')">Rapier + SA</button>
+        <button class="die die-p" onclick="rollCmp('crit_sa')">Rapier + SA + Crit!</button>
+      </div>
+      <div class="roll-out" id="cmp-out">
+        <div class="roll-n" id="cmp-n" style="color:rgba(245,237,216,.2)">—</div>
+        <div class="roll-txt" id="cmp-txt">Compare damage outputs across scenarios</div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-row">
+    <button class="nav-btn" disabled>← Back</button>
+    <span class="prog-label">1 of 6</span>
+    <button class="nav-btn primary" onclick="go(1)">Next →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- LESSON 2: Positioning -->
+<!-- ═══════════════════════════════════ -->
+<div class="lesson" id="lesson-1">
+  <div class="card">
+    <div class="card-tag">Chapter 2 · Tactics</div>
+    <div class="card-title">Positioning — Where Thea Stands Wins Fights</div>
+    <div class="body">
+      <p>Thea's 30 ft movement and AC 15 give her flexibility other characters don't have. Where Lucian stays back and casts, Thea <span class="hl">dances through the fight</span> — close to trigger SA, then away to avoid retaliation.</p>
+    </div>
+
+    <div class="box box-r">
+      <div class="box-label">⚠️ Thea's Two Dangers</div>
+      <strong>1. Surrounded:</strong> Two enemies flanking Thea means two attacks per round at her 9 HP. Always keep one flank free.<br><br>
+      <strong>2. Opportunity Attacks:</strong> Moving OUT of an enemy's melee range triggers a free attack. Solution — after attacking in melee, don't just run. Either Disengage (Action) or don't move away at all.
+    </div>
+
+    <div class="cgrid">
+      <div class="cc cc-g">
+        <div class="cc-title">✓ Best Position</div>
+        <div class="cc-body">Behind a melee ally, attacking the same target. You get SA (ally adjacent), they absorb hits, you stay mobile. Move in, attack, move back to partial cover.</div>
+      </div>
+      <div class="cc cc-p">
+        <div class="cc-title">✦ Hidden Sniper</div>
+        <div class="cc-body">Use Short Bow from 30-80 ft. Hide behind terrain. Stealth +8 means you're almost invisible. Attack from hiding = Advantage = SA every turn with zero melee risk.</div>
+      </div>
+      <div class="cc cc-t">
+        <div class="cc-title">⚡ Hit and Fade</div>
+        <div class="cc-body">Attack in melee, then Dash away as Bonus Action. Costs your Bonus Action but lets you attack AND reposition without Opportunity Attacks. Works when your turn puts the enemy at 0 HP too.</div>
+      </div>
+      <div class="cc cc-r">
+        <div class="cc-title">✗ Don't Do This</div>
+        <div class="cc-body">Run PAST an enemy to reach another target (Opp. Attack). Charge into a crowd alone (surrounded). Melee attack and then move away without Disengaging (Opp. Attack again).</div>
+      </div>
+    </div>
+
+    <div class="box box-b">
+      <div class="box-label">🧭 Small Size Advantage</div>
+      Being Small (Halfling) means Thea can move through the space of Medium or larger creatures — Talon and Ragnar are effectively doorways. This is unusually powerful for positioning. Thea can literally run through her allies to reach flanking positions without triggering reactions.
+    </div>
+  </div>
+  <div class="nav-row">
+    <button class="nav-btn" onclick="go(0)">← Back</button>
+    <span class="prog-label">2 of 6</span>
+    <button class="nav-btn primary" onclick="go(2)">Next →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- LESSON 3: Skills as Weapons -->
+<!-- ═══════════════════════════════════ -->
+<div class="lesson" id="lesson-2">
+  <div class="card">
+    <div class="card-tag">Chapter 3 · Skills</div>
+    <div class="card-title">Your Skills Are as Powerful as Your Blades</div>
+    <div class="body">
+      <p>Thea has the best skill modifiers in the party by a significant margin. Stealth +8 and Acrobatics +8 — with Expertise, that's double proficiency — mean she can attempt things no other character can reliably do. <span class="hl">Use this constantly, not just in combat.</span></p>
+    </div>
+
+    <div class="cgrid">
+      <div class="cc cc-p">
+        <div class="cc-title">👣 Stealth +8 — Expertise</div>
+        <div class="cc-body">Average roll of 17.5 before the die. Enemies need passive Perception of 18+ to notice. Use before every combat to get Hidden → Advantage on first attack. Also scout ahead, bypass encounters entirely, set up ambushes.</div>
+      </div>
+      <div class="cc cc-t">
+        <div class="cc-title">🤸 Acrobatics +8 — Expertise</div>
+        <div class="cc-body">Escape grapples (Acrobatics vs Grappler's Athletics). Stay standing when pushed. Move through difficult terrain. The DM will use this in creative situations — be ready for "make an Acrobatics check."</div>
+      </div>
+      <div class="cc cc-g">
+        <div class="cc-title">🔍 Insight +4, Perception +4</div>
+        <div class="cc-body">Notice lies (Insight). Spot hidden enemies (Perception, ties to Passive 14). These are the detective skills — before roleplay encounters, roll Insight to read the room. Tell the party what you sense.</div>
+      </div>
+      <div class="cc cc-t">
+        <div class="cc-title">🖐 Sleight of Hand +6</div>
+        <div class="cc-body">Pickpocket, plant evidence, pass items secretly, palming objects. Enormous roleplay value. Your Sailor background means you've used these skills at sea — lean into it narratively.</div>
+      </div>
+    </div>
+
+    <div class="box box-p">
+      <div class="box-label">💡 The Pre-Combat Stealth Setup</div>
+      When you see combat coming before it starts, ask the DM: <em>"Can Thea attempt to Hide before initiative is rolled?"</em> A Stealth +8 check often succeeds. You start the fight hidden, your first attack has Advantage, and Sneak Attack fires before the enemy even knows where you are. This is the single most powerful thing Thea can do.
+    </div>
+
+    <div class="dz">
+      <div class="dz-title">🎲 Skill Checks</div>
+      <div class="die-row">
+        <button class="die die-p" onclick="rollSkill('Stealth',8)">Stealth +8</button>
+        <button class="die die-t" onclick="rollSkill('Acrobatics',8)">Acrobatics +8</button>
+        <button class="die die-t" onclick="rollSkill('Sleight of Hand',6)">Sleight of Hand +6</button>
+        <button class="die die-g" onclick="rollSkill('Perception',4)">Perception +4</button>
+        <button class="die die-g" onclick="rollSkill('Insight',4)">Insight +4</button>
+      </div>
+      <div class="roll-out" id="skill-out">
+        <div class="roll-n" id="skill-n" style="color:rgba(245,237,216,.2)">—</div>
+        <div class="roll-txt" id="skill-txt">Roll to feel how reliable Thea's expert skills are</div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-row">
+    <button class="nav-btn" onclick="go(1)">← Back</button>
+    <span class="prog-label">3 of 6</span>
+    <button class="nav-btn primary" onclick="go(3)">Next →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- LESSON 4: Reading the Fight -->
+<!-- ═══════════════════════════════════ -->
+<div class="lesson" id="lesson-3">
+  <div class="card">
+    <div class="card-tag">Chapter 4 · Judgment</div>
+    <div class="card-title">Reading the Fight — When to Stab, When to Vanish</div>
+    <div class="body">
+      <p>Intermediate Rogue play is about threat assessment. Every turn ask: <span class="hl">am I the most dangerous thing in this fight right now, or am I the most at-risk?</span> The answer changes your tactics completely.</p>
+    </div>
+
+    <div class="box box-p">
+      <div class="box-label">🧠 The Three-Question Check</div>
+      <strong>1. Can I get Sneak Attack this turn?</strong> If yes — attack. If no — Disengage and reposition, or Hide for next turn's advantage.<br><br>
+      <strong>2. Will the enemy hit me back?</strong> If you're adjacent to two enemies, you'll eat two attacks. Deal damage from the safer target or use Short Bow.<br><br>
+      <strong>3. Does anyone need saving?</strong> You can't heal, but you can redirect attention. Attacking the enemy targeting a downed ally forces it to deal with you.
+    </div>
+
+    <div class="cgrid">
+      <div class="cc cc-g">
+        <div class="cc-title">✓ Attack when...</div>
+        <div class="cc-body">SA conditions are met · You're attacking from hiding · Target is the biggest threat to your allies · One hit might end the fight (enemy at low HP)</div>
+      </div>
+      <div class="cc cc-p">
+        <div class="cc-title">✦ Hide when...</div>
+        <div class="cc-body">No SA conditions available · You're exposed with low HP · Next round's SA from hiding will deal more than attacking this round without it · You need to reset position</div>
+      </div>
+      <div class="cc cc-t">
+        <div class="cc-title">⚡ Disengage when...</div>
+        <div class="cc-body">You're adjacent to an enemy you don't want to attack · You need to reach a different target · Staying put will get you hit twice next round · An ally needs you to reach them</div>
+      </div>
+      <div class="cc cc-r">
+        <div class="cc-title">✗ Avoid...</div>
+        <div class="cc-body">Attacking without SA when you could set up SA · Running through multiple enemy spaces · Using Short Bow when you're already adjacent (Disadvantage at melee range) · Forgetting Halfling Luck on crucial rolls</div>
+      </div>
+    </div>
+
+    <div class="box box-b">
+      <div class="box-label">🤝 Communicate With Your Party</div>
+      Tell Talon and Ragnar your plan. "I'm going to flank the archer — can one of you move to the swordsman?" Getting SA requires an ally to be adjacent. Your best allies are the melee fighters. A quick word before you move turns average damage into Sneak Attack every round.
+    </div>
+  </div>
+  <div class="nav-row">
+    <button class="nav-btn" onclick="go(2)">← Back</button>
+    <span class="prog-label">4 of 6</span>
+    <button class="nav-btn primary" onclick="go(4)">⚔ Enter Battle →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- LESSON 5: BATTLE SCENARIO -->
+<!-- ═══════════════════════════════════ -->
+<div class="lesson" id="lesson-4">
+
+  <div class="battle-hdr">
+    <div class="b-scene-title">⚔ The Warehouse at Pier Nine</div>
+    <div class="b-scene-desc">Three Sorcerer cultists have cornered your party in a warehouse near Ashwick's docks. A Caster stands back flanked by two Enforcers — big, armored brutes with clubs. Crates and barrels dot the floor. The Caster is the real threat — she's already drawing power. The Enforcers move to intercept. Initiative is rolled.</div>
+  </div>
+
+  <div class="b-status" id="b-status">
+    <span class="bstat bstat-hp" id="bs-hp">❤ Thea: 9/9 HP</span>
+    <span class="bstat bstat-sa" id="bs-sa">✦ Sneak Attack: Ready</span>
+    <span class="bstat" id="bs-hide" style="border-color:rgba(61,220,151,.15);background:transparent;color:rgba(61,220,151,.3);">◌ Not Hidden</span>
+    <span class="bstat" id="bs-ra" style="border-color:rgba(255,68,68,.15);background:transparent;color:rgba(255,68,68,.3);">◌ Reaction Ready</span>
+  </div>
+
+  <div class="combat-log" id="clog">
+    <div class="log-e sys">⚔ Initiative: Thea (18), Lucian (15), Enforcer A (12), Rovan (10), Enforcer B (8), Caster (6), Ragnar (4)</div>
+    <div class="log-e sys">Round 1 — Thea goes FIRST</div>
+  </div>
+
+  <div id="b-steps"></div>
+
+  <div class="b-end" id="b-end">
+    <div class="card-title" style="margin-bottom:.6rem">⚔ Battle Complete</div>
+    <div id="b-end-txt" class="body"></div>
+    <div style="margin-top:1rem">
+      <button class="step-nxt show" onclick="go(5)">Review →</button>
+      <button class="step-nxt show" style="margin-left:.5rem;background:none;border-color:rgba(255,210,122,.3)" onclick="resetBattle()">Fight Again</button>
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <button class="nav-btn" onclick="go(3)">← Back</button>
+    <span class="prog-label">5 of 6</span>
+    <button class="nav-btn primary" id="b-done-btn" onclick="go(5)" style="display:none">Review →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- LESSON 6: AFTER-ACTION -->
+<!-- ═══════════════════════════════════ -->
+<div class="lesson" id="lesson-5">
+  <div class="card">
+    <div class="card-tag">Chapter 6 · Review</div>
+    <div class="card-title">After-Action Report</div>
+
+    <div class="box box-t">
+      <div class="box-label">📊 Battle Score</div>
+      <div class="score-big" id="final-score">—</div>
+      <div id="final-msg" style="margin-top:.5rem;font-size:1rem;line-height:1.6;"></div>
+    </div>
+
+    <div class="box box-p" style="margin-top:.9rem">
+      <div class="box-label">🔑 Key Decisions Recap</div>
+      <strong>Round 1 — Opening:</strong> The pre-combat Hide was the highest-value move available. One Action guarantees SA on Turn 2 from safety. Charging in early without SA setup was the common mistake.<br><br>
+      <strong>Round 2 — Priority target:</strong> The Caster is always Priority 1. She deals AoE damage that hits the whole party. One SA hit on a low-CON caster can end her contribution in one turn.<br><br>
+      <strong>Round 2 — Opportunity Attack trap:</strong> Moving past an Enforcer without Disengaging costs you an attack at your 9 HP. The route around the crates is worth the extra movement.<br><br>
+      <strong>Round 3 — Finishing move:</strong> When the Enforcer was at low HP, finishing him with the Rapier freed the whole party from melee pressure. Rogues are excellent finishers on wounded targets.
+    </div>
+
+    <div class="box box-g" style="margin-top:.8rem">
+      <div class="box-label">⚡ Three Habits of Intermediate Rogue Play</div>
+      <strong>1. Pre-combat Hide whenever possible.</strong> Stealth +8 almost never fails. It's the best free action in your kit.<br><br>
+      <strong>2. Know your allies' positions before you move.</strong> SA fires when Ragnar or Talon is adjacent. Ask where they're going before committing.<br><br>
+      <strong>3. Never forget Halfling Luck.</strong> On critical saves or attack rolls, that reroll can be the difference between going down and staying up.
+    </div>
+
+    <div class="dz" style="margin-top:1rem">
+      <div class="dz-title">🎲 Final Practice</div>
+      <div class="die-row">
+        <button class="die die-p" onclick="rollFinal('sneak')">Rapier + Sneak Attack</button>
+        <button class="die die-t" onclick="rollFinal('hide')">Stealth Check (Hide)</button>
+        <button class="die die-g" onclick="rollFinal('dex_save')">DEX Saving Throw</button>
+        <button class="die die-r" onclick="rollFinal('death')">Death Save</button>
+      </div>
+      <div class="roll-out" id="final-out">
+        <div class="roll-n" id="final-n" style="color:rgba(245,237,216,.2)">—</div>
+        <div class="roll-txt" id="final-txt">Practice any roll you'd make in combat</div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-row">
+    <button class="nav-btn" onclick="go(4)">← Battle</button>
+    <span class="prog-label">6 of 6</span>
+    <button class="nav-btn primary" onclick="go(0)">↺ Restart</button>
+  </div>
+</div>
+
+</div>
+<script>
+// ── NAV ──────────────────────────────────────────
+let cur = 0;
+const done = new Set();
+let bScore = 0, bMax = 0, bStep = 0;
+let theaHP = 9, saUsed = false, isHidden = false;
+
+function go(n) {
+  done.add(cur);
+  document.getElementById('lesson-'+cur).classList.remove('active');
+  document.getElementById('lesson-'+n).classList.add('active');
+  cur = n;
+  document.querySelectorAll('.cn').forEach((b,i) => {
+    b.classList.remove('active','done');
+    if (i===n) b.classList.add('active');
+    else if (done.has(i)) b.classList.add('done');
+  });
+  if (n===4 && bStep===0) initBattle();
+  if (n===5) showFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── DICE ─────────────────────────────────────────
+function d(n){return Math.floor(Math.random()*n)+1;}
+function luck(r){if(r===1){const r2=d(20);return {val:r2,lucky:true};}return {val:r,lucky:false};}
+function anim(id,val,cls){
+  const el=document.getElementById(id);
+  el.classList.remove('spin','g','b','c','f');
+  void el.offsetWidth;
+  el.classList.add('spin',cls);
+  el.textContent=val;
+}
+
+function rollCmp(type) {
+  const out=document.getElementById('cmp-out');
+  const txt=document.getElementById('cmp-txt');
+  let val,cls,rc,msg;
+  if(type==='bow_nosa'){
+    const r=d(6);const t=r+4;val=t;cls='b';rc='miss';
+    msg=`Short Bow (no SA): 1d6(${r})+4 = <strong>${t} damage</strong>. No SA — average turn.`;
+  } else if(type==='bow_sa'){
+    const r=d(6),sa=d(6),t=r+4+sa;val=t;cls='g';rc='hit';
+    msg=`Short Bow + SA: 1d6(${r})+4+1d6(${sa}) = <strong>${t} damage</strong>. SA adds ${sa} — that's ${Math.round((sa/t)*100)}% bonus damage.`;
+  } else if(type==='rapier_sa'){
+    const r=d(8),sa=d(6),t=r+4+sa;val=t;cls='g';rc='hit';
+    msg=`Rapier + SA: 1d8(${r})+4+1d6(${sa}) = <strong>${t} damage</strong>. Rapier's d8 gives higher average base.`;
+  } else {
+    const r1=d(8),r2=d(8),sa1=d(6),sa2=d(6),t=r1+r2+4+sa1+sa2;val=t;cls='c';rc='crit';
+    msg=`CRITICAL HIT — Rapier+SA: 2×1d8(${r1}+${r2})+4+2×1d6(${sa1}+${sa2}) = <strong style="color:var(--amethyst-glow)">${t} damage!</strong> Crits double ALL dice.`;
+  }
+  out.className='roll-out '+rc;
+  anim('cmp-n',val,cls);
+  txt.innerHTML=msg;
+}
+
+function rollSkill(name,mod){
+  const raw=d(20);
+  const {val:r,lucky}=luck(raw);
+  const total=r+mod;
+  const cls=total>=18?'c':total>=12?'g':'b';
+  const out=document.getElementById('skill-out');
+  out.className='roll-out '+(total>=10?'hit':'miss');
+  anim('skill-n',total,cls);
+  const lk=lucky?` <strong style="color:var(--amethyst-glow)">(Halfling Luck reroll!)</strong>`:'';
+  document.getElementById('skill-txt').innerHTML=`<strong>${name}:</strong> d20(${r})+${mod} = <strong>${total}</strong>${lk}<br><span style="opacity:.55;font-size:.85rem">DC 10: ${total>=10?'✓':'✗'} · DC 15: ${total>=15?'✓':'✗'} · DC 20: ${total>=20?'✓':'✗'}</span>`;
+}
+
+function rollFinal(type){
+  const out=document.getElementById('final-out');
+  const txt=document.getElementById('final-txt');
+  let val,cls,rc,msg;
+  if(type==='sneak'){
+    const atkRaw=d(20);const {val:atk,lucky}=luck(atkRaw);const atkT=atk+6;
+    const dmg=d(8)+4,sa=d(6),total=dmg+sa;
+    val=atkT>=13?total:atkT;
+    cls=atk===20?'c':atkT>=13?'g':'b';rc=atkT>=13?'hit':'miss';
+    const lk=lucky?'(Luck!) ':'';
+    if(atk===20){msg=`CRIT! ${lk}d20(${atk})+6=${atkT}. Double dice: 2d8+4+2d6 = <strong style="color:var(--amethyst-glow)">${d(8)+d(8)+4+d(6)+d(6)} damage!</strong>`;}
+    else{msg=`Rapier+SA: d20(${atk})+6=${lk}<strong>${atkT}</strong> — ${atkT>=13?`Hit! ${dmg}+SA(${sa})=<strong>${total} damage</strong>`:'Miss.'}`;}
+  } else if(type==='hide'){
+    const raw=d(20);const{val:r,lucky}=luck(raw);const t=r+8;
+    val=t;cls=t>=18?'c':t>=12?'g':'b';rc=t>=12?'hit':'miss';
+    const lk=lucky?'(Luck!) ':'';
+    msg=`Stealth (Hide): d20(${r})+8=${lk}<strong>${t}</strong>. ${t>=15?'Success — you vanish into shadow.':t>=10?'Hidden but barely.':'Enemy might notice — roll again or abort.'}`;
+  } else if(type==='dex_save'){
+    const raw=d(20);const{val:r,lucky}=luck(raw);const t=r+6;
+    val=t;cls=t>=14?'g':'b';rc=t>=14?'hit':'miss';
+    const lk=lucky?'(Luck!) ':'';
+    msg=`DEX Save: d20(${r})+6=${lk}<strong>${t}</strong>. ${t>=15?'Clear — you dodge the effect.':t>=10?'Borderline — depends on the DC.':'Caught by it.'}`;
+  } else {
+    const raw=d(20);const{val:r,lucky}=luck(raw);
+    val=r;cls=r>=10?'g':r>=2?'b':'f';rc=r>=10?'hit':'miss';
+    const lk=lucky?` (Halfling Luck reroll!)`:'';
+    if(r===20){msg=`Natural 20 Death Save${lk} — you leap back to 1 HP immediately!`;}
+    else{msg=`Death Save: ${r}${lk}. ${r>=10?`Success (${r}/3 needed to stabilize).`:`Failure. 3 failures = character death.`}`;}
+  }
+  out.className='roll-out '+rc;
+  anim('final-n',val,cls);
+  txt.innerHTML=msg;
+}
+
+// ── BATTLE ───────────────────────────────────────
+const STEPS = [
+  {
+    who:'you', whoLabel:"Thea's Turn — Round 1 (Initiative 18)",
+    narr:"You go first. The two Enforcers are 25 ft away moving toward the party. The Caster stands 50 ft back, beginning to gesticulate — she'll be ready to cast on her turn. Ragnar and Talon are 10 ft to your left. There are crates and barrels throughout the room. The Caster hasn't noticed exactly where everyone is yet.",
+    prompt:"You act first — before anyone. What's your opening move?",
+    choices:[
+      {text:"Use Action to Hide behind the nearest crate (Stealth +8). Stay low. Next turn attack from hiding with Advantage — guaranteed Sneak Attack on the most dangerous target.",quality:'best',fb:"Excellent. Stealth +8 almost certainly succeeds. Next turn you attack the Caster from hiding with Advantage and Sneak Attack. This is the highest-value Round 1 opening for Thea — you sacrifice one turn of damage for guaranteed SA plus the attack bonus."},
+      {text:"Move 25 ft toward Enforcer A and attack with Rapier — no SA yet since no ally is adjacent, but get damage in early.",quality:'ok',fb:"Proactive but low-efficiency. Without Sneak Attack you deal avg 8.5 damage. The Hide setup would deal avg 12.5 next turn with SA plus Advantage. More importantly, you're now exposed in melee with 9 HP and no allies nearby."},
+      {text:"Move toward the Caster (50 ft — can't reach this turn) and throw a Dagger at her (range 20/60 ft). She's 50 ft away — within normal throwing range.",quality:'good',fb:"Creative — targeting the Caster early is correct priority. But at 50 ft with a thrown Dagger and no SA it's about 8 average damage. Hiding this turn and reaching her next with SA is more efficient. Still, identifying the Caster as the priority is the right instinct."},
+      {text:"Use Action to Help — give Talon Advantage on his attack this round.",quality:'bad',fb:"Using your entire Action to give one ally Advantage is low personal economy. Thea is the party's highest single-target damage dealer — your Action is worth more as an attack than as a support gift. Bardic Inspiration-style support is Lucian's role, not yours."}
+    ]
+  },
+  {
+    who:'ally', whoLabel:"Lucian's Turn (Initiative 15)",
+    narr:"Lucian steps behind a barrel and casts Faerie Fire — both Enforcers light up in golden radiance. All attacks against them now have Advantage. He shouts to Talon: 'Left one is yours!' and flicks a Bardic Inspiration die to Ragnar.",
+    prompt:"Lucian's Faerie Fire now gives Advantage against the Enforcers. No Reaction needed from you. Enforcer A is moving...",
+    choices:[{text:"Observe — this is Lucian's turn. Note that attacks vs Enforcers now have Advantage. Plan accordingly.",quality:'best',fb:"Good situational awareness. Lucian's Faerie Fire just gave you Advantage on Enforcer attacks. Combined with any ally being adjacent, you'll have both SA conditions met next time you attack an Enforcer. And you're still hidden from your Round 1 setup."}]
+  },
+  {
+    who:'enemy', whoLabel:"Enforcer A's Turn",
+    narr:"Enforcer A charges and swings at Ragnar — hits for 9 bludgeoning damage. Ragnar takes it but stays up. The Enforcer is now adjacent to Ragnar and is glowing from Faerie Fire.",
+    prompt:"Enforcer A is adjacent to Ragnar and glowing with Faerie Fire. You're hidden. Round 1 ends — Round 2 begins. Talon fires at Enforcer A — 11 piercing damage. Enforcer A looks badly wounded. Your turn.",
+    choices:[
+      {text:"Emerge from hiding and attack Enforcer A with Rapier — you have Advantage (hidden attack), ally adjacent (Ragnar), AND Faerie Fire. Triple conditions for Sneak Attack. Finishing a wounded enemy removes one attack per round from the fight.",quality:'best',fb:"Outstanding. Three SA conditions — Advantage from hidden, ally adjacent, Faerie Fire. Any one alone would suffice. You're doing maximum possible damage this turn. Finishing the Enforcer removes ~2 attacks per round from the fight. This is ideal Rogue play."},
+      {text:"Stay hidden and move to flank the Caster — she's 50 ft back. Use Short Bow on her from hiding for SA.",quality:'good',fb:"Targeting the Caster is correct priority thinking. However, Enforcer A is almost dead — one more SA hit ends him. Finishing a wounded enemy with a guaranteed high-damage attack is often better than repositioning. That said, removing the Caster is a legitimate long-game call."},
+      {text:"Attack Enforcer B instead — he's untouched and more dangerous long-term.",quality:'ok',fb:"Not wrong — Enforcer B is at full HP and hasn't been focused. But killing one enemy outright (Enforcer A is almost dead) is almost always better than spreading damage. Finish A, then turn to B."}
+    ]
+  },
+  {
+    who:'enemy', whoLabel:"Enforcer B & Caster's Turns",
+    narr:"Enforcer B charges Talon — hits for 7 damage. Talon winces but holds. Then the Caster raises her hand: Thunderwave! Everyone in a 15 ft cube must make a CON save DC 13. Ragnar rolls 8 — fails, takes 9 thunder and is pushed 10 ft. Talon rolls 15 — succeeds, half damage (4). You're outside the area (you repositioned). Rovan moves and casts Magic Missile at Enforcer B — 9 force damage.",
+    prompt:"Enforcer B is wounded from Magic Missile. The Caster is 50 ft away. Your turn — Ragnar is now 10 ft from the Enforcer (pushed back by Thunderwave). What's your move?",
+    choices:[
+      {text:"Move within 5 ft of the Caster using Short Bow range (attack from 5 ft is still ranged but imposes Disadvantage). Instead move to flank Enforcer B with Ragnar — Ragnar is still nearby, SA fires, Advantage from Faerie Fire. Finish Enforcer B.",quality:'best',fb:"Correct read. Ragnar is still within 5 ft of Enforcer B (he was only pushed 10 ft, Enforcer B didn't move). SA fires, Faerie Fire gives Advantage. Two conditions met. Finishing Enforcer B ends all melee pressure — then the whole party can focus the Caster together. Clean decision."},
+      {text:"Sprint toward the Caster and attack her with Rapier — Disengage first (Action) so no Opportunity Attack.",quality:'ok',fb:"Disengage + attack isn't possible in the same turn — Disengage IS your Action. You'd have to Disengage and not attack, OR attack and trigger Opportunity Attacks. To reach the Caster safely this turn you'd need the full 30 ft movement and then attack. Achievable but uses Action for Disengage, not attack."},
+      {text:"Throw a Dagger at the Caster from current position — she's about 45 ft away, within Short Bow range but dagger is 20/60 ft. Use Short Bow instead.",quality:'good',fb:"Short Bow at the Caster is valid. She likely has lower AC and HP. No SA though — no ally adjacent to her and you're not hidden. Average 7.5 damage vs finishing Enforcer B with SA (avg 12.5). The math favors the Enforcer, but targeting the Caster is strategically sound."}
+    ]
+  },
+  {
+    who:'ally', whoLabel:"Allies' Turns — Round 3",
+    narr:"Ragnar activates Innate Sorcery and punches Enforcer B — 6 damage. Lucian casts Vicious Mockery on the Caster — 3 psychic and Disadvantage on her next attack. Talon fires at the Caster — 8 piercing damage. The Caster is visibly hurting. Both Enforcers are down or nearly down. Your turn.",
+    prompt:"The Caster is wounded and has Disadvantage on her next attack from Vicious Mockery. She's 50 ft away. You're in position after last turn. What ends this fight?",
+    choices:[
+      {text:"Sprint to the Caster (use full 30 ft movement to reach her), attack with Rapier. No ally is adjacent to her yet, but you're attacking from close range — use your movement to get adjacent to her AND have Ragnar adjacent too if possible.",quality:'best',fb:"Perfect finish. The Caster has low HP, is already wounded by Talon, and has Disadvantage on her next attack from Lucian. Getting adjacent with Ragnar also adjacent means SA fires. One SA Rapier hit from a wounded target ends the fight. This is Thea's closing move — targeted, efficient, decisive."},
+      {text:"Hide again for another setup turn.",quality:'ok',fb:"Setting up from hiding would guarantee SA and Advantage on the attack next turn. But the Caster is almost dead from Talon's arrow — another turn means she gets to cast again. When an enemy is nearly down and you can reach them, close it out."},
+      {text:"Attack Enforcer B with Short Bow — he's still technically alive after Ragnar's hit.",quality:'bad',fb:"Enforcer B is at ~3 HP maximum after taking multiple hits. Talon or Ragnar will finish him. The real threat is the Caster who's still casting spells. One SA hit on the Caster ends the fight. Focus fire on the priority target."}
+    ]
+  },
+  {
+    who:'ally', whoLabel:"Resolution",
+    narr:"Your Rapier finds its mark — Sneak Attack fires one final time. The Caster gasps and collapses. The last Enforcer, seeing his leader fall, drops his club. The warehouse falls silent. Talon kicks the club aside. Ragnar cracks his knuckles. Your party has won.",
+    prompt:"Combat ends. Thea stood in the shadows, struck at the right moment, and made every Sneak Attack count. How would you describe her role in this fight?",
+    choices:[
+      {text:"Thea was the surgical blade — she set up her conditions, waited for the right moment, and hit harder than anyone in the party when it counted.",quality:'best',fb:"That's the Rogue. Patience, positioning, and decisive strikes at the right moment. You didn't try to tank hits or spam attacks — you made every action count. That's intermediate play."},
+      {text:"I should have attacked more and hidden less — felt passive sometimes.",quality:'ok',fb:"It's a natural feeling, but the math disagrees. Every SA you proc by setting up correctly outpaces two attacks without it. The Hide turn felt passive but the payoff was a guaranteed 12+ damage strike. Trust the setup."}
+    ]
+  }
+];
+
+function initBattle(){
+  theaHP=9; saUsed=false; isHidden=false; bScore=0; bMax=0; bStep=0;
+  updateStatus();
+  document.getElementById('b-steps').innerHTML='';
+  document.getElementById('b-end').classList.remove('show');
+  renderStep(0);
+}
+
+function resetBattle(){
+  document.getElementById('clog').innerHTML=`<div class="log-e sys">⚔ Initiative: Thea (18), Lucian (15), Enforcer A (12), Rovan (10), Enforcer B (8), Caster (6), Ragnar (4)</div><div class="log-e sys">Round 1 — Thea goes FIRST</div>`;
+  initBattle();
+}
+
+function updateStatus(){
+  const hp=document.getElementById('bs-hp');
+  hp.textContent=`❤ Thea: ${theaHP}/9 HP`;
+  hp.className='bstat bstat-hp'+(theaHP<=3?' low':'');
+  const sa=document.getElementById('bs-sa');
+  sa.textContent=saUsed?'◌ SA Used This Turn':'✦ Sneak Attack: Ready';
+  sa.className='bstat bstat-sa'+(saUsed?' used':'');
+  const hide=document.getElementById('bs-hide');
+  if(isHidden){hide.textContent='👁 Hidden — Advantage!';hide.className='bstat bstat-hide';}
+  else{hide.textContent='◌ Not Hidden';hide.style.cssText='border-color:rgba(61,220,151,.15);background:transparent;color:rgba(61,220,151,.3);';hide.className='bstat';}
+}
+
+function addLog(txt,cls){
+  const log=document.getElementById('clog');
+  const d=document.createElement('div');
+  d.className='log-e '+(cls||'');
+  d.textContent=txt;
+  log.appendChild(d);
+  log.scrollTop=log.scrollHeight;
+}
+
+function renderStep(idx){
+  if(idx>=STEPS.length){endBattle();return;}
+  bStep=idx;
+  const step=STEPS[idx];
+  const stepsEl=document.getElementById('b-steps');
+  const div=document.createElement('div');
+  div.className='b-step';
+  div.id='step-'+idx;
+  const whoCls=step.who==='ally'?'ally':step.who==='enemy'?'enemy':'you';
+  const letters=['A','B','C','D'];
+  const choicesHTML=step.choices.map((c,ci)=>
+    `<button class="choice" onclick="battleChoice(${idx},${ci})">${letters[ci]}. ${c.text}</button>`
+  ).join('');
+  div.innerHTML=`
+    <div class="step-who ${whoCls}">— ${step.whoLabel} —</div>
+    <div class="step-narr">${step.narr}</div>
+    <div class="step-prompt">${step.prompt}</div>
+    <div class="choices" id="choices-${idx}">${choicesHTML}</div>
+    <div class="step-fb" id="fb-${idx}"></div>
+    <button class="step-nxt" id="nxt-${idx}" onclick="nextStep(${idx+1})">${idx<STEPS.length-1?'Continue →':'End Battle →'}</button>`;
+  stepsEl.appendChild(div);
+  div.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function battleChoice(stepIdx,choiceIdx){
+  const step=STEPS[stepIdx];
+  const choice=step.choices[choiceIdx];
+  const buttons=document.querySelectorAll(`#choices-${stepIdx} .choice`);
+  buttons.forEach(b=>b.classList.add('disabled'));
+  const qMap={best:'correct',good:'neutral',ok:'neutral',bad:'wrong'};
+  buttons[choiceIdx].classList.add(qMap[choice.quality]||'neutral');
+  bMax++;
+  if(choice.quality==='best') bScore++;
+  else if(choice.quality==='good') bScore+=0.5;
+  applyEffect(stepIdx,choiceIdx,choice.quality);
+  const fb=document.getElementById('fb-'+stepIdx);
+  const fc=choice.quality==='best'?'good':choice.quality==='bad'?'bad':'ok';
+  fb.className='step-fb show '+fc;
+  fb.textContent=(choice.quality==='best'?'✓ ':choice.quality==='bad'?'✗ ':'◆ ')+choice.fb;
+  document.getElementById('nxt-'+stepIdx).classList.add('show');
+  addLog('Thea: '+choice.text.substring(0,70)+'...','you');
+  updateStatus();
+}
+
+function applyEffect(stepIdx,ci,quality){
+  if(stepIdx===0){
+    if(quality==='best'){isHidden=true;addLog('[System] Thea hidden — will have Advantage on next attack','sys');}
+    else if(quality==='ok'){addLog('[System] Thea moves to melee — exposed at 9 HP','bad');}
+  }
+  if(stepIdx===2){
+    if(quality==='best'){isHidden=false;saUsed=true;addLog('[System] SA fires! Hidden+Faerie Fire+Ally = max conditions','good');}
+  }
+  saUsed=false; // Reset SA each turn for display
+}
+
+function nextStep(next){
+  const logMap={1:'Lucian casts Faerie Fire — Enforcers glow gold',2:'Enforcer A hits Ragnar — 9 bludgeoning damage',3:'Thunderwave! Ragnar fails, pushed back. Rovan wounds Enforcer B',4:'Ragnar, Lucian, Talon all attack — Caster badly wounded',5:'Final strike — Caster falls. Victory.'};
+  if(logMap[next]) addLog(logMap[next],'sys');
+  renderStep(next);
+}
+
+function endBattle(){
+  document.getElementById('b-end').classList.add('show');
+  document.getElementById('b-done-btn').style.display='block';
+  const pct=bMax>0?Math.round((bScore/bMax)*100):0;
+  const msgs=[[90,'Surgical precision. You read every situation correctly and maximized SA on the right targets at the right times.'],[70,'Strong play. A few positioning hesitations but your priority targeting was correct.'],[50,'Solid instincts but some SA opportunities were left on the table. Review positioning and target priority.'],[0,'Work through Chapters 1-2 again focusing on SA setup and positioning. The battle will make more sense second time through.']];
+  const m=msgs.find(([min])=>pct>=min);
+  document.getElementById('b-end-txt').innerHTML=`<p>Score: <strong>${Math.round(bScore)}/${bMax} (${pct}%)</strong></p><p style="margin-top:.5rem">${m[1]}</p>`;
+}
+
+function showFinal(){
+  const pct=bMax>0?Math.round((bScore/bMax)*100):0;
+  document.getElementById('final-score').textContent=pct+'%';
+  const msgs=[[90,'Outstanding. You\'re playing Thea at an intermediate level. The Rogue toolkit is yours.'],[70,'Above average. SA conditions and priority targeting click well. One more battle and it\'ll be instinct.'],[50,'Good foundation. Focus on pre-combat Hide setup and finishing wounded targets — those two habits raise your score significantly.'],[0,'Complete the battle first for your score. Then replay — knowing the scenario clarifies the decision logic.']];
+  const m=msgs.find(([min])=>pct>=min);
+  document.getElementById('final-msg').textContent=m?m[1]:'Complete the battle to see your score.';
+}
+</script>
+</body>
+</html>
