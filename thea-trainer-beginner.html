@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thea Rochiel — Beginner Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:#c9a227; --gold-light:#e8c96a;
+  --topaz:#ffd27a; --topaz-glow:#ffe4a0;
+  --emerald-glow:#3ddc97; --ruby-glow:#ff4444;
+  --sapphire-glow:#6aaeff; --amethyst-glow:#c46aff;
+  --shadow:#2a1f0a;
+  --parchment:#f5edd8; --pdim:rgba(245,237,216,.7);
+  --bg:#08060a; --bg2:#110d14; --bg3:#1a1220;
+  --border:rgba(255,210,122,.2);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--parchment);font-family:'Crimson Text',serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 20% 10%,rgba(42,31,10,.3) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 90%,rgba(255,210,122,.04) 0%,transparent 55%);}
+.wrap{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:1.2rem 1rem 4rem;}
+
+/* HEADER */
+.hdr{text-align:center;padding:2.2rem 1rem 1.4rem;border-bottom:1px solid var(--border);margin-bottom:1.8rem;}
+.hdr-eye{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.28em;color:var(--topaz);opacity:.65;margin-bottom:.5rem;text-transform:uppercase;}
+.hdr-title{font-family:'Cinzel Decorative',cursive;font-size:clamp(1.5rem,5vw,2.3rem);
+  background:linear-gradient(135deg,var(--topaz),var(--topaz-glow),var(--gold-light));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1.2;margin-bottom:.5rem;}
+.hdr-sub{font-size:1rem;color:rgba(245,237,216,.45);font-style:italic;}
+
+/* NAV */
+.pnav{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.8rem;}
+.pnav-btn{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.07em;
+  padding:.32rem .65rem;border-radius:3px;cursor:pointer;
+  border:1px solid rgba(255,210,122,.2);color:rgba(245,237,216,.3);
+  background:rgba(0,0,0,.3);transition:all .2s;touch-action:manipulation;}
+.pnav-btn.active{border-color:var(--topaz);color:var(--topaz-glow);background:rgba(255,210,122,.1);}
+.pnav-btn.done{border-color:var(--emerald-glow);color:var(--emerald-glow);background:rgba(61,220,151,.07);}
+
+/* LESSONS */
+.lesson{display:none;animation:fadeUp .3s ease;}
+.lesson.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+/* CARDS */
+.card{background:linear-gradient(145deg,rgba(20,15,30,.97),rgba(10,8,16,.99));
+  border:1px solid var(--border);border-radius:10px;padding:1.4rem;margin-bottom:1.1rem;
+  box-shadow:0 6px 40px rgba(0,0,0,.55);}
+.card-tag{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.22em;
+  color:var(--topaz);opacity:.65;margin-bottom:.4rem;text-transform:uppercase;}
+.card-title{font-family:'Cinzel',serif;font-size:1.15rem;color:var(--topaz-glow);
+  margin-bottom:.75rem;line-height:1.3;}
+.body{font-size:1.05rem;line-height:1.68;color:var(--pdim);}
+.body p{margin-bottom:.7rem;}.body p:last-child{margin-bottom:0;}
+.hl{color:var(--topaz-glow);font-weight:600;}
+.sa{color:var(--amethyst-glow);font-weight:600;}
+.good{color:var(--emerald-glow);}
+.bad{color:var(--ruby-glow);}
+
+/* CALLOUTS */
+.box{border-radius:6px;padding:.8rem 1rem;margin:.75rem 0;font-size:.97rem;line-height:1.58;}
+.box-topaz {border-left:3px solid var(--topaz);    background:rgba(255,210,122,.07);}
+.box-green {border-left:3px solid var(--emerald-glow);background:rgba(61,220,151,.07);}
+.box-purple{border-left:3px solid var(--amethyst-glow);background:rgba(196,106,255,.07);}
+.box-red   {border-left:3px solid var(--ruby-glow);background:rgba(255,68,68,.07);}
+.box-blue  {border-left:3px solid var(--sapphire-glow);background:rgba(106,174,255,.07);}
+.box-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.3rem;opacity:.75;}
+
+/* CONCEPT GRID */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin:.8rem 0;}
+@media(max-width:480px){.cgrid{grid-template-columns:1fr;}}
+.cc{border-radius:6px;padding:.85rem;border:1px solid;}
+.cc-title{font-family:'Cinzel',serif;font-size:.82rem;margin-bottom:.3rem;}
+.cc-body{font-size:.87rem;color:rgba(245,237,216,.58);line-height:1.42;}
+.cc-topaz{border-color:rgba(255,210,122,.25);background:rgba(255,210,122,.06);}
+.cc-topaz .cc-title{color:var(--topaz-glow);}
+.cc-green{border-color:rgba(61,220,151,.25);background:rgba(61,220,151,.06);}
+.cc-green .cc-title{color:var(--emerald-glow);}
+.cc-red{border-color:rgba(255,68,68,.25);background:rgba(255,68,68,.06);}
+.cc-red .cc-title{color:var(--ruby-glow);}
+.cc-purple{border-color:rgba(196,106,255,.25);background:rgba(196,106,255,.06);}
+.cc-purple .cc-title{color:var(--amethyst-glow);}
+
+/* STAT CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:.6rem 0;}
+.chip{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.04em;
+  padding:.25rem .6rem;border-radius:3px;border:1px solid;}
+.chip-t{border-color:rgba(255,210,122,.3);background:rgba(255,210,122,.08);color:var(--topaz-glow);}
+.chip-g{border-color:rgba(61,220,151,.3);background:rgba(61,220,151,.08);color:var(--emerald-glow);}
+.chip-r{border-color:rgba(255,68,68,.3);background:rgba(255,68,68,.08);color:#ff9999;}
+.chip-p{border-color:rgba(196,106,255,.3);background:rgba(196,106,255,.08);color:var(--amethyst-glow);}
+
+/* WEAPON TABLE */
+.weapon-table{width:100%;border-collapse:collapse;margin:.75rem 0;font-size:.9rem;}
+.weapon-table th{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.12em;
+  color:var(--topaz);text-transform:uppercase;padding:.4rem .6rem;
+  border-bottom:1px solid rgba(255,210,122,.25);text-align:left;}
+.weapon-table td{padding:.45rem .6rem;border-bottom:1px solid rgba(245,237,216,.07);color:var(--pdim);}
+.weapon-table tr:last-child td{border-bottom:none;}
+.weapon-table .name{color:var(--parchment);font-weight:600;}
+.weapon-table .atk{color:var(--topaz-glow);}
+.weapon-table .dmg{color:var(--amethyst-glow);}
+
+/* SNEAK ATTACK VISUALIZER */
+.sa-viz{background:rgba(0,0,0,.4);border:1px solid rgba(196,106,255,.2);border-radius:8px;padding:1.1rem;margin:.8rem 0;}
+.sa-title{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.15em;color:var(--amethyst-glow);text-transform:uppercase;margin-bottom:.8rem;}
+.sa-conditions{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.9rem;}
+.sa-cond{display:flex;align-items:center;gap:.6rem;padding:.45rem .7rem;border-radius:4px;
+  border:1px solid;cursor:pointer;touch-action:manipulation;transition:all .15s;}
+.sa-cond.active{border-color:var(--amethyst-glow)!important;background:rgba(196,106,255,.12)!important;}
+.sa-cond-check{width:16px;height:16px;border-radius:50%;border:1px solid;flex-shrink:0;transition:all .15s;display:flex;align-items:center;justify-content:center;font-size:.7rem;}
+.sa-cond.active .sa-cond-check{background:var(--amethyst-glow);border-color:var(--amethyst-glow);color:#000;}
+.sa-cond-label{font-size:.92rem;color:rgba(245,237,216,.65);}
+.sa-cond.active .sa-cond-label{color:var(--parchment);}
+.sa-result{padding:.65rem .9rem;border-radius:5px;font-family:'Cinzel',serif;font-size:.82rem;letter-spacing:.05em;}
+.sa-result.yes{background:rgba(196,106,255,.12);border:1px solid rgba(196,106,255,.35);color:var(--amethyst-glow);}
+.sa-result.no{background:rgba(0,0,0,.3);border:1px solid rgba(245,237,216,.1);color:rgba(245,237,216,.35);}
+
+/* DICE */
+.dice-zone{background:rgba(0,0,0,.4);border:1px solid rgba(255,210,122,.15);border-radius:8px;padding:1.1rem;margin-top:.9rem;}
+.dz-title{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.16em;color:var(--topaz);text-transform:uppercase;margin-bottom:.8rem;}
+.die-row{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.75rem;}
+.die{font-family:'Cinzel',serif;font-weight:700;font-size:.82rem;
+  padding:.45rem .85rem;border-radius:4px;cursor:pointer;
+  transition:all .15s;touch-action:manipulation;user-select:none;border:1px solid;}
+.die:active{transform:scale(.92);}
+.die-t{border-color:rgba(255,210,122,.4);background:rgba(255,210,122,.1);color:var(--topaz-glow);}
+.die-t:hover{background:rgba(255,210,122,.22);}
+.die-p{border-color:rgba(196,106,255,.4);background:rgba(196,106,255,.1);color:var(--amethyst-glow);}
+.die-p:hover{background:rgba(196,106,255,.22);}
+.die-g{border-color:rgba(61,220,151,.4);background:rgba(61,220,151,.1);color:var(--emerald-glow);}
+.die-g:hover{background:rgba(61,220,151,.22);}
+.die-r{border-color:rgba(255,68,68,.4);background:rgba(255,68,68,.1);color:#ff9999;}
+.die-r:hover{background:rgba(255,68,68,.22);}
+
+.roll-out{min-height:3.8rem;display:flex;align-items:center;gap:.8rem;
+  padding:.6rem .9rem;border-radius:5px;background:rgba(0,0,0,.45);
+  border:1px solid rgba(255,210,122,.1);transition:all .3s;}
+.roll-out.hit{background:rgba(61,220,151,.08);border-color:rgba(61,220,151,.3);}
+.roll-out.miss{background:rgba(255,68,68,.07);border-color:rgba(255,68,68,.25);}
+.roll-out.crit{background:rgba(196,106,255,.1);border-color:rgba(196,106,255,.4);}
+.roll-n{font-family:'Cinzel Decorative',cursive;font-size:2.1rem;min-width:2.6rem;text-align:center;}
+.roll-n.g{color:var(--emerald-glow);}
+.roll-n.b{color:var(--ruby-glow);}
+.roll-n.c{color:var(--amethyst-glow);text-shadow:0 0 18px var(--amethyst-glow);}
+.roll-n.f{color:var(--ruby-glow);text-shadow:0 0 18px var(--ruby-glow);}
+.roll-txt{font-size:.93rem;color:rgba(245,237,216,.6);line-height:1.45;}
+.roll-txt strong{color:var(--parchment);}
+@keyframes bounce{0%{transform:scale(1.7) rotate(-10deg);opacity:.4;}60%{transform:scale(1.1) rotate(3deg);}100%{transform:scale(1) rotate(0);opacity:1;}}
+.roll-n.spin{animation:bounce .32s ease-out;}
+
+/* TURN TRACKER */
+.turn-tracker{background:rgba(0,0,0,.4);border:1px solid rgba(255,210,122,.15);border-radius:8px;overflow:hidden;margin-top:1rem;}
+.tt-header{background:linear-gradient(135deg,rgba(255,210,122,.15),rgba(255,210,122,.05));
+  padding:.7rem 1rem;font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.16em;
+  color:var(--topaz);text-transform:uppercase;display:flex;justify-content:space-between;}
+.init-list{padding:.6rem;}
+.init-row{display:flex;align-items:center;gap:.7rem;padding:.45rem .6rem;border-radius:4px;margin-bottom:.25rem;transition:background .2s;}
+.init-row.cur{background:rgba(255,210,122,.1);border-left:3px solid var(--topaz);}
+.init-n{font-family:'Cinzel',serif;font-size:.88rem;font-weight:700;min-width:26px;text-align:center;color:var(--topaz);}
+.init-name{flex:1;font-size:.93rem;}
+.init-name.you{color:var(--topaz-glow);font-weight:600;}
+.init-badge{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.08em;padding:.12rem .38rem;border-radius:2px;}
+.init-badge.turn{background:rgba(255,210,122,.2);color:var(--topaz);border:1px solid rgba(255,210,122,.3);}
+.init-badge.done{background:rgba(61,220,151,.12);color:var(--emerald-glow);border:1px solid rgba(61,220,151,.25);}
+
+/* QUIZ */
+.quiz-q{font-family:'Cinzel',serif;font-size:.92rem;color:var(--topaz-glow);margin-bottom:.8rem;line-height:1.45;letter-spacing:.02em;}
+.quiz-opts{display:flex;flex-direction:column;gap:.45rem;margin-bottom:.8rem;}
+.quiz-opt{padding:.65rem .9rem;border-radius:5px;cursor:pointer;text-align:left;
+  border:1px solid rgba(245,237,216,.12);background:rgba(0,0,0,.3);
+  color:rgba(245,237,216,.72);font-size:.93rem;line-height:1.4;
+  transition:all .15s;touch-action:manipulation;}
+.quiz-opt:hover{border-color:rgba(255,210,122,.4);background:rgba(255,210,122,.07);color:var(--parchment);}
+.quiz-opt.correct{border-color:var(--emerald-glow)!important;background:rgba(61,220,151,.12)!important;color:var(--emerald-glow)!important;cursor:default;}
+.quiz-opt.wrong{border-color:var(--ruby-glow)!important;background:rgba(255,68,68,.1)!important;color:#ff9999!important;cursor:default;}
+.quiz-opt.disabled{pointer-events:none;opacity:.45;}
+.quiz-fb{border-radius:5px;padding:.7rem .9rem;font-size:.92rem;line-height:1.52;display:none;}
+.quiz-fb.show{display:block;}
+.quiz-fb.correct{background:rgba(61,220,151,.1);border-left:3px solid var(--emerald-glow);color:var(--emerald-glow);}
+.quiz-fb.wrong{background:rgba(255,68,68,.09);border-left:3px solid var(--ruby-glow);color:#ffaaaa;}
+
+/* NAV */
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;gap:.6rem;}
+.nav-btn{font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.09em;
+  padding:.62rem 1.2rem;border-radius:4px;cursor:pointer;transition:all .2s;touch-action:manipulation;
+  border:1px solid rgba(255,210,122,.35);color:var(--topaz-glow);
+  background:linear-gradient(135deg,rgba(255,210,122,.12),rgba(255,210,122,.04));}
+.nav-btn:hover{background:linear-gradient(135deg,rgba(255,210,122,.25),rgba(255,210,122,.1));}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.nav-btn.primary{border-color:var(--topaz);background:linear-gradient(135deg,rgba(255,210,122,.25),rgba(255,210,122,.08));}
+.prog-label{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.1em;color:rgba(245,237,216,.28);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hdr">
+  <div class="hdr-eye">Ora Campaign · Player Guide</div>
+  <div class="hdr-title">The Rogue's Primer</div>
+  <div class="hdr-sub">A beginner's guide for Thea Rochiel — Level 1 Rogue</div>
+</div>
+
+<div class="pnav" id="pnav">
+  <button class="pnav-btn active" onclick="go(0)">1. Who Is Thea</button>
+  <button class="pnav-btn" onclick="go(1)">2. Rolling Dice</button>
+  <button class="pnav-btn" onclick="go(2)">3. Sneak Attack</button>
+  <button class="pnav-btn" onclick="go(3)">4. Your Turn</button>
+  <button class="pnav-btn" onclick="go(4)">5. Combat Flow</button>
+  <button class="pnav-btn" onclick="go(5)">6. Quiz</button>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- LESSON 1: Who Is Thea -->
+<!-- ══════════════════════════════════════ -->
+<div class="lesson active" id="lesson-0">
+  <div class="card">
+    <div class="card-tag">Lesson 1 · Character</div>
+    <div class="card-title">Who Is Thea, and How Does She Fight?</div>
+    <div class="body">
+      <p>Thea is a <span class="hl">Halfling Rogue</span> — small, fast, and dangerously precise. She doesn't win fights by being tough. She wins by <span class="hl">hitting the right target at the right moment</span> for massive burst damage, then vanishing before anyone can hit back.</p>
+      <p>Where Lucian uses magic and charm, Thea uses <span class="hl">positioning, timing, and opportunism</span>. Her most important ability — Sneak Attack — deals an extra die of damage whenever she has even the slightest edge over an enemy.</p>
+    </div>
+
+    <div class="chips">
+      <span class="chip chip-r">❤️ HP: 9 — stay out of danger</span>
+      <span class="chip chip-t">🛡 AC: 15 — hard to hit</span>
+      <span class="chip chip-t">⚡ Initiative: +4 — usually goes early</span>
+      <span class="chip chip-p">✦ Sneak Attack: +1d6 when conditions are met</span>
+    </div>
+
+    <div class="cgrid">
+      <div class="cc cc-topaz">
+        <div class="cc-title">🗡️ Thea's Strengths</div>
+        <div class="cc-body">Highest single-hit damage potential in the party · AC 15 (hardest to hit) · Stealth +8 and Acrobatics +8 (best skill character) · DEX +4 means great initiative, attacks, and saves</div>
+      </div>
+      <div class="cc cc-red">
+        <div class="cc-title">⚠️ Thea's Vulnerabilities</div>
+        <div class="cc-body">Only 9 HP — same as the Wizard · No healing, no magic · Can only Sneak Attack ONCE per turn · Does very average damage when Sneak Attack conditions aren't met</div>
+      </div>
+      <div class="cc cc-green">
+        <div class="cc-title">🍀 Halfling Luck</div>
+        <div class="cc-body">If you roll a Natural 1 on an attack, ability check, or saving throw — roll again and use the second roll. The worst possible roll can't stick. This is a passive ability, it just works.</div>
+      </div>
+      <div class="cc cc-purple">
+        <div class="cc-title">👣 Naturally Stealthy</div>
+        <div class="cc-body">You can attempt to Hide even when only obscured by a creature one size larger than you. In practice: hide behind your human allies. Halfling-specific and very powerful.</div>
+      </div>
+    </div>
+
+    <div class="box box-topaz">
+      <div class="box-label">💡 The One Rule to Know</div>
+      Thea's damage goes from <em>average</em> to <em>exceptional</em> the moment Sneak Attack fires. Your entire combat strategy is about <span class="hl">making sure Sneak Attack is available every single turn</span>. Everything else — positioning, weapon choice, movement — exists to serve that goal.
+    </div>
+  </div>
+  <div class="nav-row">
+    <button class="nav-btn" disabled>← Back</button>
+    <span class="prog-label">1 of 6</span>
+    <button class="nav-btn primary" onclick="go(1)">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- LESSON 2: Rolling Dice -->
+<!-- ══════════════════════════════════════ -->
+<div class="lesson" id="lesson-1">
+  <div class="card">
+    <div class="card-tag">Lesson 2 · Dice</div>
+    <div class="card-title">How Rolling Works for Thea</div>
+    <div class="body">
+      <p>Every attack and skill check uses the same formula: <span class="hl">d20 + modifier vs target number</span>. For Thea, that modifier is almost always <span class="hl">+4 (DEX)</span> or higher because her whole character is built around Dexterity.</p>
+    </div>
+
+    <table class="weapon-table">
+      <thead><tr><th>Weapon</th><th>Hit Bonus</th><th>Damage</th><th>When to Use</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Rapier</td><td class="atk">+6</td><td class="dmg">1d8+4</td><td>Main melee weapon — highest damage die</td></tr>
+        <tr><td class="name">Short Sword</td><td class="atk">+6</td><td class="dmg">1d6+4</td><td>Off-hand or when dual wielding</td></tr>
+        <tr><td class="name">Dagger</td><td class="atk">+6</td><td class="dmg">1d4+4</td><td>Throw at range or off-hand backup</td></tr>
+        <tr><td class="name">Short Bow</td><td class="atk">+6</td><td class="dmg">1d6+4</td><td>Safe ranged option — 80 ft normal range</td></tr>
+      </tbody>
+    </table>
+
+    <div class="body" style="margin-top:.3rem">
+      <p>All four weapons hit with <span class="hl">+6</span> (DEX +4 + Proficiency +2). The choice depends on range and whether Sneak Attack conditions are met.</p>
+    </div>
+
+    <div class="box box-topaz">
+      <div class="box-label">📖 Example — Attacking the Swordsman</div>
+      Thea fires her Short Bow at a bandit 30 ft away. She rolls d20 and gets <strong>13</strong>, plus her attack bonus of <strong>+6</strong> = <strong>19</strong>. The bandit's AC is 14. 19 beats 14 — hit! She rolls 1d6+4 = <strong>8 piercing damage</strong>. If Sneak Attack fires: add 1d6 = up to <strong>14 damage</strong> total.
+    </div>
+
+    <div class="dice-zone">
+      <div class="dz-title">🎲 Practice Rolls</div>
+      <div class="die-row">
+        <button class="die die-t" onclick="rollSkill('Stealth',8)">Stealth +8</button>
+        <button class="die die-t" onclick="rollSkill('Acrobatics',8)">Acrobatics +8</button>
+        <button class="die die-t" onclick="rollSkill('Perception',4)">Perception +4</button>
+        <button class="die die-t" onclick="rollSkill('Sleight of Hand',6)">Sleight of Hand +6</button>
+        <button class="die die-t" onclick="rollSkill('Insight',4)">Insight +4</button>
+      </div>
+      <div class="roll-out" id="skill-out">
+        <div class="roll-n" id="skill-n" style="color:rgba(245,237,216,.2)">—</div>
+        <div class="roll-txt" id="skill-txt">Tap a skill to roll</div>
+      </div>
+    </div>
+
+    <div class="box box-purple" style="margin-top:1rem">
+      <div class="box-label">🍀 Halfling Luck in Action</div>
+      You roll a Natural 1 on your Stealth check. Normally that's a critical failure. With Halfling Luck it doesn't count — <strong>roll again automatically</strong>. This applies to attacks too. You literally cannot roll a Natural 1 that sticks.
+    </div>
+  </div>
+  <div class="nav-row">
+    <button class="nav-btn" onclick="go(0)">← Back</button>
+    <span class="prog-label">2 of 6</span>
+    <button class="nav-btn primary" onclick="go(2)">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- LESSON 3: Sneak Attack -->
+<!-- ══════════════════════════════════════ -->
+<div class="lesson" id="lesson-2">
+  <div class="card">
+    <div class="card-tag">Lesson 3 · Core Mechanic</div>
+    <div class="card-title">Sneak Attack — Thea's Most Important Rule</div>
+    <div class="body">
+      <p>Sneak Attack adds <span class="sa">1d6 extra damage</span> to one attack per turn. It fires when <span class="hl">either</span> of two conditions is met — you don't need both, just one.</p>
+    </div>
+
+    <div class="cgrid">
+      <div class="cc cc-green">
+        <div class="cc-title">✓ Condition 1: Advantage</div>
+        <div class="cc-body">You roll two d20s and take the higher. Sources: you're hidden, enemy is blinded, Lucian's Faerie Fire, prone enemy in melee, ally uses Help action.</div>
+      </div>
+      <div class="cc cc-topaz">
+        <div class="cc-title">✓ Condition 2: Ally Adjacent</div>
+        <div class="cc-body">An ally is within 5 ft of the target AND you don't have Disadvantage. The ally doesn't need to do anything — just be standing next to the enemy. This is the easy one.</div>
+      </div>
+    </div>
+
+    <div class="body" style="margin-top:.5rem">
+      <p>Use the checker below — tap which conditions apply and see if Sneak Attack fires:</p>
+    </div>
+
+    <div class="sa-viz">
+      <div class="sa-title">✦ Sneak Attack Condition Checker</div>
+      <div class="sa-conditions">
+        <div class="sa-cond" id="cond-adv" onclick="toggleCond('adv')" style="border-color:rgba(61,220,151,.25);background:rgba(0,0,0,.3)">
+          <div class="sa-cond-check" id="check-adv" style="border-color:rgba(61,220,151,.4)"></div>
+          <div class="sa-cond-label">I have Advantage on the attack (hidden, enemy blinded, Faerie Fire, etc.)</div>
+        </div>
+        <div class="sa-cond" id="cond-ally" onclick="toggleCond('ally')" style="border-color:rgba(255,210,122,.25);background:rgba(0,0,0,.3)">
+          <div class="sa-cond-check" id="check-ally" style="border-color:rgba(255,210,122,.4)"></div>
+          <div class="sa-cond-label">An ally is within 5 ft of the target (Talon, Ragnar, etc. standing next to the enemy)</div>
+        </div>
+        <div class="sa-cond" id="cond-dis" onclick="toggleCond('dis')" style="border-color:rgba(255,68,68,.25);background:rgba(0,0,0,.3)">
+          <div class="sa-cond-check" id="check-dis" style="border-color:rgba(255,68,68,.4)"></div>
+          <div class="sa-cond-label">I have Disadvantage on the attack (I'm poisoned, blinded, etc.)</div>
+        </div>
+        <div class="sa-cond" id="cond-finesse" onclick="toggleCond('finesse')" style="border-color:rgba(196,106,255,.25);background:rgba(0,0,0,.3)">
+          <div class="sa-cond-check" id="check-finesse" style="border-color:rgba(196,106,255,.4)"></div>
+          <div class="sa-cond-label">I'm using a finesse weapon (Rapier, Dagger, Short Sword) or ranged weapon (Short Bow, thrown Dagger)</div>
+        </div>
+      </div>
+      <div class="sa-result no" id="sa-result">Select conditions above to check</div>
+    </div>
+
+    <div class="dice-zone" style="margin-top:.9rem">
+      <div class="dz-title">🎲 Roll a Full Sneak Attack</div>
+      <div class="die-row">
+        <button class="die die-t" onclick="rollAtk('rapier',false)">Rapier (no SA)</button>
+        <button class="die die-p" onclick="rollAtk('rapier',true)">Rapier + Sneak Attack</button>
+        <button class="die die-t" onclick="rollAtk('bow',false)">Short Bow (no SA)</button>
+        <button class="die die-p" onclick="rollAtk('bow',true)">Short Bow + Sneak Attack</button>
+      </div>
+      <div class="roll-out" id="atk-out">
+        <div class="roll-n" id="atk-n" style="color:rgba(245,237,216,.2)">—</div>
+        <div class="roll-txt" id="atk-txt">See how much difference Sneak Attack makes</div>
+      </div>
+    </div>
+
+    <div class="box box-red" style="margin-top:.8rem">
+      <div class="box-label">⚠️ Important Limits</div>
+      Sneak Attack fires <strong>once per turn</strong> — not once per attack. If somehow you attack twice, only one attack gets the bonus. Also: it requires a <strong>finesse</strong> or <strong>ranged</strong> weapon. A standard longsword doesn't qualify. All of Thea's weapons do.
+    </div>
+  </div>
+  <div class="nav-row">
+    <button class="nav-btn" onclick="go(1)">← Back</button>
+    <span class="prog-label">3 of 6</span>
+    <button class="nav-btn primary" onclick="go(3)">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- LESSON 4: Your Turn -->
+<!-- ══════════════════════════════════════ -->
+<div class="lesson" id="lesson-3">
+  <div class="card">
+    <div class="card-tag">Lesson 4 · Combat</div>
+    <div class="card-title">What You Do Each Turn</div>
+    <div class="body">
+      <p>Each round you get an <span class="hl">Action</span>, a <span class="hl">Bonus Action</span>, and <span class="hl">30 ft of Movement</span>. Unlike Lucian who has many options, Thea has a clear priority every turn.</p>
+    </div>
+
+    <div class="cgrid">
+      <div class="cc cc-topaz">
+        <div class="cc-title">⚔️ Action — Attack</div>
+        <div class="cc-body">Almost always: attack with your best weapon for the situation. Apply Sneak Attack if conditions are met. This is 90% of your turns.</div>
+      </div>
+      <div class="cc cc-topaz">
+        <div class="cc-title">⚡ Bonus Action — Dash or Off-hand</div>
+        <div class="cc-body">No Sneak Attack-specific Bonus Action at Level 1. Use it for: Dash (extra 30 ft movement), Help (give ally Advantage), or Off-hand attack with Dagger/Short Sword (no modifier to damage).</div>
+      </div>
+      <div class="cc cc-green">
+        <div class="cc-title">🚶 Movement — Positioning</div>
+        <div class="cc-body">Get into range. After attacking, get OUT of range if possible. Thea doesn't want to eat hits. Use 30 ft intelligently — attack from a flanking position, then step back behind Ragnar.</div>
+      </div>
+      <div class="cc cc-purple">
+        <div class="cc-title">⚡ Hide (Action)</div>
+        <div class="cc-body">In the right situation, use your Action to Hide (Stealth +8 — almost guaranteed). Next turn you attack with Advantage = Sneak Attack guaranteed. Great setup turn.</div>
+      </div>
+    </div>
+
+    <div class="box box-topaz">
+      <div class="box-label">💡 The Simplest Thea Turn</div>
+      <strong>Move</strong> to a position adjacent to where Ragnar or Talon is standing next to an enemy.<br>
+      <strong>Action:</strong> Attack with Rapier (+6 to hit). Sneak Attack fires automatically because an ally is adjacent.<br>
+      <strong>Bonus Action:</strong> Dash away, or hold for emergency off-hand attack.<br>
+      That's it. Rinse and repeat every round.
+    </div>
+
+    <div class="box box-blue">
+      <div class="box-label">🎯 Which Weapon When</div>
+      <strong>Rapier</strong> — default melee choice (biggest damage die, 1d8)<br>
+      <strong>Short Bow</strong> — enemy too far away, or you need to stay safe at range<br>
+      <strong>Dagger</strong> — thrown at 20/60 ft, or off-hand second attack<br>
+      <strong>Short Sword</strong> — paired with Dagger for dual wield option
+    </div>
+  </div>
+  <div class="nav-row">
+    <button class="nav-btn" onclick="go(2)">← Back</button>
+    <span class="prog-label">4 of 6</span>
+    <button class="nav-btn primary" onclick="go(4)">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- LESSON 5: Combat Flow -->
+<!-- ══════════════════════════════════════ -->
+<div class="lesson" id="lesson-4">
+  <div class="card">
+    <div class="card-tag">Lesson 5 · Full Round</div>
+    <div class="card-title">A Complete Combat Round</div>
+    <div class="body">
+      <p>Combat starts with Initiative — everyone rolls <span class="hl">d20 + DEX modifier</span>. With Initiative +4, Thea almost always goes early, which is a real advantage for a Rogue.</p>
+    </div>
+
+    <div class="dice-zone">
+      <div class="dz-title">🎲 Roll Initiative</div>
+      <div class="die-row">
+        <button class="die die-t" onclick="rollInit()">Roll Initiative (d20+4)</button>
+      </div>
+      <div class="roll-out" id="init-out">
+        <div class="roll-n" id="init-n" style="color:rgba(245,237,216,.2)">—</div>
+        <div class="roll-txt" id="init-txt">Roll to see where Thea lands in the order</div>
+      </div>
+    </div>
+
+    <div class="turn-tracker" style="margin-top:1rem">
+      <div class="tt-header">
+        <span>⚔ Initiative Order — Round 1</span>
+        <span id="tt-label" style="opacity:.6">Tap Next Turn</span>
+      </div>
+      <div class="init-list" id="init-list">
+        <div class="init-row cur" id="ti-0"><div class="init-n">20</div><div class="init-name you">Thea Rochiel ← YOU</div><div class="init-badge turn">TURN</div></div>
+        <div class="init-row" id="ti-1"><div class="init-n">17</div><div class="init-name">Talon Ashe</div><div class="init-badge" style="opacity:0">—</div></div>
+        <div class="init-row" id="ti-2"><div class="init-n">13</div><div class="init-name" style="color:#ff9999">Bandit Swordsman</div><div class="init-badge" style="opacity:0">—</div></div>
+        <div class="init-row" id="ti-3"><div class="init-n">10</div><div class="init-name">Ragnar Blackthorn</div><div class="init-badge" style="opacity:0">—</div></div>
+        <div class="init-row" id="ti-4"><div class="init-n">7</div><div class="init-name" style="color:#ff9999">Bandit Archer</div><div class="init-badge" style="opacity:0">—</div></div>
+      </div>
+      <div style="padding:.6rem;display:flex;gap:.5rem;">
+        <button class="nav-btn" onclick="nextTurn()" style="flex:1">Next Turn →</button>
+        <button class="nav-btn" onclick="resetTurns()" style="opacity:.6">Reset</button>
+      </div>
+    </div>
+
+    <div class="box box-topaz" style="margin-top:1rem">
+      <div class="box-label">📋 Thea's Turn Checklist</div>
+      <strong>1.</strong> Can I Sneak Attack? (ally adjacent OR I have Advantage)<br>
+      <strong>2.</strong> Am I in a safe position? (not surrounded)<br>
+      <strong>3.</strong> Attack with the right weapon for the range<br>
+      <strong>4.</strong> Use Bonus Action (Dash away, off-hand, or Help)<br>
+      <strong>5.</strong> Say "Done"
+    </div>
+
+    <div class="box box-green">
+      <div class="box-label">⬆ Going First is a Big Deal for Thea</div>
+      With Initiative +4, Thea often acts before enemies. On Round 1, before any ally is adjacent, you may not have easy Sneak Attack conditions. Solution: use your first turn to <strong>Hide</strong> (Action, Stealth +8) — then Round 2 you attack with Advantage = guaranteed Sneak Attack.
+    </div>
+  </div>
+  <div class="nav-row">
+    <button class="nav-btn" onclick="go(3)">← Back</button>
+    <span class="prog-label">5 of 6</span>
+    <button class="nav-btn primary" onclick="go(5)">Quiz →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- LESSON 6: QUIZ -->
+<!-- ══════════════════════════════════════ -->
+<div class="lesson" id="lesson-5">
+  <div class="card">
+    <div class="card-tag">Lesson 6 · Knowledge Check</div>
+    <div class="card-title">Quick Quiz</div>
+    <div class="body" style="margin-bottom:1rem">
+      <p>Five questions about real situations Thea will face at the table.</p>
+    </div>
+
+    <div id="q1" style="margin-bottom:1.2rem">
+      <div class="quiz-q">1. Thea attacks a bandit. Ragnar is standing right next to the same bandit. Does Sneak Attack fire?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="qa(1,'a')">A — No, she needs Advantage for Sneak Attack</button>
+        <button class="quiz-opt" onclick="qa(1,'b')">B — Yes, an ally adjacent to the target is enough</button>
+        <button class="quiz-opt" onclick="qa(1,'c')">C — Only if Thea is also adjacent to Ragnar</button>
+      </div>
+      <div class="quiz-fb" id="qf1"></div>
+    </div>
+
+    <div id="q2" style="margin-bottom:1.2rem">
+      <div class="quiz-q">2. Thea rolls a Natural 1 on her attack roll. What happens?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="qa(2,'a')">A — Automatic miss, and something bad might happen</button>
+        <button class="quiz-opt" onclick="qa(2,'b')">B — She rerolls thanks to Halfling Luck and uses the new result</button>
+        <button class="quiz-opt" onclick="qa(2,'c')">C — She adds her DEX modifier so it's not a natural 1 anymore</button>
+      </div>
+      <div class="quiz-fb" id="qf2"></div>
+    </div>
+
+    <div id="q3" style="margin-bottom:1.2rem">
+      <div class="quiz-q">3. Thea is poisoned (Disadvantage on attacks). Ragnar is adjacent to her target. Can she Sneak Attack?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="qa(3,'a')">A — Yes — an ally is adjacent so it still works</button>
+        <button class="quiz-opt" onclick="qa(3,'b')">B — No — Disadvantage blocks Sneak Attack even if an ally is adjacent</button>
+        <button class="quiz-opt" onclick="qa(3,'c')">C — Only if she also has Advantage from another source to cancel the Disadvantage</button>
+      </div>
+      <div class="quiz-fb" id="qf3"></div>
+    </div>
+
+    <div id="q4" style="margin-bottom:1.2rem">
+      <div class="quiz-q">4. Thea wants to attack an enemy 50 ft away. Which weapon should she use?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="qa(4,'a')">A — Rapier (it has the highest damage)</button>
+        <button class="quiz-opt" onclick="qa(4,'b')">B — Short Bow (80 ft range, can still Sneak Attack at range)</button>
+        <button class="quiz-opt" onclick="qa(4,'c')">C — Dagger (thrown, 20/60 ft range)</button>
+      </div>
+      <div class="quiz-fb" id="qf4"></div>
+    </div>
+
+    <div id="q5" style="margin-bottom:.5rem">
+      <div class="quiz-q">5. It's Round 1. No allies are adjacent to any enemy yet. What's Thea's best opening move?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="qa(5,'a')">A — Attack anyway — average damage is better than nothing</button>
+        <button class="quiz-opt" onclick="qa(5,'b')">B — Use the Help action to give Talon Advantage on his attack</button>
+        <button class="quiz-opt" onclick="qa(5,'c')">C — Use the Action to Hide (Stealth +8) — next turn attack with Advantage for guaranteed Sneak Attack</button>
+      </div>
+      <div class="quiz-fb" id="qf5"></div>
+    </div>
+
+    <div id="quiz-result" style="display:none;margin-top:1.1rem">
+      <div class="box box-topaz">
+        <div class="box-label">📊 Results</div>
+        <div id="result-text" style="font-size:1.05rem;line-height:1.6;"></div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-row">
+    <button class="nav-btn" onclick="go(4)">← Back</button>
+    <span class="prog-label">6 of 6</span>
+    <button class="nav-btn primary" onclick="go(0)">↺ Restart</button>
+  </div>
+</div>
+
+</div>
+<script>
+// ── State ────────────────────────────────────────
+let cur = 0;
+const done = new Set();
+const qData = {
+  1:{correct:'b',fb:{a:"Advantage is one way to trigger Sneak Attack, but not the only way. An ally within 5 ft of the target is enough on its own — no Advantage needed.",b:"Correct! The ally-adjacent condition is the easier of the two triggers. As long as Ragnar (or any ally) is standing next to the target and Thea doesn't have Disadvantage, Sneak Attack fires every time.",c:"The ally needs to be adjacent to the TARGET, not to Thea. Thea can be 30 ft away firing a bow, and if Ragnar is next to the enemy, Sneak Attack still fires."}},
+  2:{correct:'b',fb:{a:"Halfling Luck specifically prevents Natural 1s from sticking on attacks, ability checks, and saving throws. Roll again automatically.",b:"Exactly right! Halfling Luck is passive — it triggers automatically. You'll never end a session without at least one 'thank goodness for that' Luck proc.",c:"Modifiers are added after the roll. A Natural 1 is about the raw die result, not the total. Halfling Luck fixes the die result before you add modifiers."}},
+  3:{correct:'b',fb:{a:"This is the tricky part of Sneak Attack. Disadvantage blocks the ally-adjacent condition. She'd need Advantage from another source (like Lucian's Faerie Fire) to cancel the Disadvantage first.",b:"Correct! This is a crucial rule. Sneak Attack with the ally-adjacent condition requires you to have NO Disadvantage. If you're poisoned or otherwise at Disadvantage, only having Advantage cancels it out — the ally alone isn't enough.",c:"Close — this is actually the right thinking. Advantage + Disadvantage cancel out to a flat roll, and a flat roll with an ally adjacent DOES allow Sneak Attack."}},
+  4:{correct:'b',fb:{a:"The Rapier is melee only — it can't reach 50 ft. Range weapons are needed here.",b:"Perfect. Short Bow has 80 ft normal range, uses DEX (+6 to hit), and counts as a ranged weapon so Sneak Attack can still fire if conditions are met. Best choice at 50 ft.",c:"The Dagger has a thrown range of only 20/60 ft — 50 ft is at the edge of its normal range (20 ft), which would impose Disadvantage. Short Bow is the cleaner option here."}},
+  5:{correct:'c',fb:{a:"Attacking without Sneak Attack deals 1d6+4 average (~7.5 damage). With Sneak Attack it's 2d6+4 (~11 damage). The setup turn is almost always worth it on Round 1.",b:"Help gives an ally Advantage — useful but that's giving up your entire action for one ally's benefit. Hiding sets up your OWN guaranteed Sneak Attack next turn.",c:"Correct! Stealth +8 means the Hide check almost always succeeds. Next turn you attack from hiding = Advantage = Sneak Attack guaranteed. The setup pays for itself immediately."}}
+};
+let qAnswers = {}, qScore = 0;
+
+// Sneak Attack conditions
+const conds = {adv:false, ally:false, dis:false, finesse:false};
+
+function go(n) {
+  done.add(cur);
+  document.getElementById('lesson-' + cur).classList.remove('active');
+  document.getElementById('lesson-' + n).classList.add('active');
+  cur = n;
+  document.querySelectorAll('.pnav-btn').forEach((b,i) => {
+    b.classList.remove('active','done');
+    if (i===n) b.classList.add('active');
+    else if (done.has(i)) b.classList.add('done');
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Dice
+function d(n){return Math.floor(Math.random()*n)+1;}
+function anim(elId, val, cls) {
+  const el = document.getElementById(elId);
+  el.classList.remove('spin','g','b','c','f');
+  void el.offsetWidth;
+  el.classList.add('spin',cls);
+  el.textContent = val;
+}
+
+function rollSkill(name, mod) {
+  let r = d(20);
+  // Simulate Halfling Luck on Natural 1
+  const luck = r === 1;
+  if (luck) r = d(20);
+  const total = r + mod;
+  const cls = total >= 15 ? 'g' : total <= 7 ? 'b' : 'g';
+  const out = document.getElementById('skill-out');
+  out.className = 'roll-out ' + (total >= 12 ? 'hit' : 'miss');
+  anim('skill-n', total, cls);
+  const luckNote = luck ? ' <strong style="color:var(--amethyst-glow)">(Halfling Luck reroll!)</strong>' : '';
+  document.getElementById('skill-txt').innerHTML = `<strong>${name}:</strong> d20(${r}) + ${mod} = <strong>${total}</strong>${luckNote}<br><span style="opacity:.55;font-size:.85rem">Beats DC 10: ${total>=10?'✓':'✗'} · DC 15: ${total>=15?'✓':'✗'} · DC 20: ${total>=20?'✓':'✗'}</span>`;
+}
+
+function rollAtk(weapon, sa) {
+  const atkRaw = d(20);
+  const luck = atkRaw === 1;
+  const atk = luck ? d(20) : atkRaw;
+  const atkTotal = atk + 6;
+  const dmgDie = weapon === 'rapier' ? 8 : 6;
+  const dmg = d(dmgDie) + 4;
+  const saRoll = sa ? d(6) : 0;
+  const total = dmg + saRoll;
+  const isCrit = atk === 20;
+  const out = document.getElementById('atk-out');
+  out.className = 'roll-out ' + (isCrit ? 'crit' : atkTotal >= 13 ? 'hit' : 'miss');
+  const cls = isCrit ? 'c' : atkTotal >= 13 ? 'g' : 'b';
+  anim('atk-n', isCrit ? '★' : atkTotal, cls);
+  const luckNote = luck ? ' (Luck reroll!)' : '';
+  const critNote = isCrit ? ' CRITICAL HIT — double damage dice!' : '';
+  document.getElementById('atk-txt').innerHTML = `<strong>${weapon==='rapier'?'Rapier':'Short Bow'}${sa?' + Sneak Attack':''}:</strong> Attack d20(${atk})+6=${atkTotal}${luckNote}${critNote}<br><span style="opacity:.55;font-size:.85rem">${atkTotal>=13||isCrit ? `Hit! ${dmg}${sa?` + SA(${saRoll}) = <strong style="color:var(--amethyst-glow)">${total} damage</strong>`:` damage`}` : 'Miss.'}</span>`;
+}
+
+function rollInit() {
+  const r = d(20), total = r + 4;
+  const out = document.getElementById('init-out');
+  out.className = 'roll-out ' + (total >= 15 ? 'hit' : 'miss');
+  anim('init-n', total, total >= 15 ? 'g' : 'b');
+  const pos = total >= 18 ? 'first — excellent!' : total >= 13 ? 'early — good position' : total >= 8 ? 'mid-order' : 'late — be ready';
+  document.getElementById('init-txt').innerHTML = `<strong>Initiative:</strong> d20(${r}) + 4 = <strong>${total}</strong> — ${pos}`;
+}
+
+// Sneak Attack checker
+function toggleCond(key) {
+  conds[key] = !conds[key];
+  const el = document.getElementById('cond-' + key);
+  const ch = document.getElementById('check-' + key);
+  if (conds[key]) { el.classList.add('active'); ch.textContent = '✓'; }
+  else { el.classList.remove('active'); ch.textContent = ''; }
+  updateSA();
+}
+
+function updateSA() {
+  const res = document.getElementById('sa-result');
+  if (!conds.finesse) {
+    res.className = 'sa-result no';
+    res.textContent = '✗ Sneak Attack cannot fire — need a finesse or ranged weapon (tick the weapon box)';
+    return;
+  }
+  if (conds.adv && conds.dis) {
+    // Cancel out — check ally
+    if (conds.ally) {
+      res.className = 'sa-result yes';
+      res.textContent = '✦ Sneak Attack fires! Advantage + Disadvantage cancel to flat roll, but ally is adjacent.';
+    } else {
+      res.className = 'sa-result no';
+      res.textContent = '✗ Sneak Attack cannot fire — Advantage and Disadvantage cancel out, no ally adjacent.';
+    }
+    return;
+  }
+  if (conds.dis && !conds.adv) {
+    res.className = 'sa-result no';
+    res.textContent = '✗ Sneak Attack cannot fire — Disadvantage blocks the ally condition. Need Advantage to cancel it.';
+    return;
+  }
+  if (conds.adv || conds.ally) {
+    res.className = 'sa-result yes';
+    res.textContent = '✦ Sneak Attack fires! Add 1d6 to your damage. ' + (conds.adv ? 'Source: Advantage.' : 'Source: ally adjacent with no Disadvantage.');
+  } else {
+    res.className = 'sa-result no';
+    res.textContent = '✗ No Sneak Attack — need Advantage OR an ally adjacent to the target.';
+  }
+}
+
+// Turn tracker
+let tCur = 0;
+const tNames = ['Thea Rochiel ← YOU','Talon Ashe','Bandit Swordsman','Ragnar Blackthorn','Bandit Archer'];
+function nextTurn() {
+  const doneRow = document.getElementById('ti-' + tCur);
+  doneRow.classList.remove('cur');
+  doneRow.querySelector('.init-badge').className = 'init-badge done';
+  doneRow.querySelector('.init-badge').textContent = 'DONE';
+  tCur = (tCur + 1) % 5;
+  if (tCur === 0) { resetTurns(); document.getElementById('tt-label').textContent = 'Round 2!'; return; }
+  const nr = document.getElementById('ti-' + tCur);
+  nr.classList.add('cur');
+  nr.querySelector('.init-badge').className = 'init-badge turn';
+  nr.querySelector('.init-badge').textContent = 'TURN';
+  document.getElementById('tt-label').textContent = tNames[tCur].includes('YOU') ? '⚡ YOUR TURN!' : tNames[tCur].split(' ')[0] + "'s turn";
+}
+function resetTurns() {
+  tCur = 0;
+  for (let i=0;i<5;i++) {
+    const r = document.getElementById('ti-'+i);
+    r.classList.remove('cur');
+    r.querySelector('.init-badge').className='init-badge';
+    r.querySelector('.init-badge').textContent='';
+  }
+  document.getElementById('ti-0').classList.add('cur');
+  document.getElementById('ti-0').querySelector('.init-badge').className='init-badge turn';
+  document.getElementById('ti-0').querySelector('.init-badge').textContent='TURN';
+  document.getElementById('tt-label').textContent='Tap Next Turn';
+}
+
+// Quiz
+function qa(qn, choice) {
+  if (qAnswers[qn]) return;
+  qAnswers[qn] = choice;
+  const data = qData[qn];
+  const opts = document.querySelectorAll('#q'+qn+' .quiz-opt');
+  opts.forEach(o => o.classList.add('disabled'));
+  const letters = ['a','b','c'];
+  opts.forEach((o,i) => {
+    if (letters[i] === data.correct) o.classList.add('correct');
+    else if (letters[i] === choice && choice !== data.correct) o.classList.add('wrong');
+  });
+  const fb = document.getElementById('qf'+qn);
+  const isRight = choice === data.correct;
+  if (isRight) qScore++;
+  fb.className = 'quiz-fb show ' + (isRight ? 'correct' : 'wrong');
+  fb.textContent = (isRight ? '✓ ' : '✗ ') + data.fb[choice];
+  if (Object.keys(qAnswers).length === 5) showResult();
+}
+function showResult() {
+  const el = document.getElementById('quiz-result');
+  const txt = document.getElementById('result-text');
+  el.style.display = 'block';
+  const msgs = [[5,'Perfect 5/5! You understand the Rogue completely. Thea is going to be terrifying at the table.'],[4,'4/5 — Strong. One slip but you have the core concepts. Sneak Attack will fire every round.'],[3,'3/5 — Solid start. Review lessons 3 and 5 on Sneak Attack conditions and opening moves.'],[0,'1-2/5 — Go back through Sneak Attack (Lesson 3) — that mechanic is the key to everything Thea does.']];
+  txt.innerHTML = `<strong>${qScore}/5</strong> — ${msgs.find(([m])=>qScore>=m)[1]}`;
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+</script>
+</body>
+</html>
